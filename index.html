@@ -175,18 +175,102 @@
         .shopping-item .icon-and-name { display: flex; align-items: center; gap: 8px; }
         .shopping-item img { width: 24px; height: 24px; }
 
-        /* Print */
+        /* --- PRINT OPTIMIZATION (A4 Landscape) --- */
         @media print {
-            @page { size: landscape; margin: 0; }
-            body { padding: 0; background: white; width: 100vw; height: 100vh; }
-            .inventory-section, .controls-bar, h1, .modal, #setup-screen { display: none !important; }
-            #tables-container { overflow: visible; display: block; }
-            .single-child-table { width: 100vw; height: 100vh; margin: 0; padding: 10px; page-break-after: always; min-width: 0; display: flex; flex-direction: column; }
-            .week-grid { flex: 1; border: 2px solid #ccc; }
-            .header-cell { background: #eee !important; border: 1px solid #999; font-size: 16px; }
-            .day-cell { border: 1px solid #999; }
+            @page {
+                size: A4 landscape; /* מגדיר דף A4 לרוחב */
+                margin: 5mm; /* שוליים קטנים */
+            }
+
+            body, html {
+                background: white;
+                padding: 0;
+                margin: 0;
+                width: 297mm; /* רוחב A4 */
+                height: 210mm; /* גובה A4 */
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+
+            /* הסתרת כל האלמנטים המיותרים */
+            .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .new-item-control, #trash-can, .cell-delete-btn, .remove-row-btn { 
+                display: none !important; 
+            }
+
+            #app-screen {
+                display: block !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            #tables-container { 
+                display: block !important;
+                overflow: visible !important; 
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            .single-child-table { 
+                width: 100% !important;
+                height: 195mm !important; /* מותאם לגובה A4 פחות שוליים */
+                min-width: 0 !important;
+                box-shadow: none !important;
+                border: none !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                page-break-after: always; 
+                display: flex; 
+                flex-direction: column;
+            }
+
+            .child-title { 
+                font-size: 24pt !important; 
+                padding: 5px !important; 
+                margin-bottom: 5px !important;
+                border: 1px solid #000;
+                color: #000 !important;
+                background-color: rgba(200, 200, 200, 0.3) !important;
+            }
+
+            .week-grid { 
+                flex: 1; 
+                display: grid;
+                grid-template-columns: 80px repeat(6, 1fr) !important;
+                grid-template-rows: 40px repeat(5, 1fr) !important;
+                gap: 0 !important;
+                border: 2px solid #000 !important;
+            }
+
+            .header-cell { 
+                font-size: 14pt !important; 
+                background-color: #eee !important; 
+                border: 1px solid #000 !important;
+                color: black !important;
+            }
+
+            .day-cell { 
+                border: 1px solid #000 !important;
+                min-height: 0 !important;
+            }
+
             .day-cell:not(.filled)::after { content: ''; }
-            .day-cell .food-item img, .day-cell .food-item span.emoji { width: 50px; height: 50px; font-size: 40px; }
+
+            .day-cell .food-item img {
+                width: 50px !important;
+                height: 50px !important;
+            }
+            
+            .day-cell .food-item span.emoji {
+                font-size: 30pt !important;
+            }
+            
+            .day-cell .food-item span:not(.emoji) {
+                font-size: 10pt !important;
+                color: black !important;
+                font-weight: bold;
+            }
         }
     </style>
 </head>
@@ -206,7 +290,7 @@
         <div class="controls-bar">
             <div class="controls-group">
                 <button class="btn btn-shopping" onclick="showShoppingList()">🛒 רשימה</button>
-                <button class="btn btn-success" onclick="window.print()">📸 שמור</button>
+                <button class="btn btn-success" onclick="window.print()">📸 שמור (PDF)</button>
                 <button class="btn btn-magic" onclick="autoFillMenu()">🪄 אוטומטי</button>
             </div>
             <button class="btn btn-warning" style="flex:0;" onclick="clearTable()">🧹</button>
@@ -311,12 +395,13 @@
                 option.innerText = `${cat.icon} ${cat.name}`;
                 catSelect.appendChild(option);
             });
+            
             if (document.getElementById('children-list-container').children.length === 0) {
                 addChildRow('אורי', '#539fec');
             }
         });
 
-        // Global functions must be attached to window for HTML onclick attributes to work
+        // Global functions
         window.addChildRow = function(name = '', color = '#a29bfe') {
             const container = document.getElementById('children-list-container');
             const div = document.createElement('div');
@@ -431,7 +516,7 @@
 
         function buildTables() {
             const container = document.getElementById('tables-container');
-            container.innerHTML = ''; // IMPORTANT: Clear container before rebuilding to avoid duplicates
+            container.innerHTML = ''; 
             
             childrenData.forEach(child => {
                 const card = document.createElement('div');
@@ -442,7 +527,7 @@
                 grid.className = 'week-grid';
                 grid.style.backgroundColor = hexToRgba(child.color, 0.3);
 
-                // Re-build grid elements using pure DOM (no innerHTML +=) to prevent event loss
+                // Re-build grid elements using DOM
                 const corner = document.createElement('div');
                 corner.className = 'header-cell';
                 corner.innerText = 'קטגוריה';
