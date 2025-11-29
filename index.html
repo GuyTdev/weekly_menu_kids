@@ -151,8 +151,8 @@
             content: '+'; font-size: 24px; color: rgba(0,0,0,0.15); pointer-events: none; position: absolute;
         }
         
-        /* Visual Feedback for Drag/Select */
-        .day-cell.drag-over, .day-cell.highlight-target {
+        /* Visual Feedback */
+        .day-cell.drag-over {
             background-color: #dff9fb !important; border: 2px solid var(--primary) !important; transform: scale(1.02);
         }
 
@@ -174,8 +174,6 @@
         .shopping-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; text-align: right; }
         .shopping-item .icon-and-name { display: flex; align-items: center; gap: 8px; }
         .shopping-item img { width: 24px; height: 24px; }
-
-        #trash-can { display: none; } /* Not needed with new click interface */
 
         /* Print */
         @media print {
@@ -215,7 +213,7 @@
         </div>
 
         <div class="inventory-section">
-            <h4 style="margin:0 0 10px 0; text-align:center;">לחץ על מאכל כדי לבחור אותו 👇</h4>
+            <h4 style="margin:0 0 10px 0; text-align:center;">לגרור או ללחוץ לבחירה 👇</h4>
             <div class="tab-buttons"></div>
             
             <div class="new-item-control">
@@ -254,7 +252,6 @@
     </div>
 
     <script>
-        // --- Data ---
         const categories = [
             { id: 'bread', name: 'פחמימה', icon: '🍞' },
             { id: 'filling', name: 'חלבון/ממרח', icon: '🧀' },
@@ -301,13 +298,12 @@
         ];
 
         let childrenData = [];
-        let selectedInventoryItem = null; // Storing selected item for click-to-place
+        let selectedInventoryItem = null;
         let currentCellTarget = null;
 
-        // --- Init ---
+        // Setup
         document.addEventListener('DOMContentLoaded', () => {
             const catSelect = document.getElementById('new-food-cat');
-            // Clear existing options first to prevent dupes if re-run
             catSelect.innerHTML = '<option value="auto">✨ קטגוריה אוטומטית</option>';
             categories.forEach(cat => {
                 const option = document.createElement('option');
@@ -315,14 +311,12 @@
                 option.innerText = `${cat.icon} ${cat.name}`;
                 catSelect.appendChild(option);
             });
-            
-            // Add default child if empty
             if (document.getElementById('children-list-container').children.length === 0) {
                 addChildRow('אורי', '#539fec');
             }
         });
 
-        // --- Global Helper for Button ---
+        // Global functions must be attached to window for HTML onclick attributes to work
         window.addChildRow = function(name = '', color = '#a29bfe') {
             const container = document.getElementById('children-list-container');
             const div = document.createElement('div');
@@ -354,22 +348,12 @@
             buildTables();
         }
 
-        // --- Logic ---
         function resolveIcon(name, cat, customUrl = null) {
             if (customUrl) return `<img src="${customUrl}">`;
-            
             if (iconDictionary[name]) {
                 const val = iconDictionary[name];
                 if (typeof val === 'object') return `<img src="${val.src}">`;
                 return `<span class="emoji">${val}</span>`;
-            }
-            
-            // Partial
-            for (const [key, val] of Object.entries(iconDictionary)) {
-                if (typeof key === 'string' && key.length > 2 && name.includes(key)) {
-                    if (typeof val === 'object') return `<img src="${val.src}">`;
-                    return `<span class="emoji">${val}</span>`;
-                }
             }
             const fallback = iconDictionary[cat] || '🍱';
             return `<span class="emoji">${fallback}</span>`;
@@ -394,35 +378,29 @@
         function initInventory(catId) {
             const list = document.getElementById('inventory-list');
             list.innerHTML = '';
-            // Clear selection when changing tab
-            selectedInventoryItem = null; 
+            selectedInventoryItem = null;
             
             const filtered = allInventoryItems.filter(i => i.cat === catId);
             filtered.forEach(item => {
                 const el = document.createElement('div');
                 el.className = 'food-item';
-                el.draggable = true; // For desktop drag
+                el.draggable = true;
                 el.innerHTML = resolveIcon(item.name, item.cat, item.customUrl) + `<span>${item.name}</span>`;
                 
-                // 1. Drag Events (Desktop)
                 el.addEventListener('dragstart', (ev) => {
                     ev.dataTransfer.setData("application/json", JSON.stringify(item));
                 });
 
-                // 2. Click Selection (Mobile/Easy Desktop)
                 el.onclick = () => {
-                    // Toggle selection
                     if (selectedInventoryItem === item) {
                         selectedInventoryItem = null;
                         el.classList.remove('selected-for-move');
                     } else {
-                        // Unselect others
                         document.querySelectorAll('.inventory-list .food-item').forEach(x => x.classList.remove('selected-for-move'));
                         selectedInventoryItem = item;
                         el.classList.add('selected-for-move');
                     }
                 };
-                
                 list.appendChild(el);
             });
         }
@@ -453,7 +431,8 @@
 
         function buildTables() {
             const container = document.getElementById('tables-container');
-            container.innerHTML = '';
+            container.innerHTML = ''; // IMPORTANT: Clear container before rebuilding to avoid duplicates
+            
             childrenData.forEach(child => {
                 const card = document.createElement('div');
                 card.className = 'single-child-table';
@@ -463,18 +442,30 @@
                 grid.className = 'week-grid';
                 grid.style.backgroundColor = hexToRgba(child.color, 0.3);
 
-                // Header
-                grid.innerHTML += `<div class="header-cell">קטגוריה</div>`;
-                days.forEach(d => grid.innerHTML += `<div class="header-cell day-header">${d}</div>`);
+                // Re-build grid elements using pure DOM (no innerHTML +=) to prevent event loss
+                const corner = document.createElement('div');
+                corner.className = 'header-cell';
+                corner.innerText = 'קטגוריה';
+                grid.appendChild(corner);
+
+                days.forEach(d => {
+                    const th = document.createElement('div');
+                    th.className = 'header-cell day-header';
+                    th.innerText = d;
+                    grid.appendChild(th);
+                });
 
                 categories.forEach(cat => {
-                    grid.innerHTML += `<div class="header-cell">${cat.icon}<br>${cat.name}</div>`;
+                    const ch = document.createElement('div');
+                    ch.className = 'header-cell';
+                    ch.innerHTML = `${cat.icon}<br>${cat.name}`;
+                    grid.appendChild(ch);
+
                     days.forEach(day => {
                         const cell = document.createElement('div');
                         cell.className = 'day-cell';
                         cell.setAttribute('data-cat', cat.id);
                         
-                        // Drag & Drop Handlers
                         cell.addEventListener('dragover', (e) => { e.preventDefault(); cell.classList.add('drag-over'); });
                         cell.addEventListener('dragleave', () => cell.classList.remove('drag-over'));
                         cell.addEventListener('drop', (e) => {
@@ -483,20 +474,13 @@
                             if(data) populateCell(cell, JSON.parse(data));
                         });
 
-                        // Click Logic
                         cell.onclick = () => {
                             if(selectedInventoryItem) {
-                                // Place selected item
                                 populateCell(cell, selectedInventoryItem);
-                                // Optional: Unselect after place
-                                // selectedInventoryItem = null; 
-                                // document.querySelectorAll('.selected-for-move').forEach(x => x.classList.remove('selected-for-move'));
                             } else {
-                                // Open selector modal
                                 openItemSelector(cell, cat.id);
                             }
                         };
-
                         grid.appendChild(cell);
                     });
                 });
@@ -516,14 +500,11 @@
             const div = document.createElement('div');
             div.className = 'food-item';
             div.innerHTML = resolveIcon(item.name, item.cat, item.customUrl) + `<span>${item.name}</span>`;
-            
-            // Allow re-drag from cell
             div.draggable = true;
             div.addEventListener('dragstart', (ev) => {
                ev.dataTransfer.setData("application/json", JSON.stringify(item));
             });
             
-            // Delete button
             const del = document.createElement('div');
             del.className = 'cell-delete-btn';
             del.innerText = 'x';
@@ -560,7 +541,6 @@
 
         window.closeModal = function(id) { document.getElementById(id).style.display = 'none'; }
 
-        // --- Tools ---
         window.showShoppingList = function() {
             const summary = {};
             document.querySelectorAll('.day-cell.filled .food-item span:last-child').forEach(sp => {
