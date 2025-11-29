@@ -1,8 +1,8 @@
-<!DOCTYPE html
+<!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>תפריט קופסאות שבועי</title>
     
     <style>
@@ -21,21 +21,22 @@
             background-color: var(--bg-color);
             color: var(--text);
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            -webkit-tap-highlight-color: transparent;
         }
 
         h1.main-title {
             color: var(--primary);
-            margin-bottom: 25px;
-            font-size: 32px;
+            margin-bottom: 15px;
+            font-size: 28px;
             text-align: center;
         }
 
-        /* --- UI Elements --- */
+        /* --- Buttons --- */
         .btn {
             border: none;
             padding: 10px 15px;
@@ -50,8 +51,9 @@
             gap: 5px;
             color: white;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            white-space: nowrap;
         }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+        .btn:active { transform: scale(0.95); }
         .btn-primary { background: var(--primary); }
         .btn-success { background: #00b894; }
         .btn-warning { background: #fdcb6e; color: #333; }
@@ -59,242 +61,167 @@
         .btn-magic { background: linear-gradient(135deg, #a29bfe, #74b9ff); }
         .btn-whatsapp { background: #25d366; }
         .btn-add { background: #fab1a0; color: #333; margin-top: 10px; width: 100%; }
-        .btn-small-delete { background: #ff7675; color: white; padding: 5px 8px; font-size: 12px; border-radius: 8px; }
+        .btn-small-delete { background: #ff7675; color: white; padding: 8px; font-size: 14px; border-radius: 8px; }
 
         /* --- Setup Screen --- */
         #setup-screen {
             background: white;
-            padding: 30px;
+            padding: 20px;
             border-radius: 20px;
             box-shadow: var(--shadow);
             text-align: center;
             max-width: 450px;
             width: 100%;
             margin-top: 10px;
+            box-sizing: border-box;
         }
 
         .child-input-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
-        .child-input-row input[type="text"] { flex: 1; padding: 10px; border: 2px solid #dfe6e9; border-radius: 10px; outline: none; font-family: 'Rubik', sans-serif; }
-        .child-input-row input[type="color"] { width: 40px; height: 40px; border: none; background: none; cursor: pointer; }
-        .remove-row-btn { background: #ff7675; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-weight: bold; }
+        .child-input-row input[type="text"] { flex: 1; padding: 10px; border: 2px solid #dfe6e9; border-radius: 10px; outline: none; font-family: 'Rubik', sans-serif; font-size: 16px; }
+        .child-input-row input[type="color"] { width: 40px; height: 40px; border: none; background: none; }
+        .remove-row-btn { background: #ff7675; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-weight: bold; }
 
         /* --- Main App --- */
-        #app-screen { display: none; width: 100%; max-width: 1200px; flex-direction: column; gap: 20px; margin-bottom: 80px; }
-        .controls-bar { background: white; padding: 15px; border-radius: 15px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; box-shadow: var(--shadow); position: sticky; top: 10px; z-index: 100; }
+        #app-screen { display: none; width: 100%; max-width: 1200px; flex-direction: column; gap: 15px; margin-bottom: 80px; }
         
-        /* Inventory */
-        .inventory-section { background: white; padding: 15px; border-radius: 15px; box-shadow: var(--shadow); }
-        .tab-buttons { display: flex; justify-content: center; gap: 5px; margin-bottom: 15px; flex-wrap: wrap; }
-        .tab-button { background: #dfe6e9; padding: 8px 15px; border-radius: 10px; cursor: pointer; font-weight: 500; color: #555; transition: background 0.2s; }
+        .controls-bar { 
+            background: white; padding: 10px; border-radius: 15px; display: flex; flex-wrap: wrap; 
+            justify-content: space-between; align-items: center; gap: 10px; box-shadow: var(--shadow); 
+            position: sticky; top: 5px; z-index: 100; 
+        }
+        
+        .controls-group { display: flex; gap: 5px; flex-wrap: wrap; flex: 1; }
+        .controls-group .btn { flex-grow: 1; }
+
+        .inventory-section { background: white; padding: 10px; border-radius: 15px; box-shadow: var(--shadow); }
+        .tab-buttons { display: flex; overflow-x: auto; gap: 5px; margin-bottom: 10px; padding-bottom: 5px; }
+        .tab-button { background: #dfe6e9; padding: 8px 15px; border-radius: 20px; white-space: nowrap; font-size: 14px; cursor: pointer; }
         .tab-button.active { background: var(--primary); color: white; }
 
-        .new-item-control {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 15px;
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 12px;
-        }
-        .new-item-control input { flex: 2; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: 'Rubik', sans-serif; }
-        .new-item-control select { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: 'Rubik', sans-serif; cursor: pointer; }
-        .new-item-control button { width: 50px; font-size: 20px; padding: 5px; }
+        .new-item-control { display: flex; gap: 5px; margin-bottom: 10px; background: #f8f9fa; padding: 8px; border-radius: 12px; flex-wrap: wrap; }
+        .new-item-control input, .new-item-control select { padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; flex: 1; }
+        .new-item-control button { width: auto; min-width: 50px; font-size: 20px; }
 
-        .inventory-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-height: 150px; overflow-y: auto; padding-bottom: 5px; }
+        .inventory-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-height: 180px; overflow-y: auto; }
 
-        /* Draggable Items */
+        /* Items */
         .food-item {
-            width: 70px;
-            height: 70px;
-            background: white;
-            border: 1px solid #dfe6e9;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: grab;
-            user-select: none;
-            transition: all 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            font-size: 11px;
-            text-align: center;
-            line-height: 1.1;
-            position: relative;
-            overflow: hidden;
+            width: 65px; height: 65px; background: white; border: 1px solid #dfe6e9; border-radius: 12px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            cursor: pointer; user-select: none; transition: all 0.2s; font-size: 10px; text-align: center;
+            flex-shrink: 0; position: relative;
         }
-        .food-item:hover { border-color: var(--primary); transform: scale(1.05); }
-        .food-item img { width: 40px; height: 40px; object-fit: contain; margin-bottom: 2px; }
-        .food-item span.emoji { font-size: 28px; margin-bottom: 4px; display: block; }
+        .food-item img { width: 35px; height: 35px; object-fit: contain; margin-bottom: 2px; }
+        .food-item span.emoji { font-size: 26px; margin-bottom: 2px; display: block; }
         
+        /* Highlight selected item in mobile mode */
+        .food-item.selected-for-move {
+            border: 3px solid var(--primary);
+            background-color: #e3f2fd;
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        /* Categories Colors */
         .food-item[data-cat="bread"] { border-top: 3px solid #fdcb6e; }
         .food-item[data-cat="filling"] { border-top: 3px solid #ff7675; }
         .food-item[data-cat="veggie"] { border-top: 3px solid #00b894; }
         .food-item[data-cat="fruit"] { border-top: 3px solid #e17055; }
         .food-item[data-cat="treat"] { border-top: 3px solid #a29bfe; }
 
-        /* Context Menu & Modals */
-        #context-menu { display: none; position: absolute; background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 3000; overflow: hidden; }
-        .ctx-item { padding: 10px 20px; cursor: pointer; font-size: 14px; }
-        .ctx-item:hover { background: #f0f0f0; }
-
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; max-height: 90vh; overflow-y: auto; }
-        
-        /* Selector List */
-        #item-selector-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-height: 40vh; overflow-y: auto; padding: 10px; border: 1px solid #eee; border-radius: 10px; }
-        #item-selector-list .food-item { cursor: pointer; width: 80px; height: 80px; }
-        #item-selector-list .food-item:hover { border-color: var(--accent); transform: scale(1.05); }
-
         /* Tables */
-        .single-child-table { background: white; padding: 25px; border-radius: 20px; box-shadow: var(--shadow); page-break-inside: avoid; page-break-after: always; }
-        .child-title { text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 15px; padding: 10px; border-radius: 10px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
-        .week-grid { display: grid; grid-template-columns: 80px repeat(6, 1fr); gap: 5px; border: 1px solid rgba(0,0,0,0.1); padding: 8px; border-radius: 12px; }
-        .header-cell { padding: 8px; text-align: center; font-weight: bold; border-radius: 6px; font-size: 13px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.6); }
+        #tables-container { width: 100%; overflow-x: auto; padding-bottom: 10px; -webkit-overflow-scrolling: touch; }
+        .single-child-table { background: white; padding: 15px; border-radius: 20px; box-shadow: var(--shadow); min-width: 800px; margin-bottom: 20px; }
+        .child-title { text-align: center; font-size: 22px; font-weight: bold; margin-bottom: 10px; padding: 8px; border-radius: 10px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+        
+        .week-grid { display: grid; grid-template-columns: 80px repeat(6, 1fr); gap: 4px; border: 1px solid rgba(0,0,0,0.1); padding: 5px; border-radius: 12px; }
+        .header-cell { padding: 5px; text-align: center; font-weight: bold; border-radius: 6px; font-size: 12px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.6); }
         .day-header { background: #ffeaa7 !important; }
 
         .day-cell {
-            background: rgba(255,255,255,0.5); 
-            border-radius: 6px;
-            min-height: 70px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 1px dashed rgba(0,0,0,0.2);
-            cursor: pointer;
-            position: relative;
-            padding: 5px;
+            background: rgba(255,255,255,0.5); border-radius: 6px; min-height: 65px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border: 1px dashed rgba(0,0,0,0.2); cursor: pointer; position: relative; padding: 2px;
+            transition: all 0.2s;
         }
-
-        .day-cell .food-item { width: 100%; height: auto; min-height: 60px; margin: 0; cursor: grab; box-shadow: none; border: none; border-radius: 0; }
         
-        .cell-menu-btn {
-            position: absolute; top: 2px; right: 2px;
-            background: rgba(0,0,0,0.1); border: none; border-radius: 50%; width: 18px; height: 18px;
-            font-size: 12px; line-height: 18px; text-align: center; cursor: pointer; color: #333; padding: 0; display: none;
+        /* Hint + */
+        .day-cell:not(.filled)::after {
+            content: '+'; font-size: 24px; color: rgba(0,0,0,0.15); pointer-events: none; position: absolute;
         }
-        .day-cell:hover .cell-menu-btn { display: block; }
-        .day-cell.filled .cell-menu-btn { background: #ff7675; color: white; }
+        
+        /* Visual Feedback for Drag/Select */
+        .day-cell.drag-over, .day-cell.highlight-target {
+            background-color: #dff9fb !important; border: 2px solid var(--primary) !important; transform: scale(1.02);
+        }
 
-        /* Shopping List */
-        .shopping-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; font-size: 18px; }
+        .day-cell .food-item { width: 100%; height: 100%; border: none; box-shadow: none; background: transparent; }
+        
+        /* Delete btn on cell */
+        .cell-delete-btn {
+            position: absolute; top: -5px; left: -5px; background: #ff7675; color: white;
+            border-radius: 50%; width: 20px; height: 20px; font-size: 12px; line-height: 20px;
+            text-align: center; display: none; z-index: 5; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .day-cell.filled:hover .cell-delete-btn { display: block; }
+
+        /* Modals */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 350px; max-height: 80vh; overflow-y: auto; text-align: center; }
+        
+        #item-selector-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 15px; }
+        .shopping-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; text-align: right; }
         .shopping-item .icon-and-name { display: flex; align-items: center; gap: 8px; }
-        .shopping-item .icon-and-name img, .shopping-item .icon-and-name .emoji { width: 24px; height: 24px; font-size: 20px; }
+        .shopping-item img { width: 24px; height: 24px; }
 
-        #trash-can { position: fixed; bottom: 20px; left: 20px; width: 70px; height: 70px; background: #ff7675; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; box-shadow: var(--shadow); z-index: 1000; }
-        
-        /* --- PRINT OPTIMIZATION (A4 Landscape) --- */
+        #trash-can { display: none; } /* Not needed with new click interface */
+
+        /* Print */
         @media print {
-            @page {
-                size: landscape; /* A4 Landscape */
-                margin: 0;
-            }
-            body {
-                background: white;
-                padding: 0;
-                margin: 0;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                width: 100vw;
-                height: 100vh;
-            }
-            /* Hide UI Elements */
-            .inventory-section, #trash-can, .controls-bar, .new-item-control, h1.main-title, .modal, .cell-menu-btn, #setup-screen { 
-                display: none !important; 
-            }
-            
-            /* Expand Table to Fill Page */
-            #tables-container {
-                display: block;
-                width: 100%;
-            }
-            
-            .single-child-table {
-                width: 100vw;
-                height: 100vh;
-                box-shadow: none;
-                border: none;
-                margin: 0;
-                padding: 10px 20px;
-                box-sizing: border-box;
-                page-break-after: always; /* Each child on new page */
-                display: flex;
-                flex-direction: column;
-            }
-            
-            .child-title {
-                font-size: 30px;
-                padding: 10px;
-                margin-bottom: 10px;
-            }
-
-            .week-grid {
-                flex: 1; /* Take remaining height */
-                display: grid;
-                grid-template-columns: 100px repeat(6, 1fr); /* Slightly wider row header */
-                grid-template-rows: 50px repeat(5, 1fr); /* Fixed header height, equal row heights */
-                gap: 2px;
-                border: 2px solid #ccc;
-            }
-
-            .header-cell {
-                font-size: 16px;
-                background-color: #eee !important;
-                border: 1px solid #999;
-            }
-            
-            .day-cell {
-                border: 1px solid #999;
-                min-height: 0; /* Let grid control height */
-            }
-            
-            /* Make icons bigger in print */
-            .day-cell .food-item img, .day-cell .food-item span.emoji {
-                width: 60px;
-                height: 60px;
-                font-size: 50px;
-            }
-            .day-cell .food-item span:not(.emoji) {
-                font-size: 16px; /* Text label size */
-                font-weight: bold;
-            }
+            @page { size: landscape; margin: 0; }
+            body { padding: 0; background: white; width: 100vw; height: 100vh; }
+            .inventory-section, .controls-bar, h1, .modal, #setup-screen { display: none !important; }
+            #tables-container { overflow: visible; display: block; }
+            .single-child-table { width: 100vw; height: 100vh; margin: 0; padding: 10px; page-break-after: always; min-width: 0; display: flex; flex-direction: column; }
+            .week-grid { flex: 1; border: 2px solid #ccc; }
+            .header-cell { background: #eee !important; border: 1px solid #999; font-size: 16px; }
+            .day-cell { border: 1px solid #999; }
+            .day-cell:not(.filled)::after { content: ''; }
+            .day-cell .food-item img, .day-cell .food-item span.emoji { width: 50px; height: 50px; font-size: 40px; }
         }
     </style>
 </head>
 <body>
 
-    <h1 class="main-title">תפריט קופסאות שבועי</h1>
+    <h1 class="main-title">תפריט קופסאות שבועי 🍱</h1>
 
     <div id="setup-screen">
-        <h2>הגדרת קופסאות אוכל 🎨</h2>
-        <p>הוסיפו ילדים ובחרו צבע לקופסה שלהם:</p>
+        <h2>הגדרת ילדים 🎨</h2>
         <div id="children-list-container"></div>
         <button class="btn btn-add" onclick="addChildRow()">+ הוסף ילד</button>
         <br><br>
-        <button class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px;" onclick="startApp()">התחל לעצב! 🚀</button>
+        <button class="btn btn-primary" style="width: 100%; font-size: 18px; padding: 12px;" onclick="startApp()">התחל לעצב! 🚀</button>
     </div>
 
     <div id="app-screen">
         <div class="controls-bar">
-            <div style="display:flex; gap:10px; flex-wrap: wrap;">
-                <button class="btn btn-shopping" onclick="showShoppingList()">🛒 רשימת קניות</button>
-                <button class="btn btn-success" onclick="window.print()">📸 שמור (PDF)</button>
+            <div class="controls-group">
+                <button class="btn btn-shopping" onclick="showShoppingList()">🛒 רשימה</button>
+                <button class="btn btn-success" onclick="window.print()">📸 שמור</button>
                 <button class="btn btn-magic" onclick="autoFillMenu()">🪄 אוטומטי</button>
             </div>
-            <button class="btn btn-warning" onclick="clearTable()">🧹 נקה</button>
+            <button class="btn btn-warning" style="flex:0;" onclick="clearTable()">🧹</button>
         </div>
 
         <div class="inventory-section">
-            <h4 style="margin:0 0 10px 0; text-align:center;">מחסן מוצרים (קליק ימני לעריכת תמונה)</h4>
+            <h4 style="margin:0 0 10px 0; text-align:center;">לחץ על מאכל כדי לבחור אותו 👇</h4>
             <div class="tab-buttons"></div>
             
             <div class="new-item-control">
-                <input type="text" id="new-food-name" placeholder="הקלד שם מאכל (למשל: בורקס)..." onkeypress="handleKeyPress(event)">
-                <select id="new-food-cat" title="בחר קטגוריה">
-                    <option value="auto">✨ זיהוי אוטומטי</option>
+                <input type="text" id="new-food-name" placeholder="מאכל חדש..." onkeypress="handleKeyPress(event)">
+                <select id="new-food-cat">
+                    <option value="auto">✨ קטגוריה אוטומטית</option>
                 </select>
                 <button class="btn btn-primary" onclick="addNewItem()">+</button>
             </div>
@@ -307,44 +234,27 @@
 
     <div id="item-selector-modal" class="modal">
         <div class="modal-content">
-            <h2 id="selector-title" style="text-align:center; color:#6c5ce7;">בחירת פריט </h2>
+            <h3 id="selector-title">בחר פריט</h3>
             <div id="item-selector-list"></div>
-            <br>
-            <div style="display: flex; gap: 10px;">
-                 <button class="btn btn-small-delete" style="flex: 1;" onclick="deleteItemFromCell()">🗑️ מחק פריט קיים</button>
-                <button class="btn btn-primary" style="flex: 1;" onclick="document.getElementById('item-selector-modal').style.display='none'">סגור</button>
+            <div style="margin-top: 15px; display:flex; gap:10px;">
+                <button class="btn btn-small-delete" style="flex:1" onclick="deleteItemFromCell()">🗑️ נקה תא</button>
+                <button class="btn btn-primary" style="flex:1" onclick="closeModal('item-selector-modal')">סגור</button>
             </div>
         </div>
-    </div>
-
-    <div id="context-menu">
-        <div class="ctx-item" onclick="changeItemImage()">🖼️ שנה תמונה (URL)</div>
-        <div class="ctx-item" onclick="deleteItemFromInventory()" style="color:red">🗑️ מחק מהמחסן</div>
     </div>
 
     <div id="shopping-modal" class="modal">
         <div class="modal-content">
-            <h2 style="text-align:center; color:#6c5ce7;">רשימת קניות 📝</h2>
+            <h3>רשימת קניות 📝</h3>
             <div id="shopping-list-items"></div>
             <br>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn btn-whatsapp" style="flex: 1;" onclick="copyToWhatsapp()">💬 העתק לוואטסאפ</button>
-                <button class="btn btn-primary" style="flex: 1;" onclick="document.getElementById('shopping-modal').style.display='none'">סגור</button>
-            </div>
+            <button class="btn btn-whatsapp" style="width:100%; margin-bottom:10px;" onclick="copyToWhatsapp()">העתק לוואטסאפ 💬</button>
+            <button class="btn btn-primary" style="width:100%" onclick="closeModal('shopping-modal')">סגור</button>
         </div>
     </div>
 
-    <div id="trash-can" ondrop="trashDrop(event)" ondragover="allowDrop(event)">
-        <span style="font-size:30px;">🗑️</span>
-    </div>
-
     <script>
-        // --- Global Data & State ---
-        let childrenData = []; 
-        let contextTargetItem = null;
-        let shoppingListSummary = {};
-        let currentCellTarget = null; 
-
+        // --- Data ---
         const categories = [
             { id: 'bread', name: 'פחמימה', icon: '🍞' },
             { id: 'filling', name: 'חלבון/ממרח', icon: '🧀' },
@@ -354,105 +264,79 @@
         ];
         const days = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'];
         
-        // Dictionary matching the items in the uploaded image + New items
         const iconDictionary = {
-            // Row 1: Breads
-            'לחמניה': '🥖',
-            'פנקייק': '🥞', 
-            'לחם מלא': '🍞',
-            'פיתה': '🥙',
-            'בייגלה': '🥨',
-            'לחם': '🍞',
-            'טוסט': '🥪',
+            'בייגלה שומשום': { type: 'img', src: 'https://www.nika-cakes.co.il/wp-content/uploads/2020/12/Romanian-pretzel.jpg' },
+            'אבוקדו': { type: 'img', src: 'https://i0.wp.com/lyb.co.il/wp-content/uploads/2021/01/half-of-avocado-.jpg?fit=764%2C1024&ssl=1' },
+            'תמר': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/uW5nT0cbTD7gyfDt.jpg' },
+            'עגבניית שרי': { type: 'img', src: 'https://www.ecolution.co.il/wp-content/uploads/2025/02/lobelo-%D7%A2%D7%92%D7%91%D7%A0%D7%99%D7%99%D7%AA-%D7%A9%D7%A8%D7%99-%D7%9C%D7%95%D7%91%D7%9C%D7%95-600x999.jpg' },
+            'גמבה': { type: 'img', src: 'https://hevdel.co.il/wp-content/uploads/2021/02/bell-peppers-421087_640.jpg' },
+            'שוקולד השחר': { type: 'img', src: 'https://res.cloudinary.com/shufersal/image/upload/f_auto,q_auto/v1551800922/prod/product_images/products_large/QJU14_L_P_416021_1.png' },
+            'נוטלה': { type: 'img', src: 'https://res.cloudinary.com/shufersal/image/upload/f_auto,q_auto/v1551800922/prod/product_images/products_large/JEB38_L_P_80135876_1.png' },
+            'מוצרלה מגורדת': { type: 'img', src: 'https://manhaadama.co.il/wp-content/uploads/2022/01/Mock-Up2.jpg' },
+            'מוצרלה בייבי': { type: 'img', src: 'https://noyhasade.b-cdn.net/wp-content/uploads/2021/01/baby_mozarella2.jpg' },
+            'גאודה קוביות': { type: 'img', src: 'https://www.hamoshava.co.il/wp-content/uploads/2025/04/%D7%92%D7%90%D7%95%D7%93%D7%94-%D7%94%D7%95%D7%9C%D7%A0%D7%93%D7%99%D7%AA-%D7%9E%D7%A9%D7%95%D7%9C%D7%A9.jpg' },
+            'פטה עיזים': { type: 'img', src: 'https://www.carmella.co.il/wp-content/uploads/2022/08/7290001499303.jpg' },
+            'חביתה': { type: 'img', src: 'https://www.kipa.co.il/userFiles/2025/11/1200-680/334694_%D7%97%D7%91%D7%99%D7%AA%D7%94_2.jpg' },
+            'לחמניה': '🥖', 'לביבות': '🥞', 'לחם מלא': '🍞', 'פיתה': '🥙', 'בייגלה': '🥨', 'לחם': '🍞', 'טוסט': '🥪',
             'בלינצס': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmtCm9Bu4wczi_0LUyr29ux-xOfFnzeLq_6bvycZPmBA&s=10' },
-            
-            // Row 2: Proteins
-            'ממרח שוקולד': '🍫',
-            'ביצה קשה': '🥚',
-            'חביתה': '🍳',
-            'פסטרמה': '🥩',
+            'ממרח שוקולד': '🍫', 'ביצה קשה': '🥚', 'פסטרמה': '🥩', 'גבינה צהובה': '🧀',
             'גבינה לבנה': { type: 'img', src: 'https://noyhasade.b-cdn.net/wp-content/uploads/2020/09/7290002824183-2.jpg'},
-            'גבינה צהובה': '🧀',
             'בולגרית': { type: 'img', src: 'https://gad-dairy.co.il/wp-content/uploads/2016/05/30056-13-a_pic_site_9-1024x1024.png' },
             'גבינת שמנת': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtiZ7V4aeVC52RnVhqm5FHQpxuQ8wk182azK07MmJ9Rg&s=10' },
-            
-            // Row 3: Fruits
-            'תותים': '🍓',
-            'תפוח': '🍎',
-            'אוכמניות': '🫐',
-            'שזיף': '🟣', // Closest emoji
-            'מנגו': '🥭',
-            'קיווי': '🥝',
-            'בננה': '🍌',
-            
-            // Row 4: Veggies + Fruit (from image)
-            'תפו': '🍊', // Orange (named Tapuz in hebrew)
-            'זיתים ירוקים': '🫒',
-            'מלפפון': '🥒',
-            'מלפפון חמוץ': '🥒',
-            'עגבניות שרי': '🍅',
-            'פלפל גמבה': '🫑',
-            'עגבניה': '🍅',
-            
-            // Row 5: Treats
+            'תותים': '🍓', 'תפוח': '🍎', 'אוכמניות': '🫐', 'שזיף': '🟣', 'מנגו': '🥭', 'קיווי': '🥝', 'בננה': '🍌',
+            'תפו': '🍊', 'זיתים ירוקים': '🫒', 'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅',
             'קרקרים': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/Yz1gR9k5ej75oC8J.jpg' },
-            'יוגורט': '🥛',
-            'פתי בר': '🍪',
-            'מיץ תפוזים': '🧃',
-            'קאפקייק': '🧁',
-            'בייגלה (חטיף)': '🥨',
-            'חטיף': '🍬',
+            'יוגורט': '🥛', 'פתי בר': '🍪', 'מיץ תפוזים': '🧃', 'קאפקייק': '🧁', 'בייגלה (חטיף)': '🥨', 'חטיף': '🍬',
             'אקטימל': { type: 'img', src: 'https://www.emess.co.il/resize/?width=800&height=450&url=/uploads/2024/08/%D7%90%D7%A7%D7%98%D7%99%D7%9E%D7%9C.jpg' },
             'כדור שוקולד': { type: 'img', src: 'https://cakenet.co.il/wp-content/uploads/2019/02/0_02891.jpg' },
-            
-            // Defaults
             'bread': '🍞', 'filling': '🧀', 'veggie': '🥒', 'fruit': '🍎', 'treat': '🍪' 
         };
 
-        // Inventory
         let allInventoryItems = [
-            // Breads
-            { name: 'לחמניה', cat: 'bread' }, { name: 'פנקייק', cat: 'bread' }, { name: 'לחם מלא', cat: 'bread' }, { name: 'פיתה', cat: 'bread' }, { name: 'בייגלה', cat: 'bread' }, { name: 'לחם', cat: 'bread' }, { name: 'בלינצס', cat: 'bread' },
-            // Filling
-            { name: 'ממרח שוקולד', cat: 'filling' }, { name: 'ביצה קשה', cat: 'filling' }, { name: 'חביתה', cat: 'filling' }, { name: 'פסטרמה', cat: 'filling' }, { name: 'גבינה לבנה', cat: 'filling' }, { name: 'גבינה צהובה', cat: 'filling' }, { name: 'בולגרית', cat: 'filling' }, { name: 'גבינת שמנת', cat: 'filling' },
-            // Fruit
-            { name: 'תותים', cat: 'fruit' }, { name: 'תפוח', cat: 'fruit' }, { name: 'אוכמניות', cat: 'fruit' }, { name: 'שזיף', cat: 'fruit' }, { name: 'מנגו', cat: 'fruit' }, { name: 'קיווי', cat: 'fruit' },
-            // Veggie
-            { name: 'תפו', cat: 'veggie' }, { name: 'זיתים ירוקים', cat: 'veggie' }, { name: 'מלפפון', cat: 'veggie' }, { name: 'מלפפון חמוץ', cat: 'veggie' }, { name: 'עגבניות שרי', cat: 'veggie' }, { name: 'פלפל גמבה', cat: 'veggie' },
-            // Treats
-            { name: 'קרקרים', cat: 'treat' }, { name: 'יוגורט', cat: 'treat' }, { name: 'פתי בר', cat: 'treat' }, { name: 'מיץ תפוזים', cat: 'treat' }, { name: 'קאפקייק', cat: 'treat' }, { name: 'בייגלה (חטיף)', cat: 'treat' },
-            // Extras
-            { name: 'אקטימל', cat: 'treat' }, { name: 'כדור שוקולד', cat: 'treat' }
+            { name: 'בייגלה שומשום', cat: 'bread' }, { name: 'לחמניה', cat: 'bread' }, { name: 'פיתה', cat: 'bread' }, { name: 'בלינצס', cat: 'bread' }, { name: 'טוסט', cat: 'bread' },
+            { name: 'אבוקדו', cat: 'filling' }, { name: 'חביתה', cat: 'filling' }, { name: 'שוקולד השחר', cat: 'filling' }, { name: 'גבינה צהובה', cat: 'filling' }, { name: 'בולגרית', cat: 'filling' }, { name: 'גבינת שמנת', cat: 'filling' }, { name: 'ביצה קשה', cat: 'filling' },
+            { name: 'עגבניית שרי', cat: 'veggie' }, { name: 'גמבה', cat: 'veggie' }, { name: 'מלפפון', cat: 'veggie' }, { name: 'זיתים ירוקים', cat: 'veggie' },
+            { name: 'תמר', cat: 'fruit' }, { name: 'תפוח', cat: 'fruit' }, { name: 'בננה', cat: 'fruit' }, { name: 'ענבים', cat: 'fruit' },
+            { name: 'מוצרלה בייבי', cat: 'treat' }, { name: 'קרקרים', cat: 'treat' }, { name: 'יוגורט', cat: 'treat' }, { name: 'אקטימל', cat: 'treat' }, { name: 'כדור שוקולד', cat: 'treat' }
         ];
 
-        // --- Setup Functions ---
+        let childrenData = [];
+        let selectedInventoryItem = null; // Storing selected item for click-to-place
+        let currentCellTarget = null;
+
+        // --- Init ---
         document.addEventListener('DOMContentLoaded', () => {
             const catSelect = document.getElementById('new-food-cat');
+            // Clear existing options first to prevent dupes if re-run
+            catSelect.innerHTML = '<option value="auto">✨ קטגוריה אוטומטית</option>';
             categories.forEach(cat => {
                 const option = document.createElement('option');
                 option.value = cat.id;
                 option.innerText = `${cat.icon} ${cat.name}`;
                 catSelect.appendChild(option);
             });
+            
+            // Add default child if empty
             if (document.getElementById('children-list-container').children.length === 0) {
-                addChildRow('אורי' ,  '#539fec');
+                addChildRow('אורי', '#539fec');
             }
         });
 
-        function addChildRow(name = '', color = '#a29bfe') {
+        // --- Global Helper for Button ---
+        window.addChildRow = function(name = '', color = '#a29bfe') {
             const container = document.getElementById('children-list-container');
             const div = document.createElement('div');
             div.className = 'child-input-row';
             const canRemove = container.children.length > 0 || name === ''; 
             div.innerHTML = `
                 <input type="text" placeholder="שם הילד/ה" value="${name}">
-                <input type="color" value="${color}" title="צבע הקופסה">
+                <input type="color" value="${color}">
                 ${canRemove ? '<button class="remove-row-btn" onclick="this.parentElement.remove()">x</button>' : ''}
             `;
             container.appendChild(div);
         }
 
-        function startApp() {
+        window.startApp = function() {
             const rows = document.querySelectorAll('.child-input-row');
             childrenData = [];
             rows.forEach(row => {
@@ -470,26 +354,25 @@
             buildTables();
         }
 
-        // --- Core Functions ---
-
+        // --- Logic ---
         function resolveIcon(name, cat, customUrl = null) {
-            if (customUrl) return `<img src="${customUrl}" alt="${name}">`;
+            if (customUrl) return `<img src="${customUrl}">`;
             
             if (iconDictionary[name]) {
                 const val = iconDictionary[name];
-                if (typeof val === 'object' && val.type === 'img') return `<img src="${val.src}" alt="${name}">`;
+                if (typeof val === 'object') return `<img src="${val.src}">`;
                 return `<span class="emoji">${val}</span>`;
             }
-
+            
+            // Partial
             for (const [key, val] of Object.entries(iconDictionary)) {
                 if (typeof key === 'string' && key.length > 2 && name.includes(key)) {
-                    if (typeof val === 'object' && val.type === 'img') return `<img src="${val.src}" alt="${name}">`;
+                    if (typeof val === 'object') return `<img src="${val.src}">`;
                     return `<span class="emoji">${val}</span>`;
                 }
             }
-            
-            const fallbackIcon = iconDictionary[cat] || '🍱';
-            return `<span class="emoji">${fallbackIcon}</span>`;
+            const fallback = iconDictionary[cat] || '🍱';
+            return `<span class="emoji">${fallback}</span>`;
         }
 
         function initInventoryTabs() {
@@ -498,8 +381,7 @@
             categories.forEach((cat, idx) => {
                 const btn = document.createElement('div');
                 btn.className = `tab-button ${idx===0?'active':''}`;
-                btn.innerHTML = `${cat.icon} ${cat.name}`;
-                btn.setAttribute('data-cat', cat.id); 
+                btn.innerText = `${cat.icon} ${cat.name}`;
                 btn.onclick = () => {
                     document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
@@ -512,95 +394,60 @@
         function initInventory(catId) {
             const list = document.getElementById('inventory-list');
             list.innerHTML = '';
+            // Clear selection when changing tab
+            selectedInventoryItem = null; 
+            
             const filtered = allInventoryItems.filter(i => i.cat === catId);
             filtered.forEach(item => {
-                list.appendChild(createItemElement(item));
+                const el = document.createElement('div');
+                el.className = 'food-item';
+                el.draggable = true; // For desktop drag
+                el.innerHTML = resolveIcon(item.name, item.cat, item.customUrl) + `<span>${item.name}</span>`;
+                
+                // 1. Drag Events (Desktop)
+                el.addEventListener('dragstart', (ev) => {
+                    ev.dataTransfer.setData("application/json", JSON.stringify(item));
+                });
+
+                // 2. Click Selection (Mobile/Easy Desktop)
+                el.onclick = () => {
+                    // Toggle selection
+                    if (selectedInventoryItem === item) {
+                        selectedInventoryItem = null;
+                        el.classList.remove('selected-for-move');
+                    } else {
+                        // Unselect others
+                        document.querySelectorAll('.inventory-list .food-item').forEach(x => x.classList.remove('selected-for-move'));
+                        selectedInventoryItem = item;
+                        el.classList.add('selected-for-move');
+                    }
+                };
+                
+                list.appendChild(el);
             });
         }
 
-        function createItemElement(item) {
-            const div = document.createElement('div');
-            div.className = 'food-item';
-            div.draggable = true;
-            div.setAttribute('data-name', item.name);
-            div.setAttribute('data-cat', item.cat);
-            if(item.customUrl) div.setAttribute('data-custom-url', item.customUrl);
-            div.innerHTML = `${resolveIcon(item.name, item.cat, item.customUrl)}<span>${item.name}</span>`;
-            div.addEventListener('dragstart', drag);
-            div.addEventListener('contextmenu', (e) => showContextMenu(e, item));
-            return div;
-        }
+        window.addNewItem = function() {
+            const name = document.getElementById('new-food-name').value.trim();
+            let cat = document.getElementById('new-food-cat').value;
+            if(!name) return;
 
-        // --- Adding Items ---
-        function addNewItem() {
-            const nameInput = document.getElementById('new-food-name');
-            const catSelect = document.getElementById('new-food-cat');
-            
-            const name = nameInput.value.trim();
-            if(!name) return alert('נא להקליד שם למאכל');
-            
-            let cat = catSelect.value;
-            
-            if (cat === 'auto') {
-                cat = 'treat'; 
-                if(['לחם','פיתה','טוסט','לחמניה','מאפה','בורקס','סנדוויץ','פנקייק','בייגלה','בלינצס'].some(x => name.includes(x))) cat = 'bread';
-                else if(['גבינה','חביתה','ביצה','טונה','פסטרמה','חלבון','ממרח','בולגרית'].some(x => name.includes(x))) cat = 'filling';
-                else if(['מלפפון','עגבניה','ירק','תירס','גזר','גמבה','אבוקדו','זיתים'].some(x => name.includes(x))) cat = 'veggie';
-                else if(['תפוח','בננה','פרי','אגס','ענבים','תות','שזיף','מנגו','קיווי'].some(x => name.includes(x))) cat = 'fruit';
+            if(cat === 'auto') {
+                cat = 'treat';
+                if(['לחם','פיתה','בייגלה'].some(x=>name.includes(x))) cat='bread';
+                else if(['גבינה','ביצה'].some(x=>name.includes(x))) cat='filling';
+                else if(['מלפפון','ירק'].some(x=>name.includes(x))) cat='veggie';
+                else if(['תפוח','פרי'].some(x=>name.includes(x))) cat='fruit';
             }
-
-            const newItem = { name, cat, customUrl: null };
-            allInventoryItems.unshift(newItem);
-            
-            const activeTabElement = document.querySelector('.tab-button.active');
-            const currentCatId = activeTabElement ? activeTabElement.getAttribute('data-cat') : 'bread';
-            
-            if (currentCatId !== cat) {
-                const targetBtn = Array.from(document.querySelectorAll('.tab-button')).find(b => b.getAttribute('data-cat') === cat);
-                if(targetBtn) targetBtn.click();
-            } else {
-                initInventory(cat);
-            }
-            
-            nameInput.value = '';
-            catSelect.value = 'auto'; 
-        }
-        
-        function handleKeyPress(e) { if(e.key==='Enter') addNewItem(); }
-
-        // --- Context Menu ---
-        function showContextMenu(e, itemObj) {
-            e.preventDefault();
-            contextTargetItem = itemObj;
-            const ctxMenu = document.getElementById('context-menu');
-            ctxMenu.style.display = 'block';
-            ctxMenu.style.left = e.pageX + 'px';
-            ctxMenu.style.top = e.pageY + 'px';
-        }
-        document.addEventListener('click', () => document.getElementById('context-menu').style.display = 'none');
-
-        function changeItemImage() {
-            if(!contextTargetItem) return;
-            const url = prompt('הכנס קישור לתמונה (URL) מהאינטרנט:', contextTargetItem.customUrl || '');
-            if(url !== null) { 
-                contextTargetItem.customUrl = url || null; 
-                initInventory(contextTargetItem.cat);
-            }
+            allInventoryItems.unshift({name, cat});
+            initInventory(cat);
+            document.getElementById('new-food-name').value = '';
         }
 
-        function deleteItemFromInventory() {
-             if(!contextTargetItem) return;
-             if(confirm('למחוק את ' + contextTargetItem.name + ' לצמיתות מהמחסן?')) {
-                 allInventoryItems = allInventoryItems.filter(i => i !== contextTargetItem);
-                 initInventory(contextTargetItem.cat);
-             }
-        }
-
-        // --- Table Rendering ---
         function hexToRgba(hex, alpha) {
             let r=0, g=0, b=0;
-            if (hex.length == 4) { r = "0x" + hex[1] + hex[1]; g = "0x" + hex[2] + hex[2]; b = "0x" + hex[3] + hex[3]; } 
-            else if (hex.length == 7) { r = "0x" + hex[1] + hex[2]; g = "0x" + hex[3] + hex[4]; b = "0x" + hex[5] + hex[6]; }
+            if(hex.length==4){r="0x"+hex[1]+hex[1];g="0x"+hex[2]+hex[2];b="0x"+hex[3]+hex[3];}
+            else if(hex.length==7){r="0x"+hex[1]+hex[2];g="0x"+hex[3]+hex[4];b="0x"+hex[5]+hex[6];}
             return `rgba(${+r},${+g},${+b},${alpha})`;
         }
 
@@ -610,32 +457,47 @@
             childrenData.forEach(child => {
                 const card = document.createElement('div');
                 card.className = 'single-child-table';
-                const title = document.createElement('div');
-                title.className = 'child-title';
-                title.innerText = 'התפריט של ' + child.name;
-                title.style.backgroundColor = child.color;
-                card.appendChild(title);
-
+                card.innerHTML = `<div class="child-title" style="background:${child.color}">התפריט של ${child.name}</div>`;
+                
                 const grid = document.createElement('div');
                 grid.className = 'week-grid';
                 grid.style.backgroundColor = hexToRgba(child.color, 0.3);
 
-                grid.appendChild(createCell('header-cell', 'קטגוריה'));
-                days.forEach(day => grid.appendChild(createCell('header-cell day-header', day)));
+                // Header
+                grid.innerHTML += `<div class="header-cell">קטגוריה</div>`;
+                days.forEach(d => grid.innerHTML += `<div class="header-cell day-header">${d}</div>`);
 
                 categories.forEach(cat => {
-                    const ch = document.createElement('div');
-                    ch.className = 'header-cell cat-header';
-                    ch.innerHTML = `<span class="emoji-icon">${cat.icon}</span><span>${cat.name}</span>`;
-                    grid.appendChild(ch);
+                    grid.innerHTML += `<div class="header-cell">${cat.icon}<br>${cat.name}</div>`;
                     days.forEach(day => {
-                        const slot = document.createElement('div');
-                        slot.className = 'day-cell child-slot';
-                        slot.setAttribute('data-cat', cat.id);
-                        slot.onclick = showItemSelector; 
-                        slot.addEventListener('dragover', allowDrop);
-                        slot.addEventListener('drop', drop);
-                        grid.appendChild(slot);
+                        const cell = document.createElement('div');
+                        cell.className = 'day-cell';
+                        cell.setAttribute('data-cat', cat.id);
+                        
+                        // Drag & Drop Handlers
+                        cell.addEventListener('dragover', (e) => { e.preventDefault(); cell.classList.add('drag-over'); });
+                        cell.addEventListener('dragleave', () => cell.classList.remove('drag-over'));
+                        cell.addEventListener('drop', (e) => {
+                            e.preventDefault(); cell.classList.remove('drag-over');
+                            const data = e.dataTransfer.getData("application/json");
+                            if(data) populateCell(cell, JSON.parse(data));
+                        });
+
+                        // Click Logic
+                        cell.onclick = () => {
+                            if(selectedInventoryItem) {
+                                // Place selected item
+                                populateCell(cell, selectedInventoryItem);
+                                // Optional: Unselect after place
+                                // selectedInventoryItem = null; 
+                                // document.querySelectorAll('.selected-for-move').forEach(x => x.classList.remove('selected-for-move'));
+                            } else {
+                                // Open selector modal
+                                openItemSelector(cell, cat.id);
+                            }
+                        };
+
+                        grid.appendChild(cell);
                     });
                 });
                 card.appendChild(grid);
@@ -643,495 +505,99 @@
             });
         }
 
-        function createCell(cls, txt) {
-            const d = document.createElement('div');
-            d.className = cls;
-            d.innerText = txt;
-            return d;
-        }
-
-        function populateCell(targetCell, item) {
-            targetCell.innerHTML = '';
-            if (!item) { targetCell.classList.remove('filled'); return; }
-            const div = createItemElement(item);
-            div.addEventListener('dragstart', drag); 
-            targetCell.appendChild(div);
-            targetCell.classList.add('filled');
+        function populateCell(cell, item) {
+            cell.innerHTML = '';
+            if(!item) { 
+                cell.classList.remove('filled'); 
+                return; 
+            }
             
-            const deleteBtn = document.createElement('button');
-            deleteBtn.className = 'cell-menu-btn';
-            deleteBtn.innerHTML = 'x';
-            deleteBtn.title = 'מחיקה מהירה';
-            deleteBtn.onclick = (e) => { e.stopPropagation(); deleteItemFromCell(targetCell); };
-            targetCell.appendChild(deleteBtn);
+            cell.classList.add('filled');
+            const div = document.createElement('div');
+            div.className = 'food-item';
+            div.innerHTML = resolveIcon(item.name, item.cat, item.customUrl) + `<span>${item.name}</span>`;
+            
+            // Allow re-drag from cell
+            div.draggable = true;
+            div.addEventListener('dragstart', (ev) => {
+               ev.dataTransfer.setData("application/json", JSON.stringify(item));
+            });
+            
+            // Delete button
+            const del = document.createElement('div');
+            del.className = 'cell-delete-btn';
+            del.innerText = 'x';
+            del.onclick = (e) => { e.stopPropagation(); populateCell(cell, null); };
+            
+            cell.appendChild(div);
+            cell.appendChild(del);
         }
 
-        // --- Selector / Helper Functions ---
-        function showItemSelector(e) {
-            if (e.dataTransfer) return; 
-            const cell = e.currentTarget;
+        function openItemSelector(cell, catId) {
             currentCellTarget = cell;
-            const catId = cell.getAttribute('data-cat');
-            const category = categories.find(c => c.id === catId);
-            document.getElementById('selector-title').innerText = `בחירת ${category ? category.name : 'פריט'} 🍽️`;
             const list = document.getElementById('item-selector-list');
             list.innerHTML = '';
-            const filtered = allInventoryItems.filter(i => i.cat === catId);
-            filtered.forEach(item => {
-                const itemEl = createItemElement(item);
-                itemEl.draggable = false;
-                itemEl.onclick = () => selectItemForCell(item);
-                list.appendChild(itemEl);
+            
+            const relevant = allInventoryItems.filter(x => x.cat === catId);
+            relevant.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'food-item';
+                el.innerHTML = resolveIcon(item.name, item.cat, item.customUrl) + `<span>${item.name}</span>`;
+                el.onclick = () => {
+                    populateCell(cell, item);
+                    closeModal('item-selector-modal');
+                };
+                list.appendChild(el);
             });
+            
             document.getElementById('item-selector-modal').style.display = 'flex';
         }
 
-        function selectItemForCell(item) {
-            if (currentCellTarget) { populateCell(currentCellTarget, item); }
-            document.getElementById('item-selector-modal').style.display = 'none';
+        window.deleteItemFromCell = function() {
+            if(currentCellTarget) populateCell(currentCellTarget, null);
+            closeModal('item-selector-modal');
         }
 
-        function deleteItemFromCell(cell = currentCellTarget) {
-            if (cell) { populateCell(cell, null); }
-            document.getElementById('item-selector-modal').style.display = 'none';
-        }
+        window.closeModal = function(id) { document.getElementById(id).style.display = 'none'; }
 
-        // --- Drag & Drop ---
-        function drag(ev) {
-            const data = {
-                name: ev.target.getAttribute('data-name'),
-                cat: ev.target.getAttribute('data-cat'),
-                customUrl: ev.target.getAttribute('data-custom-url') || null
-            };
-            ev.dataTransfer.setData("application/json", JSON.stringify(data));
-        }
-
-        function allowDrop(ev) { ev.preventDefault(); }
-
-        function drop(ev) {
-            ev.preventDefault();
-            let target = ev.target.closest('.child-slot');
-            if(!target) return;
-            const rawData = ev.dataTransfer.getData("application/json");
-            if(!rawData) return;
-            populateCell(target, JSON.parse(rawData));
-        }
-
-        function trashDrop(ev) {
-            ev.preventDefault();
-            const rawData = ev.dataTransfer.getData("application/json");
-            if(rawData) {
-                const draggedItem = document.querySelector(`[data-name="${JSON.parse(rawData).name}"]`);
-                const itemSlot = draggedItem ? draggedItem.closest('.day-cell') : null;
-                if (itemSlot) populateCell(itemSlot, null); 
-            }
-        }
-        
-        // --- Shopping List & Tools ---
-        function showShoppingList() {
-            const items = document.querySelectorAll('.child-slot .food-item');
-            shoppingListSummary = {};
-            items.forEach(i => {
-                const name = i.getAttribute('data-name');
-                const cat = i.getAttribute('data-cat');
-                const customUrl = i.getAttribute('data-custom-url');
-                if (!shoppingListSummary[name]) { shoppingListSummary[name] = { count: 0, cat: cat, customUrl: customUrl }; }
-                shoppingListSummary[name].count++;
+        // --- Tools ---
+        window.showShoppingList = function() {
+            const summary = {};
+            document.querySelectorAll('.day-cell.filled .food-item span:last-child').forEach(sp => {
+                const name = sp.innerText;
+                summary[name] = (summary[name] || 0) + 1;
             });
-<!DOCTYPE html>
-<html lang="he" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>תפריט קופסאות שבועי</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700&display=swap');
-
-        :root {
-            --bg-color: #f0f3f7;
-            --accent: #ff7675;
-            --primary: #6c5ce7;
-            --text: #2d3436;
-            --shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        body {
-            font-family: 'Rubik', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        h1.main-title {
-            color: var(--primary);
-            margin-bottom: 25px;
-            font-size: 32px;
-            text-align: center;
-        }
-
-        /* --- Buttons & Inputs --- */
-        .btn {
-            border: none;
-            padding: 10px 15px;
-            border-radius: 12px;
-            font-size: 14px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            color: white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            white-space: nowrap;
-        }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
-        .btn-primary { background: var(--primary); }
-        .btn-success { background: #00b894; }
-        .btn-warning { background: #fdcb6e; color: #333; }
-        .btn-shopping { background: #e17055; }
-        .btn-magic { background: linear-gradient(135deg, #a29bfe, #74b9ff); }
-        .btn-whatsapp { background: #25d366; }
-        .btn-add { background: #fab1a0; color: #333; margin-top: 10px; width: 100%; }
-        .btn-small-delete { background: #ff7675; color: white; padding: 5px 8px; font-size: 12px; border-radius: 8px; }
-
-        /* --- Setup Screen --- */
-        #setup-screen {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            text-align: center;
-            max-width: 450px;
-            width: 100%;
-            margin-top: 10px;
-            box-sizing: border-box;
-        }
-
-        .child-input-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
-        .child-input-row input[type="text"] { flex: 1; padding: 10px; border: 2px solid #dfe6e9; border-radius: 10px; outline: none; font-family: 'Rubik', sans-serif; }
-        .child-input-row input[type="color"] { width: 40px; height: 40px; border: none; background: none; cursor: pointer; }
-        .remove-row-btn { background: #ff7675; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-weight: bold; }
-
-        /* --- Main App Container --- */
-        #app-screen { display: none; width: 100%; max-width: 1200px; flex-direction: column; gap: 20px; margin-bottom: 80px; }
-        
-        .controls-bar { 
-            background: white; padding: 15px; border-radius: 15px; display: flex; flex-wrap: wrap; 
-            justify-content: space-between; align-items: center; gap: 10px; box-shadow: var(--shadow); 
-            position: sticky; top: 10px; z-index: 100; 
-        }
-        
-        .controls-group { display: flex; gap: 10px; flex-wrap: wrap; }
-
-        /* Inventory */
-        .inventory-section { background: white; padding: 15px; border-radius: 15px; box-shadow: var(--shadow); }
-        .tab-buttons { display: flex; justify-content: center; gap: 5px; margin-bottom: 15px; flex-wrap: wrap; }
-        .tab-button { background: #dfe6e9; padding: 8px 15px; border-radius: 10px; cursor: pointer; font-weight: 500; color: #555; transition: background 0.2s; white-space: nowrap; margin-bottom: 5px;}
-        .tab-button.active { background: var(--primary); color: white; }
-
-        .new-item-control { display: flex; gap: 10px; justify-content: center; align-items: center; margin-bottom: 15px; background: #f8f9fa; padding: 10px; border-radius: 12px; flex-wrap: wrap; }
-        .new-item-control input { flex: 2; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: 'Rubik', sans-serif; min-width: 150px; }
-        .new-item-control select { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: 'Rubik', sans-serif; cursor: pointer; min-width: 120px; }
-        .new-item-control button { width: 50px; font-size: 20px; padding: 5px; }
-
-        .inventory-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-height: 150px; overflow-y: auto; padding-bottom: 5px; }
-
-        /* Draggable Items */
-        .food-item {
-            width: 70px;
-            height: 70px;
-            background: white;
-            border: 1px solid #dfe6e9;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: grab;
-            user-select: none;
-            transition: all 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            font-size: 11px;
-            text-align: center;
-            line-height: 1.1;
-            position: relative;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        .food-item:hover { border-color: var(--primary); transform: scale(1.05); }
-        .food-item img { width: 40px; height: 40px; object-fit: contain; margin-bottom: 2px; }
-        .food-item span.emoji { font-size: 28px; margin-bottom: 4px; display: block; }
-        
-        .food-item[data-cat="bread"] { border-top: 3px solid #fdcb6e; }
-        .food-item[data-cat="filling"] { border-top: 3px solid #ff7675; }
-        .food-item[data-cat="veggie"] { border-top: 3px solid #00b894; }
-        .food-item[data-cat="fruit"] { border-top: 3px solid #e17055; }
-        .food-item[data-cat="treat"] { border-top: 3px solid #a29bfe; }
-
-        /* Context Menu & Modals */
-        #context-menu { display: none; position: absolute; background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 3000; overflow: hidden; }
-        .ctx-item { padding: 10px 20px; cursor: pointer; font-size: 14px; }
-        .ctx-item:hover { background: #f0f0f0; }
-
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; max-height: 90vh; overflow-y: auto; box-sizing: border-box;}
-        
-        /* Selector List */
-        #item-selector-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-height: 40vh; overflow-y: auto; padding: 10px; border: 1px solid #eee; border-radius: 10px; }
-        #item-selector-list .food-item { cursor: pointer; width: 80px; height: 80px; }
-        #item-selector-list .food-item:hover { border-color: var(--accent); transform: scale(1.05); }
-
-        /* Tables */
-        #tables-container { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 20px; }
-
-        .single-child-table { background: white; padding: 25px; border-radius: 20px; box-shadow: var(--shadow); min-width: 800px; margin-bottom: 30px; }
-        .child-title { text-align: center; font-size: 24px; font-weight: bold; margin-bottom: 15px; padding: 10px; border-radius: 10px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
-        .week-grid { display: grid; grid-template-columns: 80px repeat(6, 1fr); gap: 5px; border: 1px solid rgba(0,0,0,0.1); padding: 8px; border-radius: 12px; }
-        .header-cell { padding: 8px; text-align: center; font-weight: bold; border-radius: 6px; font-size: 13px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.6); }
-        .day-header { background: #ffeaa7 !important; }
-
-        /* --- Day Cell (Drop Zone) Enhanced --- */
-        .day-cell {
-            background: rgba(255,255,255,0.5); 
-            border-radius: 6px;
-            min-height: 70px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 1px dashed rgba(0,0,0,0.2);
-            cursor: pointer;
-            position: relative;
-            padding: 5px;
-            transition: all 0.2s ease;
-        }
-
-        /* 1. Click Hint for Empty Cells */
-        .day-cell:not(.filled)::after {
-            content: '+';
-            font-size: 24px;
-            color: rgba(0,0,0,0.2);
-            pointer-events: none;
-            position: absolute;
-        }
-        
-        /* 2. Enhanced Drag Over Effect */
-        .day-cell.drag-over {
-            background-color: #e3f2fd !important; /* Light Blue background */
-            border: 2px solid #0984e3 !important; /* Solid blue border */
-            transform: scale(1.05); /* Pop out effect */
-            z-index: 10;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        .day-cell .food-item { width: 100%; height: auto; min-height: 60px; margin: 0; cursor: grab; box-shadow: none; border: none; border-radius: 0; }
-        
-        .cell-menu-btn {
-            position: absolute; top: 2px; right: 2px;
-            background: rgba(0,0,0,0.1); border: none; border-radius: 50%; width: 18px; height: 18px;
-            font-size: 12px; line-height: 18px; text-align: center; cursor: pointer; color: #333; padding: 0; display: none;
-        }
-        .day-cell:hover .cell-menu-btn { display: block; }
-        .day-cell.filled .cell-menu-btn { background: #ff7675; color: white; }
-
-        /* Shopping List */
-        .shopping-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; font-size: 18px; }
-        .shopping-item .icon-and-name { display: flex; align-items: center; gap: 8px; }
-        .shopping-item .icon-and-name img, .shopping-item .icon-and-name .emoji { width: 24px; height: 24px; font-size: 20px; }
-
-        #trash-can { position: fixed; bottom: 20px; left: 20px; width: 70px; height: 70px; background: #ff7675; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; box-shadow: var(--shadow); z-index: 1000; }
-        
-        /* --- MEDIA QUERIES FOR MOBILE --- */
-        @media (max-width: 768px) {
-            body { padding: 10px; }
-            h1.main-title { font-size: 24px; margin-bottom: 15px; }
-            .controls-bar { flex-direction: column; align-items: stretch; }
-            .controls-group { justify-content: space-between; }
-            .btn { padding: 12px; flex-grow: 1; }
-            #setup-screen { padding: 20px; margin-top: 0; }
-            .new-item-control { flex-direction: column; align-items: stretch; }
-            .new-item-control button { width: 100%; margin-top: 5px; }
-            .tab-buttons { flex-wrap: wrap; }
-            #tables-container { border-right: 5px solid rgba(0,0,0,0.05); }
-            .single-child-table { margin-right: 5px; }
-        }
-
-        /* --- PRINT OPTIMIZATION --- */
-        @media print {
-            @page { size: landscape; margin: 0; }
-            body { background: white; padding: 0; margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; width: 100vw; height: 100vh; }
-            .inventory-section, #trash-can, .controls-bar, .new-item-control, h1.main-title, .modal, .cell-menu-btn, #setup-screen { display: none !important; }
-            #tables-container { display: block; width: 100%; overflow: visible; }
-            .single-child-table { width: 100vw; height: 100vh; min-width: 0; box-shadow: none; border: none; margin: 0; padding: 10px 20px; box-sizing: border-box; page-break-after: always; display: flex; flex-direction: column; }
-            .child-title { font-size: 30px; padding: 10px; margin-bottom: 10px; }
-            .week-grid { flex: 1; display: grid; grid-template-columns: 100px repeat(6, 1fr); grid-template-rows: 50px repeat(5, 1fr); gap: 2px; border: 2px solid #ccc; }
-            .header-cell { font-size: 16px; background-color: #eee !important; border: 1px solid #999; }
-            .day-cell { border: 1px solid #999; min-height: 0; }
-            /* Hide hints on print */
-            .day-cell:not(.filled)::after { content: ''; }
-            .day-cell .food-item img, .day-cell .food-item span.emoji { width: 60px; height: 60px; font-size: 50px; }
-            .day-cell .food-item span:not(.emoji) { font-size: 16px; font-weight: bold; }
-        }
-    </style>
-</head>
-<body>
-
-    <h1 class="main-title">תפריט קופסאות שבועי</h1>
-
-    <div id="setup-screen">
-        <h2>הגדרת קופסאות אוכל 🎨</h2>
-        <p>הוסיפו ילדים ובחרו צבע לקופסה שלהם:</p>
-        <div id="children-list-container"></div>
-        <button class="btn btn-add" onclick="addChildRow()">+ הוסף ילד</button>
-        <br><br>
-        <button class="btn btn-primary" style="width: 100%; justify-content: center; padding: 12px;" onclick="startApp()">התחל לעצב! 🚀</button>
-    </div>
-
-    <div id="app-screen">
-        <div class="controls-bar">
-            <div class="controls-group">
-                <button class="btn btn-shopping" onclick="showShoppingList()">🛒 רשימת קניות</button>
-                <button class="btn btn-success" onclick="window.print()">📸 שמור (PDF)</button>
-                <button class="btn btn-magic" onclick="autoFillMenu()">🪄 אוטומטי</button>
-            </div>
-            <button class="btn btn-warning" onclick="clearTable()">🧹 נקה</button>
-        </div>
-
-        <div class="inventory-section">
-            <h4 style="margin:0 0 10px 0; text-align:center;">מחסן מוצרים (קליק ימני לעריכת תמונה)</h4>
-            <div class="tab-buttons"></div>
             
-            <div class="new-item-control">
-                <input type="text" id="new-food-name" placeholder="הקלד שם מאכל (למשל: בורקס)..." onkeypress="handleKeyPress(event)">
-                <select id="new-food-cat" title="בחר קטגוריה">
-                    <option value="auto">✨ זיהוי אוטומטי</option>
-                </select>
-                <button class="btn btn-primary" onclick="addNewItem()">+</button>
-            </div>
-
-            <div id="inventory-list" class="inventory-list"></div>
-        </div>
-
-        <div id="tables-container"></div>
-    </div>
-
-    <div id="item-selector-modal" class="modal">
-        <div class="modal-content">
-            <h2 id="selector-title" style="text-align:center; color:#6c5ce7;">בחירת פריט </h2>
-            <div id="item-selector-list"></div>
-            <br>
-            <div style="display: flex; gap: 10px;">
-                 <button class="btn btn-small-delete" style="flex: 1;" onclick="deleteItemFromCell()">🗑️ מחק פריט קיים</button>
-                <button class="btn btn-primary" style="flex: 1;" onclick="document.getElementById('item-selector-modal').style.display='none'">סגור</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="context-menu">
-        <div class="ctx-item" onclick="changeItemImage()">🖼️ שנה תמונה (URL)</div>
-        <div class="ctx-item" onclick="deleteItemFromInventory()" style="color:red">🗑️ מחק מהמחסן</div>
-    </div>
-
-    <div id="shopping-modal" class="modal">
-        <div class="modal-content">
-            <h2 style="text-align:center; color:#6c5ce7;">רשימת קניות 📝</h2>
-            <div id="shopping-list-items"></div>
-            <br>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn btn-whatsapp" style="flex: 1;" onclick="copyToWhatsapp()">💬 העתק לוואטסאפ</button>
-                <button class="btn btn-primary" style="flex: 1;" onclick="document.getElementById('shopping-modal').style.display='none'">סגור</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="trash-can" ondrop="trashDrop(event)" ondragover="allowDrop(event)">
-        <span style="font-size:30px;">🗑️</span>
-    </div>
-
-    <script>
-        // --- Global Data & State ---
-        let childrenData = []; 
-        let contextTargetItem = null;
-        let shoppingListSummary = {};
-        let currentCellTarget = null; 
-
-        const categories = [
-            { id: 'bread', name: 'פחמימה', icon: '🍞' },
-            { id: 'filling', name: 'חלבון/ממרח', icon: '🧀' },
-            { id: 'veggie', name: 'ירק', icon: '🥒' },
-            { id: 'fruit', name: 'פרי', icon: '🍎' },
-            { id: 'treat', name: 'פינוק', icon: '🍪' }
-        ];
-        const days = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'];
-        
-        // Dictionary matching the items + New items
-        const iconDictionary = {
-            // New Items from latest request
-            'בייגלה שומשום': { type: 'img', src: 'https://www.nika-cakes.co.il/wp-content/uploads/2020/12/Romanian-pretzel.jpg' },
-            'אבוקדו': { type: 'img', src: 'https://i0.wp.com/lyb.co.il/wp-content/uploads/2021/01/half-of-avocado-.jpg?fit=764%2C1024&ssl=1' },
-            'תמר': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/uW5nT0cbTD7gyfDt.jpg' },
-            'עגבניית שרי': { type: 'img', src: 'https://www.ecolution.co.il/wp-content/uploads/2025/02/lobelo-%D7%A2%D7%92%D7%91%D7%A0%D7%99%D7%99%D7%AA-%D7%A9%D7%A8%D7%99-%D7%9C%D7%95%D7%91%D7%9C%D7%95-600x999.jpg' },
-            'גמבה': { type: 'img', src: 'https://hevdel.co.il/wp-content/uploads/2021/02/bell-peppers-421087_640.jpg' },
-            'שוקולד השחר': { type: 'img', src: 'https://res.cloudinary.com/shufersal/image/upload/f_auto,q_auto/v1551800922/prod/product_images/products_large/QJU14_L_P_416021_1.png' },
-            'נוטלה': { type: 'img', src: 'https://res.cloudinary.com/shufersal/image/upload/f_auto,q_auto/v1551800922/prod/product_images/products_large/JEB38_L_P_80135876_1.png' },
-            'מוצרלה מגורדת': { type: 'img', src: 'https://manhaadama.co.il/wp-content/uploads/2022/01/Mock-Up2.jpg' },
-            'מוצרלה בייבי': { type: 'img', src: 'https://noyhasade.b-cdn.net/wp-content/uploads/2021/01/baby_mozarella2.jpg' },
-            'גאודה קוביות': { type: 'img', src: 'https://www.hamoshava.co.il/wp-content/uploads/2025/04/%D7%92%D7%90%D7%95%D7%93%D7%94-%D7%94%D7%95%D7%9C%D7%A0%D7%93%D7%99%D7%AA-%D7%9E%D7%A9%D7%95%D7%9C%D7%A9.jpg' },
-            'פטה עיזים': { type: 'img', src: 'https://www.carmella.co.il/wp-content/uploads/2022/08/7290001499303.jpg' },
-            'חביתה': { type: 'img', src: 'https://www.kipa.co.il/userFiles/2025/11/1200-680/334694_%D7%97%D7%91%D7%99%D7%AA%D7%94_2.jpg' },
-
-            // Existing Items
-            'לחמניה': '🥖', 'לביבות': '🥞', 'לחם מלא': '🍞', 'פיתה': '🥙', 'בייגלה': '🥨', 'לחם': '🍞', 'טוסט': '🥪',
-            'בלינצס': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmtCm9Bu4wczi_0LUyr29ux-xOfFnzeLq_6bvycZPmBA&s=10' },
-            'ממרח שוקולד': '🍫', 'ביצה קשה': '🥚', 'פסטרמה': '🥩', 'גבינה צהובה': '🧀',
-            'גבינה לבנה': { type: 'img', src: 'https://noyhasade.b-cdn.net/wp-content/uploads/2020/09/7290002824183-2.jpg'},
-            'בולגרית': { type: 'img', src: 'https://gad-dairy.co.il/wp-content/uploads/2016/05/30056-13-a_pic_site_9-1024x1024.png' },
-            'גבינת שמנת': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtiZ7V4aeVC52RnVhqm5FHQpxuQ8wk182azK07MmJ9Rg&s=10' },
-            'תותים': '🍓', 'תפוח': '🍎', 'אוכמניות': '🫐', 'שזיף': '🟣', 'מנגו': '🥭', 'קיווי': '🥝', 'בננה': '🍌',
-            'תפו': '🍊', 'זיתים ירוקים': '🫒', 'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅',
-    
-startsWith('<img')) return '🖼️';
-            const match = resolved.match(/<span class="emoji">(.*?)<\/span>/);
-            return match ? match[1] : '▪️';
-        }
-
-        function copyToWhatsapp() {
-            let listText = "רשימת קניות שבועית: \n\n";
-            for (let [name, item] of Object.entries(shoppingListSummary)) {
-                const icon = getIconText(name, item.cat, item.customUrl);
-                listText += `${icon} ${name} (${item.count})\n`;
-            }
-            navigator.clipboard.writeText(listText).then(() => {
-                alert("הרשימה הועתקה בהצלחה! ניתן להדביק אותה בוואטסאפ. 📋");
-            }, () => { alert('שגיאה בהעתקה, אנא נסו שוב.'); });
-        }
-
-        function clearTable() { if(confirm('לנקות את כל התפריטים מכל הילדים?')) document.querySelectorAll('.child-slot').forEach(e => populateCell(e, null)); }
-
-        function autoFillMenu() {
-            const slots = document.querySelectorAll('.child-slot');
-            if(slots.length > 0 && slots[0].querySelector('.food-item') && !confirm('הלוחות כבר מלאים בחלקם. לדרוס את הכל?')) return;
-            slots.forEach(slot => {
-                const cat = slot.getAttribute('data-cat');
-                const relevant = allInventoryItems.filter(i => i.cat === cat);
-                if(relevant.length) {
-                    const item = relevant[Math.floor(Math.random()*relevant.length)];
-                    populateCell(slot, item);
-                } else {
-                    populateCell(slot, null);
+            const list = document.getElementById('shopping-list-items');
+            list.innerHTML = '';
+            let text = "רשימת קניות:\n";
+            
+            if(Object.keys(summary).length === 0) list.innerHTML = "הלוח ריק!";
+            else {
+                for(let [k,v] of Object.entries(summary)) {
+                    list.innerHTML += `<div class="shopping-item"><span>${k}</span><span>${v}</span></div>`;
+                    text += `${k}: ${v}\n`;
                 }
+            }
+            window.shoppingListText = text;
+            document.getElementById('shopping-modal').style.display = 'flex';
+        }
+
+        window.copyToWhatsapp = function() {
+            navigator.clipboard.writeText(window.shoppingListText).then(()=>alert('הועתק!'));
+        }
+
+        window.autoFillMenu = function() {
+            document.querySelectorAll('.day-cell').forEach(cell => {
+                const cat = cell.getAttribute('data-cat');
+                const rel = allInventoryItems.filter(x => x.cat === cat);
+                if(rel.length) populateCell(cell, rel[Math.floor(Math.random()*rel.length)]);
             });
+        }
+
+        window.clearTable = function() {
+            if(confirm('לנקות הכל?')) document.querySelectorAll('.day-cell').forEach(c => populateCell(c, null));
         }
     </script>
 </body>
 </html>
-
