@@ -89,7 +89,6 @@
             justify-content: space-between; align-items: center; gap: 10px; box-shadow: var(--shadow); 
             position: sticky; top: 5px; z-index: 100; 
         }
-        
         .controls-group { display: flex; gap: 5px; flex-wrap: wrap; flex: 1; }
         .controls-group .btn { flex-grow: 1; }
 
@@ -98,11 +97,7 @@
         .tab-button { background: #dfe6e9; padding: 8px 15px; border-radius: 20px; white-space: nowrap; font-size: 14px; cursor: pointer; }
         .tab-button.active { background: var(--primary); color: white; }
 
-        .new-item-control { display: flex; gap: 5px; margin-bottom: 10px; background: #f8f9fa; padding: 8px; border-radius: 12px; flex-wrap: wrap; }
-        .new-item-control input, .new-item-control select { padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; flex: 1; }
-        .new-item-control button { width: auto; min-width: 50px; font-size: 20px; }
-
-        .inventory-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-height: 180px; overflow-y: auto; }
+        .inventory-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-height: 200px; overflow-y: auto; padding: 5px; }
 
         /* Items */
         .food-item {
@@ -114,13 +109,27 @@
         .food-item img { width: 35px; height: 35px; object-fit: contain; margin-bottom: 2px; }
         .food-item span.emoji { font-size: 26px; margin-bottom: 2px; display: block; }
         
-        /* Highlight selected item in mobile mode */
+        /* Highlight selected item */
         .food-item.selected-for-move {
             border: 3px solid var(--primary);
             background-color: #e3f2fd;
             transform: scale(1.1);
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             z-index: 10;
+        }
+
+        /* "Add New" Item Button in Inventory */
+        .add-item-btn {
+            border: 2px dashed #aaa;
+            background: #f9f9f9;
+            color: #555;
+            font-size: 30px;
+            font-weight: bold;
+        }
+        .add-item-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #fff;
         }
 
         /* Categories Colors */
@@ -168,107 +177,91 @@
 
         /* Modals */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 350px; max-height: 80vh; overflow-y: auto; text-align: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 350px; max-height: 80vh; overflow-y: auto; text-align: center; position: relative;}
         
+        /* Form in Modal */
+        .form-group { margin-bottom: 15px; text-align: right; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+
         #item-selector-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 15px; }
         .shopping-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; text-align: right; }
         .shopping-item .icon-and-name { display: flex; align-items: center; gap: 8px; }
         .shopping-item img { width: 24px; height: 24px; }
 
-        /* --- PRINT OPTIMIZATION (A4 Landscape) --- */
+        /* --- PRINT OPTIMIZATION (A4 Landscape Fixed) --- */
         @media print {
             @page {
-                size: A4 landscape; /* מגדיר דף A4 לרוחב */
-                margin: 5mm; /* שוליים קטנים */
-            }
-
-            body, html {
-                background: white;
-                padding: 0;
+                size: A4 landscape;
                 margin: 0;
-                width: 297mm; /* רוחב A4 */
-                height: 210mm; /* גובה A4 */
+            }
+            body, html {
+                margin: 0;
+                padding: 0;
+                width: 297mm; /* Full A4 width */
+                height: 210mm;
+                background: white;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
-
-            /* הסתרת כל האלמנטים המיותרים */
-            .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .new-item-control, #trash-can, .cell-delete-btn, .remove-row-btn { 
+            /* Hide UI */
+            .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .cell-delete-btn { 
                 display: none !important; 
             }
-
-            #app-screen {
-                display: block !important;
-                width: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
+            
+            #tables-container {
+                width: 100%;
+                display: block;
             }
 
-            #tables-container { 
-                display: block !important;
-                overflow: visible !important; 
-                width: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            .single-child-table { 
-                width: 100% !important;
-                height: 195mm !important; /* מותאם לגובה A4 פחות שוליים */
-                min-width: 0 !important;
+            .single-child-table {
+                width: 277mm !important; /* A4 width minus padding */
+                height: 190mm !important;
+                margin: 10mm auto !important; /* Centered with margin */
                 box-shadow: none !important;
-                border: none !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                page-break-after: always; 
-                display: flex; 
+                border: 2px solid #ccc !important;
+                padding: 10px !important;
+                page-break-after: always;
+                display: flex;
                 flex-direction: column;
+                transform-origin: top left;
             }
 
-            .child-title { 
-                font-size: 24pt !important; 
-                padding: 5px !important; 
-                margin-bottom: 5px !important;
-                border: 1px solid #000;
-                color: #000 !important;
-                background-color: rgba(200, 200, 200, 0.3) !important;
-            }
-
-            .week-grid { 
-                flex: 1; 
+            .week-grid {
+                flex: 1;
                 display: grid;
                 grid-template-columns: 80px repeat(6, 1fr) !important;
-                grid-template-rows: 40px repeat(5, 1fr) !important;
-                gap: 0 !important;
-                border: 2px solid #000 !important;
+                border: 2px solid #000;
             }
 
-            .header-cell { 
-                font-size: 14pt !important; 
-                background-color: #eee !important; 
-                border: 1px solid #000 !important;
-                color: black !important;
+            .child-title {
+                font-size: 24pt !important;
+                padding: 5px !important;
+                background-color: rgba(200,200,200,0.2) !important;
+                border: 1px solid #000;
+                color: #000 !important;
             }
 
-            .day-cell { 
-                border: 1px solid #000 !important;
-                min-height: 0 !important;
+            .header-cell {
+                background-color: #eee !important;
+                border: 1px solid #000;
+                color: #000;
+                font-size: 14pt;
             }
 
+            .day-cell {
+                border: 1px solid #000;
+            }
+            
+            /* Remove hint */
             .day-cell:not(.filled)::after { content: ''; }
 
-            .day-cell .food-item img {
-                width: 50px !important;
-                height: 50px !important;
+            .day-cell .food-item img, .day-cell .food-item span.emoji {
+                width: 50px !important; height: 50px !important; font-size: 40px !important;
             }
-            
-            .day-cell .food-item span.emoji {
-                font-size: 30pt !important;
-            }
-            
             .day-cell .food-item span:not(.emoji) {
-                font-size: 10pt !important;
-                color: black !important;
+                font-size: 12pt !important;
+                color: #000;
                 font-weight: bold;
             }
         }
@@ -290,28 +283,37 @@
         <div class="controls-bar">
             <div class="controls-group">
                 <button class="btn btn-shopping" onclick="showShoppingList()">🛒 רשימה</button>
-                <button class="btn btn-success" onclick="window.print()">📸 שמור (PDF)</button>
+                <button class="btn btn-success" onclick="window.print()">📸 שמור</button>
                 <button class="btn btn-magic" onclick="autoFillMenu()">🪄 אוטומטי</button>
             </div>
             <button class="btn btn-warning" style="flex:0;" onclick="clearTable()">🧹</button>
         </div>
 
         <div class="inventory-section">
-            <h4 style="margin:0 0 10px 0; text-align:center;">לגרור או ללחוץ לבחירה 👇</h4>
+            <h4 style="margin:0 0 10px 0; text-align:center;">מחסן מוצרים (גרור או לחץ)</h4>
             <div class="tab-buttons"></div>
-            
-            <div class="new-item-control">
-                <input type="text" id="new-food-name" placeholder="מאכל חדש..." onkeypress="handleKeyPress(event)">
-                <select id="new-food-cat">
-                    <option value="auto">✨ קטגוריה אוטומטית</option>
-                </select>
-                <button class="btn btn-primary" onclick="addNewItem()">+</button>
-            </div>
-
             <div id="inventory-list" class="inventory-list"></div>
         </div>
 
         <div id="tables-container"></div>
+    </div>
+
+    <div id="new-item-modal" class="modal">
+        <div class="modal-content">
+            <h3 style="color:var(--primary)">הוספת מאכל חדש ➕</h3>
+            <div class="form-group">
+                <label>שם המאכל:</label>
+                <input type="text" id="modal-food-name" placeholder="לדוגמה: בורקס">
+            </div>
+            <div class="form-group">
+                <label>קטגוריה:</label>
+                <select id="modal-food-cat"></select>
+            </div>
+            <div style="display:flex; gap:10px; margin-top:20px;">
+                <button class="btn btn-primary" style="flex:1" onclick="addNewItemFromModal()">הוסף</button>
+                <button class="btn btn-warning" style="flex:1" onclick="closeModal('new-item-modal')">ביטול</button>
+            </div>
+        </div>
     </div>
 
     <div id="item-selector-modal" class="modal">
@@ -335,7 +337,13 @@
         </div>
     </div>
 
+    <div id="context-menu">
+        <div class="ctx-item" onclick="changeItemImage()">🖼️ שנה תמונה (URL)</div>
+        <div class="ctx-item" onclick="deleteItemFromInventory()" style="color:red">🗑️ מחק מהמחסן</div>
+    </div>
+
     <script>
+        // --- Data ---
         const categories = [
             { id: 'bread', name: 'פחמימה', icon: '🍞' },
             { id: 'filling', name: 'חלבון/ממרח', icon: '🧀' },
@@ -365,7 +373,7 @@
             'בולגרית': { type: 'img', src: 'https://gad-dairy.co.il/wp-content/uploads/2016/05/30056-13-a_pic_site_9-1024x1024.png' },
             'גבינת שמנת': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtiZ7V4aeVC52RnVhqm5FHQpxuQ8wk182azK07MmJ9Rg&s=10' },
             'תותים': '🍓', 'תפוח': '🍎', 'אוכמניות': '🫐', 'שזיף': '🟣', 'מנגו': '🥭', 'קיווי': '🥝', 'בננה': '🍌',
-            'תפו': '🍊', 'זיתים ירוקים': '🫒', 'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅',
+            'תפו': '🍊', 'זיתים ירוקים': { type: 'img', src: 'https://cdn-icons-png.flaticon.com/512/1514/1514935.png' }, 'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅',
             'קרקרים': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/Yz1gR9k5ej75oC8J.jpg' },
             'יוגורט': '🥛', 'פתי בר': '🍪', 'מיץ תפוזים': '🧃', 'קאפקייק': '🧁', 'בייגלה (חטיף)': '🥨', 'חטיף': '🍬',
             'אקטימל': { type: 'img', src: 'https://www.emess.co.il/resize/?width=800&height=450&url=/uploads/2024/08/%D7%90%D7%A7%D7%98%D7%99%D7%9E%D7%9C.jpg' },
@@ -384,11 +392,13 @@
         let childrenData = [];
         let selectedInventoryItem = null;
         let currentCellTarget = null;
+        let activeCategory = 'bread';
 
-        // Setup
+        // --- Init ---
         document.addEventListener('DOMContentLoaded', () => {
-            const catSelect = document.getElementById('new-food-cat');
-            catSelect.innerHTML = '<option value="auto">✨ קטגוריה אוטומטית</option>';
+            const catSelect = document.getElementById('modal-food-cat');
+            // Populate category select in modal
+            catSelect.innerHTML = '';
             categories.forEach(cat => {
                 const option = document.createElement('option');
                 option.value = cat.id;
@@ -396,12 +406,13 @@
                 catSelect.appendChild(option);
             });
             
+            // Default child
             if (document.getElementById('children-list-container').children.length === 0) {
                 addChildRow('אורי', '#539fec');
             }
         });
 
-        // Global functions
+        // --- Functions ---
         window.addChildRow = function(name = '', color = '#a29bfe') {
             const container = document.getElementById('children-list-container');
             const div = document.createElement('div');
@@ -461,6 +472,7 @@
         }
 
         function initInventory(catId) {
+            activeCategory = catId;
             const list = document.getElementById('inventory-list');
             list.innerHTML = '';
             selectedInventoryItem = null;
@@ -488,23 +500,35 @@
                 };
                 list.appendChild(el);
             });
+
+            // ADD BUTTON at end of list
+            const addBtn = document.createElement('div');
+            addBtn.className = 'food-item add-item-btn';
+            addBtn.innerHTML = '+';
+            addBtn.title = 'הוסף מאכל חדש';
+            addBtn.onclick = () => openAddModal(catId);
+            list.appendChild(addBtn);
         }
 
-        window.addNewItem = function() {
-            const name = document.getElementById('new-food-name').value.trim();
-            let cat = document.getElementById('new-food-cat').value;
-            if(!name) return;
+        window.openAddModal = function(catId) {
+            document.getElementById('modal-food-name').value = '';
+            document.getElementById('modal-food-cat').value = catId; // Pre-select category
+            document.getElementById('new-item-modal').style.display = 'flex';
+        }
 
-            if(cat === 'auto') {
-                cat = 'treat';
-                if(['לחם','פיתה','בייגלה'].some(x=>name.includes(x))) cat='bread';
-                else if(['גבינה','ביצה'].some(x=>name.includes(x))) cat='filling';
-                else if(['מלפפון','ירק'].some(x=>name.includes(x))) cat='veggie';
-                else if(['תפוח','פרי'].some(x=>name.includes(x))) cat='fruit';
-            }
+        window.addNewItemFromModal = function() {
+            const name = document.getElementById('modal-food-name').value.trim();
+            const cat = document.getElementById('modal-food-cat').value;
+            
+            if(!name) return alert('נא להזין שם למאכל');
+            
             allInventoryItems.unshift({name, cat});
-            initInventory(cat);
-            document.getElementById('new-food-name').value = '';
+            closeModal('new-item-modal');
+            
+            // Switch to the category of the new item
+            const tabBtn = Array.from(document.querySelectorAll('.tab-button')).find(b => b.innerText.includes(categories.find(c=>c.id===cat).name));
+            if(tabBtn) tabBtn.click();
+            else initInventory(cat);
         }
 
         function hexToRgba(hex, alpha) {
@@ -527,7 +551,6 @@
                 grid.className = 'week-grid';
                 grid.style.backgroundColor = hexToRgba(child.color, 0.3);
 
-                // Re-build grid elements using DOM
                 const corner = document.createElement('div');
                 corner.className = 'header-cell';
                 corner.innerText = 'קטגוריה';
@@ -625,6 +648,34 @@
         }
 
         window.closeModal = function(id) { document.getElementById(id).style.display = 'none'; }
+
+        // --- Context Menu (Right Click) ---
+        window.showContextMenu = function(e, itemObj) {
+            e.preventDefault();
+            contextTargetItem = itemObj;
+            const ctxMenu = document.getElementById('context-menu');
+            ctxMenu.style.display = 'block';
+            ctxMenu.style.left = e.pageX + 'px';
+            ctxMenu.style.top = e.pageY + 'px';
+        }
+        document.addEventListener('click', () => document.getElementById('context-menu').style.display = 'none');
+
+        window.changeItemImage = function() {
+            if(!contextTargetItem) return;
+            const url = prompt('הכנס קישור לתמונה:', contextTargetItem.customUrl || '');
+            if(url !== null) { 
+                contextTargetItem.customUrl = url || null; 
+                initInventory(activeCategory); // Refresh view
+            }
+        }
+
+        window.deleteItemFromInventory = function() {
+             if(!contextTargetItem) return;
+             if(confirm('למחוק את ' + contextTargetItem.name + '?')) {
+                 allInventoryItems = allInventoryItems.filter(i => i !== contextTargetItem);
+                 initInventory(activeCategory);
+             }
+        }
 
         window.showShoppingList = function() {
             const summary = {};
