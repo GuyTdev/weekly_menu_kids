@@ -93,7 +93,6 @@
         .controls-group .btn { flex-grow: 1; }
 
         .inventory-section { background: white; padding: 10px; border-radius: 15px; box-shadow: var(--shadow); }
-        .inventory-header { margin:0 0 10px 0; text-align:center; font-size: 1.1em; }
         .tab-buttons { display: flex; overflow-x: auto; gap: 5px; margin-bottom: 10px; padding-bottom: 5px; }
         .tab-button { background: #dfe6e9; padding: 8px 15px; border-radius: 20px; white-space: nowrap; font-size: 14px; cursor: pointer; }
         .tab-button.active { background: var(--primary); color: white; }
@@ -105,11 +104,10 @@
             width: 65px; height: 65px; background: white; border: 1px solid #dfe6e9; border-radius: 12px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; user-select: none; transition: all 0.2s; font-size: 10px; text-align: center;
-            flex-shrink: 0; position: relative; -webkit-user-drag: element;
+            flex-shrink: 0; position: relative;
         }
-        .food-item img { width: 35px; height: 35px; object-fit: contain; margin-bottom: 2px; pointer-events: none; }
-        .food-item span.emoji { font-size: 26px; margin-bottom: 2px; display: block; pointer-events: none; }
-        .food-item span { pointer-events: none; }
+        .food-item img { width: 35px; height: 35px; object-fit: contain; margin-bottom: 2px; }
+        .food-item span.emoji { font-size: 26px; margin-bottom: 2px; display: block; }
         
         /* Highlight selected item */
         .food-item.selected-for-move {
@@ -121,8 +119,18 @@
         }
 
         /* "Add New" Item Button in Inventory */
-        .add-item-btn { border: 2px dashed #aaa; background: #f9f9f9; color: #555; font-size: 30px; font-weight: bold; }
-        .add-item-btn:hover { border-color: var(--primary); color: var(--primary); background: #fff; }
+        .add-item-btn {
+            border: 2px dashed #aaa;
+            background: #f9f9f9;
+            color: #555;
+            font-size: 30px;
+            font-weight: bold;
+        }
+        .add-item-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: #fff;
+        }
 
         /* Categories Colors */
         .food-item[data-cat="bread"] { border-top: 3px solid #fdcb6e; }
@@ -187,7 +195,6 @@
 
         /* --- Mobile adjustments --- */
         @media (max-width: 768px) {
-             /* Hide drag instruction on mobile */
             .inventory-header span.desktop-only { display: none; }
             .inventory-header::after { content: ' (לחץ לבחירה, לחיצה ארוכה לעריכה)'; font-size: 0.9em; color: #666; }
         }
@@ -196,76 +203,111 @@
         }
 
 
-        /* --- PRINT OPTIMIZATION (A4 Landscape Fixed Layout) --- */
+        /* --- PRINT OPTIMIZATION (Fixes for Mobile A4 Landscape) --- */
         @media print {
             @page {
                 size: A4 landscape;
-                margin: 1cm; /* שוליים בטוחים להדפסה */
+                margin: 0; /* Remove default margins to control manually */
             }
+            
             body, html {
-                margin: 0; padding: 0; background: white;
-                width: 100%; height: 100%;
-                -webkit-print-color-adjust: exact; print-color-adjust: exact;
+                margin: 0; 
+                padding: 0; 
+                width: 100%; 
+                height: 100%;
+                background: white;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
-            /* Hide UI */
+
+            /* Clear non-printable elements */
             .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .cell-delete-btn, #context-menu { 
                 display: none !important; 
             }
             
-            #app-screen { display: block !important; margin: 0 !important; }
-            #tables-container { display: block !important; width: 100% !important; overflow: visible !important; padding: 0 !important; }
+            #app-screen { 
+                display: block !important; 
+                margin: 0 !important; 
+                padding: 5mm !important; /* Safe padding for print */
+                width: 100% !important;
+                box-sizing: border-box;
+            }
+
+            #tables-container { 
+                display: block !important;
+                overflow: visible !important; 
+                width: 100% !important;
+            }
 
             .single-child-table {
                 width: 100% !important;
-                min-width: 0 !important; /* ביטול רוחב מינימלי של דסקטופ */
+                min-width: 0 !important;
                 box-shadow: none !important;
-                border: 2px solid #000 !important;
+                border: none !important;
+                margin: 0 0 1cm 0 !important;
                 padding: 0 !important;
-                margin: 0 0 2cm 0 !important; /* מרווח בין טבלאות בהדפסה */
+                page-break-after: always;
                 page-break-inside: avoid;
             }
 
             .child-title {
-                font-size: 18pt !important;
+                font-size: 20pt !important;
                 padding: 5px !important;
                 background-color: rgba(200,200,200,0.3) !important;
-                border-bottom: 2px solid #000;
+                border: 2px solid #000;
+                border-bottom: none;
                 color: #000 !important;
                 margin: 0 !important;
                 border-radius: 0 !important;
             }
 
-            /* שימוש באחוזים לרוחב העמודות כדי למנוע חיתוך */
-            .week-grid {
-                display: grid;
-                grid-template-columns: 10% repeat(6, 15%) !important; /* סה"כ 100% */
+            /* Responsive Grid for Print using Percentages */
+            .week-grid { 
+                display: grid !important;
+                /* Use percentages to ensure it fits any A4 rendering logic */
+                grid-template-columns: 10% 15% 15% 15% 15% 15% 15% !important;
                 gap: 0 !important;
-                border: none !important;
-                padding: 0 !important;
+                border: 2px solid #000 !important;
+                width: 100% !important;
             }
 
-            .header-cell {
-                background-color: #eee !important;
-                border: 1px solid #000;
-                color: #000;
-                font-size: 12pt !important;
-                padding: 5px 2px !important;
-            }
-
-            .day-cell {
+            .header-cell { 
+                font-size: 12pt !important; 
+                background-color: #eee !important; 
                 border: 1px solid #000 !important;
-                min-height: 60px !important;
-                padding: 2px !important;
-                border-radius: 0 !important;
+                color: #000 !important;
+                padding: 5px !important;
+                overflow: hidden;
             }
-            
+
+            .day-cell { 
+                border: 1px solid #000 !important;
+                min-height: 2.5cm !important; /* Fixed reasonable height for print */
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                padding: 2px !important;
+            }
+
             .day-cell:not(.filled)::after { content: ''; }
 
-            /* הקטנת אלמנטים בהדפסה כדי שיכנסו */
-            .day-cell .food-item { width: auto !important; height: auto !important; border: none !important;}
-            .day-cell .food-item img { width: 40px !important; height: 40px !important; }
-            .day-cell .food-item span.emoji { font-size: 30px !important; }
-            .day-cell .food-item span:not(.emoji) { font-size: 10pt !important; color: #000; font-weight: bold; white-space: normal; }
+            .day-cell .food-item {
+                border: none !important;
+                width: auto !important;
+            }
+
+            .day-cell .food-item img, .day-cell .food-item span.emoji {
+                width: 1.2cm !important; /* Physical units for print */
+                height: 1.2cm !important;
+                font-size: 30pt !important;
+            }
+            
+            .day-cell .food-item span:not(.emoji) {
+                font-size: 10pt !important;
+                color: #000 !important;
+                font-weight: bold;
+                white-space: normal !important; /* Allow wrapping in print */
+            }
         }
     </style>
 </head>
@@ -292,7 +334,7 @@
         </div>
 
         <div class="inventory-section">
-            <h4 class="inventory-header">מחסן מוצרים<span class="desktop-only"> (גרור או לחץ)</span></h4>
+            <h4 style="margin:0 0 10px 0; text-align:center;">מחסן מוצרים <span class="desktop-only">(גרור או לחץ)</span></h4>
             <div class="tab-buttons"></div>
             <div id="inventory-list" class="inventory-list"></div>
         </div>
@@ -356,7 +398,7 @@
         const days = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'];
         
         const iconDictionary = {
-            'ג\'חנון': { type: 'img', src: 'https://img.mako.co.il/2018/01/23/jachnun_iStock_869124972_C.jpg' },
+            'ג\'חנון': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjCf98VhLbeXmSTL-Qe8RfwUkJpk9a7KDWUY5X_0MRGw&s=10' },
             'בייגלה שומשום': { type: 'img', src: 'https://www.nika-cakes.co.il/wp-content/uploads/2020/12/Romanian-pretzel.jpg' },
             'אבוקדו': { type: 'img', src: 'https://i0.wp.com/lyb.co.il/wp-content/uploads/2021/01/half-of-avocado-.jpg?fit=764%2C1024&ssl=1' },
             'תמר': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/uW5nT0cbTD7gyfDt.jpg' },
@@ -486,13 +528,11 @@
                 el.draggable = true;
                 el.innerHTML = resolveIcon(item.name, item.cat, item.customUrl) + `<span>${item.name}</span>`;
                 
-                // Desktop Drag
                 el.addEventListener('dragstart', (ev) => {
                     ev.dataTransfer.setData("application/json", JSON.stringify(item));
                 });
 
-                // Mobile/Desktop Click Selection
-                el.onclick = (e) => {
+                el.onclick = () => {
                     if (selectedInventoryItem === item) {
                         selectedInventoryItem = null;
                         el.classList.remove('selected-for-move');
@@ -503,19 +543,20 @@
                     }
                 };
 
-                // Mobile Long Press for Context Menu
+                // Mobile Long Press
                 el.addEventListener('touchstart', (e) => {
                      longPressTimer = setTimeout(() => showContextMenu(e, item), 800); 
                 });
                 el.addEventListener('touchend', () => clearTimeout(longPressTimer));
                 el.addEventListener('touchmove', () => clearTimeout(longPressTimer));
+                
                 // Desktop Right Click
                 el.addEventListener('contextmenu', (e) => showContextMenu(e, item));
 
                 list.appendChild(el);
             });
 
-            // ADD BUTTON at end of list
+            // ADD BUTTON at end
             const addBtn = document.createElement('div');
             addBtn.className = 'food-item add-item-btn';
             addBtn.innerHTML = '+';
@@ -660,30 +701,23 @@
 
         window.closeModal = function(id) { document.getElementById(id).style.display = 'none'; }
 
-        // --- Context Menu (Right Click / Long Press) ---
+        // --- Context Menu ---
         window.showContextMenu = function(e, itemObj) {
             e.preventDefault();
             contextTargetItem = itemObj;
             const ctxMenu = document.getElementById('context-menu');
             ctxMenu.style.display = 'block';
-            // Handle both touch and mouse coordinates
             let pageX = e.pageX || (e.touches ? e.touches[0].pageX : 0);
             let pageY = e.pageY || (e.touches ? e.touches[0].pageY : 0);
             ctxMenu.style.left = pageX + 'px';
             ctxMenu.style.top = pageY + 'px';
         }
-        // Hide context menu on any click outside
         document.addEventListener('click', (e) => {
-            if (!e.target.closest('#context-menu')) {
-                 document.getElementById('context-menu').style.display = 'none';
-            }
+            if (!e.target.closest('#context-menu')) document.getElementById('context-menu').style.display = 'none';
         });
         document.addEventListener('touchstart', (e) => {
-             if (!e.target.closest('#context-menu')) {
-                 document.getElementById('context-menu').style.display = 'none';
-            }
+             if (!e.target.closest('#context-menu')) document.getElementById('context-menu').style.display = 'none';
         });
-
 
         window.changeItemImage = function() {
             if(!contextTargetItem) return;
