@@ -93,6 +93,7 @@
         .controls-group .btn { flex-grow: 1; }
 
         .inventory-section { background: white; padding: 10px; border-radius: 15px; box-shadow: var(--shadow); }
+        .inventory-header { margin:0 0 10px 0; text-align:center; font-size: 1.1em; }
         .tab-buttons { display: flex; overflow-x: auto; gap: 5px; margin-bottom: 10px; padding-bottom: 5px; }
         .tab-button { background: #dfe6e9; padding: 8px 15px; border-radius: 20px; white-space: nowrap; font-size: 14px; cursor: pointer; }
         .tab-button.active { background: var(--primary); color: white; }
@@ -104,10 +105,11 @@
             width: 65px; height: 65px; background: white; border: 1px solid #dfe6e9; border-radius: 12px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             cursor: pointer; user-select: none; transition: all 0.2s; font-size: 10px; text-align: center;
-            flex-shrink: 0; position: relative;
+            flex-shrink: 0; position: relative; -webkit-user-drag: element;
         }
-        .food-item img { width: 35px; height: 35px; object-fit: contain; margin-bottom: 2px; }
-        .food-item span.emoji { font-size: 26px; margin-bottom: 2px; display: block; }
+        .food-item img { width: 35px; height: 35px; object-fit: contain; margin-bottom: 2px; pointer-events: none; }
+        .food-item span.emoji { font-size: 26px; margin-bottom: 2px; display: block; pointer-events: none; }
+        .food-item span { pointer-events: none; }
         
         /* Highlight selected item */
         .food-item.selected-for-move {
@@ -119,18 +121,8 @@
         }
 
         /* "Add New" Item Button in Inventory */
-        .add-item-btn {
-            border: 2px dashed #aaa;
-            background: #f9f9f9;
-            color: #555;
-            font-size: 30px;
-            font-weight: bold;
-        }
-        .add-item-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: #fff;
-        }
+        .add-item-btn { border: 2px dashed #aaa; background: #f9f9f9; color: #555; font-size: 30px; font-weight: bold; }
+        .add-item-btn:hover { border-color: var(--primary); color: var(--primary); background: #fff; }
 
         /* Categories Colors */
         .food-item[data-cat="bread"] { border-top: 3px solid #fdcb6e; }
@@ -179,7 +171,6 @@
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 350px; max-height: 80vh; overflow-y: auto; text-align: center; position: relative;}
         
-        /* Form in Modal */
         .form-group { margin-bottom: 15px; text-align: right; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
         .form-group input, .form-group select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
@@ -189,81 +180,92 @@
         .shopping-item .icon-and-name { display: flex; align-items: center; gap: 8px; }
         .shopping-item img { width: 24px; height: 24px; }
 
-        /* --- PRINT OPTIMIZATION (A4 Landscape Fixed) --- */
+        /* Context Menu & Modals */
+        #context-menu { display: none; position: absolute; background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 3000; overflow: hidden; }
+        .ctx-item { padding: 10px 20px; cursor: pointer; font-size: 14px; }
+        .ctx-item:hover { background: #f0f0f0; }
+
+        /* --- Mobile adjustments --- */
+        @media (max-width: 768px) {
+             /* Hide drag instruction on mobile */
+            .inventory-header span.desktop-only { display: none; }
+            .inventory-header::after { content: ' (לחץ לבחירה, לחיצה ארוכה לעריכה)'; font-size: 0.9em; color: #666; }
+        }
+        @media (min-width: 769px) {
+             .inventory-header span.mobile-only { display: none; }
+        }
+
+
+        /* --- PRINT OPTIMIZATION (A4 Landscape Fixed Layout) --- */
         @media print {
             @page {
                 size: A4 landscape;
-                margin: 0;
+                margin: 1cm; /* שוליים בטוחים להדפסה */
             }
             body, html {
-                margin: 0;
-                padding: 0;
-                width: 297mm; /* Full A4 width */
-                height: 210mm;
-                background: white;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
+                margin: 0; padding: 0; background: white;
+                width: 100%; height: 100%;
+                -webkit-print-color-adjust: exact; print-color-adjust: exact;
             }
             /* Hide UI */
-            .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .cell-delete-btn { 
+            .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .cell-delete-btn, #context-menu { 
                 display: none !important; 
             }
             
-            #tables-container {
-                width: 100%;
-                display: block;
-            }
+            #app-screen { display: block !important; margin: 0 !important; }
+            #tables-container { display: block !important; width: 100% !important; overflow: visible !important; padding: 0 !important; }
 
             .single-child-table {
-                width: 277mm !important; /* A4 width minus padding */
-                height: 190mm !important;
-                margin: 10mm auto !important; /* Centered with margin */
+                width: 100% !important;
+                min-width: 0 !important; /* ביטול רוחב מינימלי של דסקטופ */
                 box-shadow: none !important;
-                border: 2px solid #ccc !important;
-                padding: 10px !important;
-                page-break-after: always;
-                display: flex;
-                flex-direction: column;
-                transform-origin: top left;
-            }
-
-            .week-grid {
-                flex: 1;
-                display: grid;
-                grid-template-columns: 80px repeat(6, 1fr) !important;
-                border: 2px solid #000;
+                border: 2px solid #000 !important;
+                padding: 0 !important;
+                margin: 0 0 2cm 0 !important; /* מרווח בין טבלאות בהדפסה */
+                page-break-inside: avoid;
             }
 
             .child-title {
-                font-size: 24pt !important;
+                font-size: 18pt !important;
                 padding: 5px !important;
-                background-color: rgba(200,200,200,0.2) !important;
-                border: 1px solid #000;
+                background-color: rgba(200,200,200,0.3) !important;
+                border-bottom: 2px solid #000;
                 color: #000 !important;
+                margin: 0 !important;
+                border-radius: 0 !important;
+            }
+
+            /* שימוש באחוזים לרוחב העמודות כדי למנוע חיתוך */
+            .week-grid {
+                display: grid;
+                grid-template-columns: 10% repeat(6, 15%) !important; /* סה"כ 100% */
+                gap: 0 !important;
+                border: none !important;
+                padding: 0 !important;
             }
 
             .header-cell {
                 background-color: #eee !important;
                 border: 1px solid #000;
                 color: #000;
-                font-size: 14pt;
+                font-size: 12pt !important;
+                padding: 5px 2px !important;
             }
 
             .day-cell {
-                border: 1px solid #000;
+                border: 1px solid #000 !important;
+                min-height: 60px !important;
+                padding: 2px !important;
+                border-radius: 0 !important;
             }
             
-            /* Remove hint */
             .day-cell:not(.filled)::after { content: ''; }
 
-            .day-cell .food-item img, .day-cell .food-item span.emoji {
-                width: 50px !important; height: 50px !important; font-size: 40px !important;
-            }
-            .day-cell .food-item span:not(.emoji) {
-                font-size: 12pt !important;
-                color: #000;
-                font-weight: bold;
-            }
+            /* הקטנת אלמנטים בהדפסה כדי שיכנסו */
+            .day-cell .food-item { width: auto !important; height: auto !important; border: none !important;}
+            .day-cell .food-item img { width: 40px !important; height: 40px !important; }
+            .day-cell .food-item span.emoji { font-size: 30px !important; }
+            .day-cell .food-item span:not(.emoji) { font-size: 10pt !important; color: #000; font-weight: bold; white-space: normal; }
         }
     </style>
 </head>
@@ -290,7 +292,7 @@
         </div>
 
         <div class="inventory-section">
-            <h4 style="margin:0 0 10px 0; text-align:center;">מחסן מוצרים (גרור או לחץ)</h4>
+            <h4 class="inventory-header">מחסן מוצרים<span class="desktop-only"> (גרור או לחץ)</span></h4>
             <div class="tab-buttons"></div>
             <div id="inventory-list" class="inventory-list"></div>
         </div>
@@ -354,6 +356,7 @@
         const days = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'];
         
         const iconDictionary = {
+            'ג\'חנון': { type: 'img', src: 'https://img.mako.co.il/2018/01/23/jachnun_iStock_869124972_C.jpg' },
             'בייגלה שומשום': { type: 'img', src: 'https://www.nika-cakes.co.il/wp-content/uploads/2020/12/Romanian-pretzel.jpg' },
             'אבוקדו': { type: 'img', src: 'https://i0.wp.com/lyb.co.il/wp-content/uploads/2021/01/half-of-avocado-.jpg?fit=764%2C1024&ssl=1' },
             'תמר': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/uW5nT0cbTD7gyfDt.jpg' },
@@ -372,8 +375,8 @@
             'גבינה לבנה': { type: 'img', src: 'https://noyhasade.b-cdn.net/wp-content/uploads/2020/09/7290002824183-2.jpg'},
             'בולגרית': { type: 'img', src: 'https://gad-dairy.co.il/wp-content/uploads/2016/05/30056-13-a_pic_site_9-1024x1024.png' },
             'גבינת שמנת': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtiZ7V4aeVC52RnVhqm5FHQpxuQ8wk182azK07MmJ9Rg&s=10' },
-            'תותים': '🍓', 'תפוח': '🍎', 'אוכמניות': '🫐', 'שזיף': '🟣', 'מנגו': '🥭', 'קיווי': '🥝', 'בננה': '🍌',
-            'תפו': '🍊', 'זיתים ירוקים': { type: 'img', src: 'https://cdn-icons-png.flaticon.com/512/1514/1514935.png' }, 'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅',
+            'תותים': '🍓', 'תפוח': '🍎', 'אוכמניות': '🫐', 'שזיף': '🟣', 'מנגו': '🥭', 'קיווי': '🥝', 'בננה': '🍌', 'ענבים': '🍇',
+            'תפו': '🍊', 'זיתים ירוקים': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDEp9HNy_nTQQl-Pe7cD2fw3XEIUHvFCJCqH_2v2Y4uw&s=10' }, 'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅', 'גזר': '🥕',
             'קרקרים': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/Yz1gR9k5ej75oC8J.jpg' },
             'יוגורט': '🥛', 'פתי בר': '🍪', 'מיץ תפוזים': '🧃', 'קאפקייק': '🧁', 'בייגלה (חטיף)': '🥨', 'חטיף': '🍬',
             'אקטימל': { type: 'img', src: 'https://www.emess.co.il/resize/?width=800&height=450&url=/uploads/2024/08/%D7%90%D7%A7%D7%98%D7%99%D7%9E%D7%9C.jpg' },
@@ -382,9 +385,9 @@
         };
 
         let allInventoryItems = [
-            { name: 'בייגלה שומשום', cat: 'bread' }, { name: 'לחמניה', cat: 'bread' }, { name: 'פיתה', cat: 'bread' }, { name: 'בלינצס', cat: 'bread' }, { name: 'טוסט', cat: 'bread' },
-            { name: 'אבוקדו', cat: 'filling' }, { name: 'חביתה', cat: 'filling' }, { name: 'שוקולד השחר', cat: 'filling' }, { name: 'גבינה צהובה', cat: 'filling' }, { name: 'בולגרית', cat: 'filling' }, { name: 'גבינת שמנת', cat: 'filling' }, { name: 'ביצה קשה', cat: 'filling' },
-            { name: 'עגבניית שרי', cat: 'veggie' }, { name: 'גמבה', cat: 'veggie' }, { name: 'מלפפון', cat: 'veggie' }, { name: 'זיתים ירוקים', cat: 'veggie' },
+            { name: 'ג\'חנון', cat: 'bread' }, { name: 'בייגלה שומשום', cat: 'bread' }, { name: 'לחמניה', cat: 'bread' }, { name: 'פיתה', cat: 'bread' }, { name: 'בלינצס', cat: 'bread' }, { name: 'טוסט', cat: 'bread' },
+            { name: 'גבינה לבנה', cat: 'filling' }, { name: 'אבוקדו', cat: 'filling' }, { name: 'חביתה', cat: 'filling' }, { name: 'שוקולד השחר', cat: 'filling' }, { name: 'גבינה צהובה', cat: 'filling' }, { name: 'בולגרית', cat: 'filling' }, { name: 'גבינת שמנת', cat: 'filling' }, { name: 'ביצה קשה', cat: 'filling' },
+            { name: 'גזר', cat: 'veggie' }, { name: 'עגבניית שרי', cat: 'veggie' }, { name: 'גמבה', cat: 'veggie' }, { name: 'מלפפון', cat: 'veggie' }, { name: 'זיתים ירוקים', cat: 'veggie' },
             { name: 'תמר', cat: 'fruit' }, { name: 'תפוח', cat: 'fruit' }, { name: 'בננה', cat: 'fruit' }, { name: 'ענבים', cat: 'fruit' },
             { name: 'מוצרלה בייבי', cat: 'treat' }, { name: 'קרקרים', cat: 'treat' }, { name: 'יוגורט', cat: 'treat' }, { name: 'אקטימל', cat: 'treat' }, { name: 'כדור שוקולד', cat: 'treat' }
         ];
@@ -393,11 +396,11 @@
         let selectedInventoryItem = null;
         let currentCellTarget = null;
         let activeCategory = 'bread';
+        let longPressTimer;
 
         // --- Init ---
         document.addEventListener('DOMContentLoaded', () => {
             const catSelect = document.getElementById('modal-food-cat');
-            // Populate category select in modal
             catSelect.innerHTML = '';
             categories.forEach(cat => {
                 const option = document.createElement('option');
@@ -406,7 +409,6 @@
                 catSelect.appendChild(option);
             });
             
-            // Default child
             if (document.getElementById('children-list-container').children.length === 0) {
                 addChildRow('אורי', '#539fec');
             }
@@ -484,11 +486,13 @@
                 el.draggable = true;
                 el.innerHTML = resolveIcon(item.name, item.cat, item.customUrl) + `<span>${item.name}</span>`;
                 
+                // Desktop Drag
                 el.addEventListener('dragstart', (ev) => {
                     ev.dataTransfer.setData("application/json", JSON.stringify(item));
                 });
 
-                el.onclick = () => {
+                // Mobile/Desktop Click Selection
+                el.onclick = (e) => {
                     if (selectedInventoryItem === item) {
                         selectedInventoryItem = null;
                         el.classList.remove('selected-for-move');
@@ -498,6 +502,16 @@
                         el.classList.add('selected-for-move');
                     }
                 };
+
+                // Mobile Long Press for Context Menu
+                el.addEventListener('touchstart', (e) => {
+                     longPressTimer = setTimeout(() => showContextMenu(e, item), 800); 
+                });
+                el.addEventListener('touchend', () => clearTimeout(longPressTimer));
+                el.addEventListener('touchmove', () => clearTimeout(longPressTimer));
+                // Desktop Right Click
+                el.addEventListener('contextmenu', (e) => showContextMenu(e, item));
+
                 list.appendChild(el);
             });
 
@@ -512,20 +526,17 @@
 
         window.openAddModal = function(catId) {
             document.getElementById('modal-food-name').value = '';
-            document.getElementById('modal-food-cat').value = catId; // Pre-select category
+            document.getElementById('modal-food-cat').value = catId;
             document.getElementById('new-item-modal').style.display = 'flex';
         }
 
         window.addNewItemFromModal = function() {
             const name = document.getElementById('modal-food-name').value.trim();
             const cat = document.getElementById('modal-food-cat').value;
-            
             if(!name) return alert('נא להזין שם למאכל');
-            
             allInventoryItems.unshift({name, cat});
             closeModal('new-item-modal');
             
-            // Switch to the category of the new item
             const tabBtn = Array.from(document.querySelectorAll('.tab-button')).find(b => b.innerText.includes(categories.find(c=>c.id===cat).name));
             if(tabBtn) tabBtn.click();
             else initInventory(cat);
@@ -649,24 +660,39 @@
 
         window.closeModal = function(id) { document.getElementById(id).style.display = 'none'; }
 
-        // --- Context Menu (Right Click) ---
+        // --- Context Menu (Right Click / Long Press) ---
         window.showContextMenu = function(e, itemObj) {
             e.preventDefault();
             contextTargetItem = itemObj;
             const ctxMenu = document.getElementById('context-menu');
             ctxMenu.style.display = 'block';
-            ctxMenu.style.left = e.pageX + 'px';
-            ctxMenu.style.top = e.pageY + 'px';
+            // Handle both touch and mouse coordinates
+            let pageX = e.pageX || (e.touches ? e.touches[0].pageX : 0);
+            let pageY = e.pageY || (e.touches ? e.touches[0].pageY : 0);
+            ctxMenu.style.left = pageX + 'px';
+            ctxMenu.style.top = pageY + 'px';
         }
-        document.addEventListener('click', () => document.getElementById('context-menu').style.display = 'none');
+        // Hide context menu on any click outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#context-menu')) {
+                 document.getElementById('context-menu').style.display = 'none';
+            }
+        });
+        document.addEventListener('touchstart', (e) => {
+             if (!e.target.closest('#context-menu')) {
+                 document.getElementById('context-menu').style.display = 'none';
+            }
+        });
+
 
         window.changeItemImage = function() {
             if(!contextTargetItem) return;
             const url = prompt('הכנס קישור לתמונה:', contextTargetItem.customUrl || '');
             if(url !== null) { 
                 contextTargetItem.customUrl = url || null; 
-                initInventory(activeCategory); // Refresh view
+                initInventory(activeCategory);
             }
+            document.getElementById('context-menu').style.display = 'none';
         }
 
         window.deleteItemFromInventory = function() {
@@ -675,6 +701,7 @@
                  allInventoryItems = allInventoryItems.filter(i => i !== contextTargetItem);
                  initInventory(activeCategory);
              }
+             document.getElementById('context-menu').style.display = 'none';
         }
 
         window.showShoppingList = function() {
