@@ -196,7 +196,7 @@
 
 
         /* ==========================================================================
-           PRINT OPTIMIZATION - A4 LANDSCAPE (V28) - Max Utilization
+           PRINT OPTIMIZATION - A4 LANDSCAPE (V29) - Max Utilization & Alignment
            ========================================================================== */
         @media print and (orientation: landscape) {
             @page {
@@ -208,10 +208,10 @@
                 margin: 0;
                 padding: 0;
                 background: white;
-                /* Force minimum width to simulate desktop layout on mobile print */
-                min-width: 1400px; 
-                /* Increased zoom significantly to utilize most of A4 landscape width */
-                zoom: 0.85; 
+                /* Increased for max utilization */
+                min-width: 1600px; 
+                /* Increased to 100% to fill the width */
+                zoom: 1.0; 
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -232,13 +232,14 @@
                 display: block !important;
                 width: 100% !important;
                 overflow: visible !important;
-                padding: 5mm !important; /* Internal padding for the paper */
+                padding: 5mm !important; 
             }
 
             /* Ensure table takes full width and breaks pages correctly */
             .single-child-table {
                 width: 100% !important;
-                min-width: 1400px !important; 
+                /* Increased min-width to match body */
+                min-width: 1600px !important; 
                 height: auto !important; 
                 box-shadow: none !important;
                 background: white !important;
@@ -251,7 +252,7 @@
             }
 
             .child-title {
-                font-size: 32pt !important; /* Adjusted for new zoom */
+                font-size: 32pt !important; 
                 padding: 10px !important;
                 margin-bottom: 10px !important;
                 background-color: rgba(200,200,200,0.3) !important;
@@ -270,21 +271,24 @@
                 width: 100% !important;
             }
 
+            /* Improved Category Cell Alignment/Height */
             .header-cell { 
-                font-size: 18pt !important; /* Adjusted for new zoom */
+                font-size: 18pt !important; 
                 background-color: #eee !important; 
                 border: 1px solid #000 !important;
                 color: #000 !important;
                 padding: 10px !important;
-                height: 50px !important;
+                height: 65px !important; /* Increased Height for centering */
                 display: flex !important;
+                flex-direction: column !important; /* Added for better vertical stacking/centering */
                 align-items: center !important;
                 justify-content: center !important;
+                text-align: center !important; /* Ensure text is centered */
             }
 
             .day-cell { 
                 border: 1px solid #000 !important;
-                height: 140px !important; /* Adjusted for new zoom */
+                height: 140px !important; 
                 display: flex !important;
                 flex-direction: column;
                 align-items: center !important;
@@ -304,14 +308,14 @@
             }
 
             .day-cell .food-item img, .day-cell .food-item span.emoji {
-                width: 80px !important; /* Adjusted for new zoom */
-                height: 80px !important; /* Adjusted for new zoom */
-                font-size: 60pt !important; /* Adjusted for new zoom */
+                width: 80px !important; 
+                height: 80px !important; 
+                font-size: 60pt !important; 
                 margin-bottom: 5px !important;
             }
             
             .day-cell .food-item span:not(.emoji) {
-                font-size: 16pt !important; /* Adjusted for new zoom */
+                font-size: 16pt !important; 
                 color: #000 !important;
                 font-weight: bold;
                 white-space: normal !important;
@@ -319,7 +323,7 @@
         }
         
         /* ==========================================================================
-           PRINT OPTIMIZATION - A4 PORTRAIT (V28) - Max Utilization
+           PRINT OPTIMIZATION - A4 PORTRAIT (V29) - Improved Alignment
            ========================================================================== */
         @media print and (orientation: portrait) {
              @page {
@@ -332,13 +336,12 @@
                 padding: 0;
                 background: white;
                 min-width: 1000px; 
-                /* Increased zoom to maximize A4 portrait width utilization (~95%) */
                 zoom: 0.55; 
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
             
-            /* The rest of the print rules should apply similarly to hide UI and format table */
+            /* Hide UI */
             .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .cell-delete-btn, #context-menu, .new-item-control { 
                 display: none !important; 
             }
@@ -371,7 +374,7 @@
             }
             
             .child-title { 
-                font-size: 26pt !important; /* Adjusted for new zoom */
+                font-size: 26pt !important; 
                 padding: 8px !important;
                 margin-bottom: 8px !important;
                 background-color: rgba(200,200,200,0.3) !important;
@@ -390,17 +393,23 @@
                 width: 100% !important;
             }
             
+            /* Improved Category Cell Alignment/Height */
             .header-cell { 
-                font-size: 16pt !important; /* Adjusted for new zoom */
-                height: 40px !important; 
+                font-size: 16pt !important; 
+                height: 55px !important; /* Increased Height for centering */
                 padding: 6px !important;
                 border: 1px solid #000 !important;
                 background-color: #eee !important;
                 color: #000 !important;
+                display: flex !important;
+                flex-direction: column !important; /* Added for better vertical stacking/centering */
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important; /* Ensure text is centered */
             } 
             .day-cell { 
                 border: 1px solid #000 !important;
-                height: 120px !important; /* Adjusted for new zoom */
+                height: 120px !important; 
                 padding: 3px !important;
                 border-radius: 0 !important;
                 background-color: transparent !important;
@@ -408,12 +417,12 @@
 
             /* Adjust item size for smaller scale */
             .day-cell .food-item img, .day-cell .food-item span.emoji {
-                width: 70px !important; /* Adjusted for new zoom */
-                height: 70px !important; /* Adjusted for new zoom */
-                font-size: 50pt !important; /* Adjusted for new zoom */
+                width: 70px !important; 
+                height: 70px !important; 
+                font-size: 50pt !important; 
                 margin-bottom: 5px !important;
             }
-            .day-cell .food-item span:not(.emoji) { font-size: 14pt !important; } /* Adjusted for new zoom */
+            .day-cell .food-item span:not(.emoji) { font-size: 14pt !important; } 
         }
     </style>
 </head>
@@ -525,9 +534,9 @@
             'גבינת שמנת': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtiZ7V4aeVC52RnVhqm5FHQpxuQ8wk182azK07MmJ9Rg&s=10' },
             'תותים': '🍓', 'תפוח': '🍎', 'אוכמניות': '🫐', 'שזיף': '🟣', 'מנגו': '🥭', 'קיווי': '🥝', 'בננה': '🍌', 'ענבים': '🍇',
             'תפו': '🍊', 
-            'זיתים ירוקים': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDEp9HNy_nTQQl-Pe7cD2fw3XEIUHvFCJCqH_2v2Y4uw&s=10' }, // FIXED: Updated URL
+            'זיתים ירוקים': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDEp9HNy_nTQQl-Pe7cD2fw3XEIUHvFCJCqH_2v2Y4uw&s=10' }, // FIXED
             'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅', 
-            'גזר': '🥕', // Retained the stable emoji for carrot
+            'גזר': '🥕', 
             'קרקרים': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/Yz1gR9k5ej75oC8J.jpg' },
             'יוגורט': '🥛', 'פתי בר': '🍪', 'מיץ תפוזים': '🧃', 'קאפקייק': '🧁', 'בייגלה (חטיף)': '🥨', 'חטיף': '🍬',
             'אקטימל': { type: 'img', src: 'https://www.emess.co.il/resize/?width=800&height=450&url=/uploads/2024/08/%D7%90%D7%A7%D7%98%D7%99%D7%9E%D7%9C.jpg' },
@@ -714,7 +723,7 @@
 
                 const corner = document.createElement('div');
                 corner.className = 'header-cell';
-                corner.innerText = 'קטגוריה';
+                corner.innerHTML = `קטגוריה`; // Using innerHTML instead of innerText
                 grid.appendChild(corner);
 
                 days.forEach(d => {
