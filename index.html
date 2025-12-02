@@ -196,7 +196,7 @@
 
 
         /* ==========================================================================
-           PRINT OPTIMIZATION - A4 LANDSCAPE (V26)
+           PRINT OPTIMIZATION - A4 LANDSCAPE (V27)
            ========================================================================== */
         @media print and (orientation: landscape) {
             @page {
@@ -209,9 +209,9 @@
                 padding: 0;
                 background: white;
                 /* Force minimum width to simulate desktop layout on mobile print */
-                min-width: 1200px; /* Increased width for better stability */
-                /* Zoom out to fit everything on one page. More aggressive scaling than 0.65 */
-                zoom: 0.55; 
+                min-width: 1400px; /* Increased width for better scaling */
+                /* Increased zoom to utilize more page space */
+                zoom: 0.70; 
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -238,7 +238,7 @@
             /* Ensure table takes full width and breaks pages correctly */
             .single-child-table {
                 width: 100% !important;
-                min-width: 1200px !important; /* Force wide layout, matching body min-width */
+                min-width: 1400px !important; /* Force wide layout, matching body min-width */
                 height: auto !important; 
                 box-shadow: none !important;
                 background: white !important;
@@ -320,7 +320,7 @@
         }
         
         /* ==========================================================================
-           PRINT OPTIMIZATION - A4 PORTRAIT (V26)
+           PRINT OPTIMIZATION - A4 PORTRAIT (V27) - Improved Utilization
            ========================================================================== */
         @media print and (orientation: portrait) {
              @page {
@@ -333,7 +333,7 @@
                 padding: 0;
                 background: white;
                 min-width: 1000px; 
-                zoom: 0.35; /* Aggressive scaling to fit 7 columns on narrow page */
+                zoom: 0.45; /* Increased from 0.35 to better utilize space */
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -371,7 +371,7 @@
             }
             
             .child-title { 
-                font-size: 20pt !important; /* Smaller font for portrait */
+                font-size: 24pt !important; /* Adjusted font for new zoom */
                 padding: 8px !important;
                 margin-bottom: 8px !important;
                 background-color: rgba(200,200,200,0.3) !important;
@@ -391,16 +391,16 @@
             }
             
             .header-cell { 
-                font-size: 10pt !important; 
-                height: 30px !important; /* Smaller height for portrait */
-                padding: 4px !important;
+                font-size: 14pt !important; /* Adjusted font for new zoom */
+                height: 40px !important; 
+                padding: 6px !important;
                 border: 1px solid #000 !important;
                 background-color: #eee !important;
                 color: #000 !important;
             } 
             .day-cell { 
                 border: 1px solid #000 !important;
-                height: 80px !important; /* Smaller cell height for portrait */
+                height: 100px !important; /* Adjusted cell height for new zoom */
                 padding: 3px !important;
                 border-radius: 0 !important;
                 background-color: transparent !important;
@@ -408,12 +408,12 @@
 
             /* Adjust item size for smaller scale */
             .day-cell .food-item img, .day-cell .food-item span.emoji {
-                width: 50px !important; 
-                height: 50px !important;
-                font-size: 30pt !important;
-                margin-bottom: 3px !important;
+                width: 60px !important; 
+                height: 60px !important;
+                font-size: 40pt !important;
+                margin-bottom: 5px !important;
             }
-            .day-cell .food-item span:not(.emoji) { font-size: 10pt !important; }
+            .day-cell .food-item span:not(.emoji) { font-size: 12pt !important; } /* Adjusted font for new zoom */
         }
     </style>
 </head>
@@ -524,7 +524,10 @@
             'בולגרית': { type: 'img', src: 'https://gad-dairy.co.il/wp-content/uploads/2016/05/30056-13-a_pic_site_9-1024x1024.png' },
             'גבינת שמנת': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtiZ7V4aeVC52RnVhqm5FHQpxuQ8wk182azK07MmJ9Rg&s=10' },
             'תותים': '🍓', 'תפוח': '🍎', 'אוכמניות': '🫐', 'שזיף': '🟣', 'מנגו': '🥭', 'קיווי': '🥝', 'בננה': '🍌', 'ענבים': '🍇',
-            'תפו': '🍊', 'זיתים ירוקים': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDEp9HNy_nTQQl-Pe7cD2fw3XEIUHvFCJCbH_2v2Y4uw&s=10' }, 'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅', 'גזר': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6-tqV3-Q-Xq_yX-Q_yX-Q_yX-Q_yX-Q&s' },
+            'תפו': '🍊', 
+            'זיתים ירוקים': '🫒', // FIXED - Replaced unstable URL with emoji
+            'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅', 
+            'גזר': '🥕', // FIXED - Replaced unstable URL with emoji
             'קרקרים': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/Yz1gR9k5ej75oC8J.jpg' },
             'יוגורט': '🥛', 'פתי בר': '🍪', 'מיץ תפוזים': '🧃', 'קאפקייק': '🧁', 'בייגלה (חטיף)': '🥨', 'חטיף': '🍬',
             'אקטימל': { type: 'img', src: 'https://www.emess.co.il/resize/?width=800&height=450&url=/uploads/2024/08/%D7%90%D7%A7%D7%98%D7%99%D7%9E%D7%9C.jpg' },
