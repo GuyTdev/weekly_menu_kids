@@ -203,90 +203,95 @@
         }
 
 
-        /* --- PRINT OPTIMIZATION (Fixes for Mobile A4 Landscape) --- */
+        /* --- PRINT OPTIMIZATION (Fixed for A4 Landscape Mobile & Desktop) --- */
         @media print {
             @page {
                 size: A4 landscape;
-                margin: 0; /* Remove default margins to control manually */
+                margin: 5mm; /* מרווח בטיחות קטן */
             }
             
             body, html {
                 margin: 0; 
                 padding: 0; 
-                width: 100%; 
+                width: 100%;
                 height: 100%;
                 background: white;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
 
-            /* Clear non-printable elements */
-            .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .cell-delete-btn, #context-menu { 
+            /* הסתרת ממשק */
+            .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .cell-delete-btn, #context-menu, .new-item-control { 
                 display: none !important; 
             }
             
-            #app-screen { 
-                display: block !important; 
-                margin: 0 !important; 
-                padding: 5mm !important; /* Safe padding for print */
-                width: 100% !important;
-                box-sizing: border-box;
-            }
-
-            #tables-container { 
+            #app-screen, #tables-container {
                 display: block !important;
-                overflow: visible !important; 
                 width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: visible !important;
             }
 
             .single-child-table {
-                width: 100% !important;
+                /* שימוש ברוחב יחסי ולא קבוע כדי למנוע חיתוך */
+                width: 100% !important; 
+                max-width: 285mm !important; /* רוחב A4 פחות שוליים */
                 min-width: 0 !important;
+                height: 190mm !important; /* גובה A4 פחות שוליים */
+                margin: 0 auto !important;
+                padding: 0 !important;
                 box-shadow: none !important;
                 border: none !important;
-                margin: 0 0 1cm 0 !important;
-                padding: 0 !important;
                 page-break-after: always;
                 page-break-inside: avoid;
+                display: flex;
+                flex-direction: column;
             }
 
             .child-title {
                 font-size: 20pt !important;
                 padding: 5px !important;
+                margin-bottom: 5px !important;
                 background-color: rgba(200,200,200,0.3) !important;
                 border: 2px solid #000;
-                border-bottom: none;
                 color: #000 !important;
-                margin: 0 !important;
                 border-radius: 0 !important;
             }
 
-            /* Responsive Grid for Print using Percentages */
+            /* Grid Configuration for Print - Using Fractional Units (fr) instead of pixels/percent */
             .week-grid { 
+                flex: 1;
                 display: grid !important;
-                /* Use percentages to ensure it fits any A4 rendering logic */
-                grid-template-columns: 10% 15% 15% 15% 15% 15% 15% !important;
+                /* עמודה ראשונה צרה, השאר שוות */
+                grid-template-columns: 0.8fr repeat(6, 1fr) !important; 
+                grid-template-rows: 30px repeat(5, 1fr) !important;
                 gap: 0 !important;
                 border: 2px solid #000 !important;
-                width: 100% !important;
+                padding: 0 !important;
             }
 
             .header-cell { 
-                font-size: 12pt !important; 
+                font-size: 11pt !important; 
                 background-color: #eee !important; 
                 border: 1px solid #000 !important;
                 color: #000 !important;
-                padding: 5px !important;
+                padding: 2px !important;
+                display: flex;
+                align-items: center;
+                justify-content: center;
                 overflow: hidden;
             }
 
             .day-cell { 
                 border: 1px solid #000 !important;
-                min-height: 2.5cm !important; /* Fixed reasonable height for print */
+                min-height: 0 !important;
                 display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
                 padding: 2px !important;
+                border-radius: 0 !important;
             }
 
             .day-cell:not(.filled)::after { content: ''; }
@@ -294,19 +299,21 @@
             .day-cell .food-item {
                 border: none !important;
                 width: auto !important;
+                height: auto !important;
             }
 
             .day-cell .food-item img, .day-cell .food-item span.emoji {
-                width: 1.2cm !important; /* Physical units for print */
+                width: 1.2cm !important; 
                 height: 1.2cm !important;
-                font-size: 30pt !important;
+                font-size: 24pt !important;
             }
             
             .day-cell .food-item span:not(.emoji) {
-                font-size: 10pt !important;
+                font-size: 9pt !important;
                 color: #000 !important;
                 font-weight: bold;
-                white-space: normal !important; /* Allow wrapping in print */
+                white-space: normal !important;
+                line-height: 1.1;
             }
         }
     </style>
@@ -701,7 +708,7 @@
 
         window.closeModal = function(id) { document.getElementById(id).style.display = 'none'; }
 
-        // --- Context Menu ---
+        // --- Context Menu (Right Click / Long Press) ---
         window.showContextMenu = function(e, itemObj) {
             e.preventDefault();
             contextTargetItem = itemObj;
