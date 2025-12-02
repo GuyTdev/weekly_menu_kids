@@ -196,7 +196,7 @@
 
 
         /* ==========================================================================
-           PRINT OPTIMIZATION - A4 LANDSCAPE (V27)
+           PRINT OPTIMIZATION - A4 LANDSCAPE (V28) - Max Utilization
            ========================================================================== */
         @media print and (orientation: landscape) {
             @page {
@@ -209,9 +209,9 @@
                 padding: 0;
                 background: white;
                 /* Force minimum width to simulate desktop layout on mobile print */
-                min-width: 1400px; /* Increased width for better scaling */
-                /* Increased zoom to utilize more page space */
-                zoom: 0.70; 
+                min-width: 1400px; 
+                /* Increased zoom significantly to utilize most of A4 landscape width */
+                zoom: 0.85; 
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -238,7 +238,7 @@
             /* Ensure table takes full width and breaks pages correctly */
             .single-child-table {
                 width: 100% !important;
-                min-width: 1400px !important; /* Force wide layout, matching body min-width */
+                min-width: 1400px !important; 
                 height: auto !important; 
                 box-shadow: none !important;
                 background: white !important;
@@ -251,7 +251,7 @@
             }
 
             .child-title {
-                font-size: 28pt !important;
+                font-size: 32pt !important; /* Adjusted for new zoom */
                 padding: 10px !important;
                 margin-bottom: 10px !important;
                 background-color: rgba(200,200,200,0.3) !important;
@@ -264,7 +264,6 @@
             /* Force Grid Layout for 7 columns (Category + 6 Days) */
             .week-grid { 
                 display: grid !important;
-                /* Percentage based columns to ensure full width: 8% for category, 6*15.3% for days */
                 grid-template-columns: 8% 15.3% 15.3% 15.3% 15.3% 15.3% 15.3% !important; 
                 gap: 0 !important;
                 border: 2px solid #000 !important;
@@ -272,7 +271,7 @@
             }
 
             .header-cell { 
-                font-size: 16pt !important; 
+                font-size: 18pt !important; /* Adjusted for new zoom */
                 background-color: #eee !important; 
                 border: 1px solid #000 !important;
                 color: #000 !important;
@@ -285,7 +284,7 @@
 
             .day-cell { 
                 border: 1px solid #000 !important;
-                height: 120px !important; 
+                height: 140px !important; /* Adjusted for new zoom */
                 display: flex !important;
                 flex-direction: column;
                 align-items: center !important;
@@ -305,14 +304,14 @@
             }
 
             .day-cell .food-item img, .day-cell .food-item span.emoji {
-                width: 70px !important; 
-                height: 70px !important;
-                font-size: 50pt !important;
+                width: 80px !important; /* Adjusted for new zoom */
+                height: 80px !important; /* Adjusted for new zoom */
+                font-size: 60pt !important; /* Adjusted for new zoom */
                 margin-bottom: 5px !important;
             }
             
             .day-cell .food-item span:not(.emoji) {
-                font-size: 14pt !important;
+                font-size: 16pt !important; /* Adjusted for new zoom */
                 color: #000 !important;
                 font-weight: bold;
                 white-space: normal !important;
@@ -320,7 +319,7 @@
         }
         
         /* ==========================================================================
-           PRINT OPTIMIZATION - A4 PORTRAIT (V27) - Improved Utilization
+           PRINT OPTIMIZATION - A4 PORTRAIT (V28) - Max Utilization
            ========================================================================== */
         @media print and (orientation: portrait) {
              @page {
@@ -333,7 +332,8 @@
                 padding: 0;
                 background: white;
                 min-width: 1000px; 
-                zoom: 0.45; /* Increased from 0.35 to better utilize space */
+                /* Increased zoom to maximize A4 portrait width utilization (~95%) */
+                zoom: 0.55; 
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -371,7 +371,7 @@
             }
             
             .child-title { 
-                font-size: 24pt !important; /* Adjusted font for new zoom */
+                font-size: 26pt !important; /* Adjusted for new zoom */
                 padding: 8px !important;
                 margin-bottom: 8px !important;
                 background-color: rgba(200,200,200,0.3) !important;
@@ -391,7 +391,7 @@
             }
             
             .header-cell { 
-                font-size: 14pt !important; /* Adjusted font for new zoom */
+                font-size: 16pt !important; /* Adjusted for new zoom */
                 height: 40px !important; 
                 padding: 6px !important;
                 border: 1px solid #000 !important;
@@ -400,7 +400,7 @@
             } 
             .day-cell { 
                 border: 1px solid #000 !important;
-                height: 100px !important; /* Adjusted cell height for new zoom */
+                height: 120px !important; /* Adjusted for new zoom */
                 padding: 3px !important;
                 border-radius: 0 !important;
                 background-color: transparent !important;
@@ -408,12 +408,12 @@
 
             /* Adjust item size for smaller scale */
             .day-cell .food-item img, .day-cell .food-item span.emoji {
-                width: 60px !important; 
-                height: 60px !important;
-                font-size: 40pt !important;
+                width: 70px !important; /* Adjusted for new zoom */
+                height: 70px !important; /* Adjusted for new zoom */
+                font-size: 50pt !important; /* Adjusted for new zoom */
                 margin-bottom: 5px !important;
             }
-            .day-cell .food-item span:not(.emoji) { font-size: 12pt !important; } /* Adjusted font for new zoom */
+            .day-cell .food-item span:not(.emoji) { font-size: 14pt !important; } /* Adjusted for new zoom */
         }
     </style>
 </head>
@@ -525,9 +525,9 @@
             'גבינת שמנת': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtiZ7V4aeVC52RnVhqm5FHQpxuQ8wk182azK07MmJ9Rg&s=10' },
             'תותים': '🍓', 'תפוח': '🍎', 'אוכמניות': '🫐', 'שזיף': '🟣', 'מנגו': '🥭', 'קיווי': '🥝', 'בננה': '🍌', 'ענבים': '🍇',
             'תפו': '🍊', 
-            'זיתים ירוקים': '🫒', // FIXED - Replaced unstable URL with emoji
+            'זיתים ירוקים': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDEp9HNy_nTQQl-Pe7cD2fw3XEIUHvFCJCqH_2v2Y4uw&s=10' }, // FIXED: Updated URL
             'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅', 
-            'גזר': '🥕', // FIXED - Replaced unstable URL with emoji
+            'גזר': '🥕', // Retained the stable emoji for carrot
             'קרקרים': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/Yz1gR9k5ej75oC8J.jpg' },
             'יוגורט': '🥛', 'פתי בר': '🍪', 'מיץ תפוזים': '🧃', 'קאפקייק': '🧁', 'בייגלה (חטיף)': '🥨', 'חטיף': '🍬',
             'אקטימל': { type: 'img', src: 'https://www.emess.co.il/resize/?width=800&height=450&url=/uploads/2024/08/%D7%90%D7%A7%D7%98%D7%99%D7%9E%D7%9C.jpg' },
