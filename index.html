@@ -196,7 +196,7 @@
 
 
         /* ==========================================================================
-           PRINT OPTIMIZATION - A4 LANDSCAPE (V29) - Max Utilization & Alignment
+           PRINT OPTIMIZATION - A4 LANDSCAPE (V30) - Max Utilization & Alignment
            ========================================================================== */
         @media print and (orientation: landscape) {
             @page {
@@ -208,9 +208,7 @@
                 margin: 0;
                 padding: 0;
                 background: white;
-                /* Increased for max utilization */
-                min-width: 1600px; 
-                /* Increased to 100% to fill the width */
+                /* Removed fixed min-width to allow 100% width to be effective */
                 zoom: 1.0; 
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
@@ -238,8 +236,7 @@
             /* Ensure table takes full width and breaks pages correctly */
             .single-child-table {
                 width: 100% !important;
-                /* Increased min-width to match body */
-                min-width: 1600px !important; 
+                /* Removed fixed min-width for better fluid use of page width */
                 height: auto !important; 
                 box-shadow: none !important;
                 background: white !important;
@@ -271,19 +268,20 @@
                 width: 100% !important;
             }
 
-            /* Improved Category Cell Alignment/Height */
+            /* Corrected Category Cell Alignment/Height for multi-line text (Issue 2) */
             .header-cell { 
                 font-size: 18pt !important; 
                 background-color: #eee !important; 
                 border: 1px solid #000 !important;
                 color: #000 !important;
                 padding: 10px !important;
-                height: 65px !important; /* Increased Height for centering */
+                height: 120px !important; /* SIGNIFICANTLY INCREASED HEIGHT (V30) */
                 display: flex !important;
-                flex-direction: column !important; /* Added for better vertical stacking/centering */
+                flex-direction: column !important; 
                 align-items: center !important;
                 justify-content: center !important;
-                text-align: center !important; /* Ensure text is centered */
+                text-align: center !important; 
+                line-height: 1.2; /* Better line spacing for text wrap */
             }
 
             .day-cell { 
@@ -323,7 +321,7 @@
         }
         
         /* ==========================================================================
-           PRINT OPTIMIZATION - A4 PORTRAIT (V29) - Improved Alignment
+           PRINT OPTIMIZATION - A4 PORTRAIT (V30) - Improved Alignment
            ========================================================================== */
         @media print and (orientation: portrait) {
              @page {
@@ -393,19 +391,20 @@
                 width: 100% !important;
             }
             
-            /* Improved Category Cell Alignment/Height */
+            /* Corrected Category Cell Alignment/Height for multi-line text (Issue 2) */
             .header-cell { 
                 font-size: 16pt !important; 
-                height: 55px !important; /* Increased Height for centering */
+                height: 100px !important; /* SIGNIFICANTLY INCREASED HEIGHT (V30) */
                 padding: 6px !important;
                 border: 1px solid #000 !important;
                 background-color: #eee !important;
                 color: #000 !important;
                 display: flex !important;
-                flex-direction: column !important; /* Added for better vertical stacking/centering */
+                flex-direction: column !important; 
                 align-items: center !important;
                 justify-content: center !important;
-                text-align: center !important; /* Ensure text is centered */
+                text-align: center !important; 
+                line-height: 1.2; /* Better line spacing for text wrap */
             } 
             .day-cell { 
                 border: 1px solid #000 !important;
@@ -534,12 +533,12 @@
             'גבינת שמנת': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtiZ7V4aeVC52RnVhqm5FHQpxuQ8wk182azK07MmJ9Rg&s=10' },
             'תותים': '🍓', 'תפוח': '🍎', 'אוכמניות': '🫐', 'שזיף': '🟣', 'מנגו': '🥭', 'קיווי': '🥝', 'בננה': '🍌', 'ענבים': '🍇',
             'תפו': '🍊', 
-            'זיתים ירוקים': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDEp9HNy_nTQQl-Pe7cD2fw3XEIUHvFCJCqH_2v2Y4uw&s=10' }, // FIXED
+            'זיתים ירוקים': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDEp9HNy_nTQQl-Pe7cD2fw3XEIUHvFCJCqH_2v2Y4uw&s=10' }, 
             'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅', 
             'גזר': '🥕', 
             'קרקרים': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/Yz1gR9k5ej75oC8J.jpg' },
             'יוגורט': '🥛', 'פתי בר': '🍪', 'מיץ תפוזים': '🧃', 'קאפקייק': '🧁', 'בייגלה (חטיף)': '🥨', 'חטיף': '🍬',
-            'אקטימל': { type: 'img', src: 'https://www.emess.co.il/resize/?width=800&height=450&url=/uploads/2024/08/%D7%90%D7%A7%D7%98%D7%99%D7%9E%D7%9C.jpg' },
+            'אקטימל': { type: 'img', src: 'https://www.emess.co.il/uploads/2024/08/%D7%90%D7%A7%D7%98%D7%99%D7%9E%D7%9C.jpg' },
             'כדור שוקולד': { type: 'img', src: 'https://cakenet.co.il/wp-content/uploads/2019/02/0_02891.jpg' },
             'bread': '🍞', 'filling': '🧀', 'veggie': '🥒', 'fruit': '🍎', 'treat': '🍪' 
         };
