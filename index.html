@@ -16,6 +16,10 @@
             --shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
+        * {
+            box-sizing: border-box; /* קריטי לחישובי רוחב */
+        }
+
         body {
             font-family: 'Rubik', sans-serif;
             background-color: var(--bg-color);
@@ -73,7 +77,6 @@
             max-width: 450px;
             width: 100%;
             margin-top: 10px;
-            box-sizing: border-box;
         }
 
         .child-input-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
@@ -109,7 +112,6 @@
         .food-item img { width: 35px; height: 35px; object-fit: contain; margin-bottom: 2px; }
         .food-item span.emoji { font-size: 26px; margin-bottom: 2px; display: block; }
         
-        /* Highlight selected item */
         .food-item.selected-for-move {
             border: 3px solid var(--primary);
             background-color: #e3f2fd;
@@ -118,7 +120,6 @@
             z-index: 10;
         }
 
-        /* "Add New" Item Button in Inventory */
         .add-item-btn {
             border: 2px dashed #aaa;
             background: #f9f9f9;
@@ -126,13 +127,7 @@
             font-size: 30px;
             font-weight: bold;
         }
-        .add-item-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: #fff;
-        }
 
-        /* Categories Colors */
         .food-item[data-cat="bread"] { border-top: 3px solid #fdcb6e; }
         .food-item[data-cat="filling"] { border-top: 3px solid #ff7675; }
         .food-item[data-cat="veggie"] { border-top: 3px solid #00b894; }
@@ -155,19 +150,16 @@
             transition: all 0.2s;
         }
         
-        /* Hint + */
         .day-cell:not(.filled)::after {
             content: '+'; font-size: 24px; color: rgba(0,0,0,0.15); pointer-events: none; position: absolute;
         }
         
-        /* Visual Feedback */
         .day-cell.drag-over {
             background-color: #dff9fb !important; border: 2px solid var(--primary) !important; transform: scale(1.02);
         }
 
         .day-cell .food-item { width: 100%; height: 100%; border: none; box-shadow: none; background: transparent; }
         
-        /* Delete btn on cell */
         .cell-delete-btn {
             position: absolute; top: -5px; left: -5px; background: #ff7675; color: white;
             border-radius: 50%; width: 20px; height: 20px; font-size: 12px; line-height: 20px;
@@ -203,99 +195,110 @@
         }
 
 
-        /* --- PRINT OPTIMIZATION (Fixed for A4 Landscape Mobile & Desktop) --- */
+        /* ==========================================================================
+           PRINT OPTIMIZATION - FIXED FOR MOBILE A4 LANDSCAPE
+           ========================================================================== */
         @media print {
             @page {
                 size: A4 landscape;
-                margin: 5mm; /* מרווח בטיחות קטן */
+                margin: 0;
             }
             
-            body, html {
-                margin: 0; 
-                padding: 0; 
-                width: 100%;
-                height: 100%;
+            body {
+                margin: 0;
+                padding: 0;
                 background: white;
+                /* Force minimum width to simulate desktop layout on mobile print */
+                min-width: 1024px; 
+                /* Zoom out to fit everything on one page */
+                zoom: 0.65; 
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
 
-            /* הסתרת ממשק */
+            /* Hide everything except the tables */
             .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .cell-delete-btn, #context-menu, .new-item-control { 
                 display: none !important; 
             }
             
-            #app-screen, #tables-container {
-                display: block !important;
+            #app-screen { 
+                display: block !important; 
+                margin: 0 !important; 
+                padding: 0 !important; 
                 width: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-                overflow: visible !important;
             }
 
+            #tables-container { 
+                display: block !important;
+                width: 100% !important;
+                overflow: visible !important;
+                padding: 10mm !important; /* Internal padding for the paper */
+            }
+
+            /* Ensure table takes full width and breaks pages correctly */
             .single-child-table {
-                /* שימוש ברוחב יחסי ולא קבוע כדי למנוע חיתוך */
-                width: 100% !important; 
-                max-width: 285mm !important; /* רוחב A4 פחות שוליים */
-                min-width: 0 !important;
-                height: 190mm !important; /* גובה A4 פחות שוליים */
-                margin: 0 auto !important;
-                padding: 0 !important;
+                width: 100% !important;
+                min-width: 1000px !important; /* Force wide layout */
+                height: auto !important; /* Let height flow naturally */
+                /* Remove screen styles */
                 box-shadow: none !important;
+                background: white !important;
                 border: none !important;
+                padding: 0 !important;
+                margin: 0 0 50px 0 !important; /* Space between children */
                 page-break-after: always;
                 page-break-inside: avoid;
-                display: flex;
-                flex-direction: column;
+                display: block !important; /* Block instead of flex to avoid issues */
             }
 
             .child-title {
-                font-size: 20pt !important;
-                padding: 5px !important;
-                margin-bottom: 5px !important;
+                font-size: 28pt !important;
+                padding: 10px !important;
+                margin-bottom: 10px !important;
                 background-color: rgba(200,200,200,0.3) !important;
                 border: 2px solid #000;
                 color: #000 !important;
                 border-radius: 0 !important;
+                text-align: center !important;
             }
 
-            /* Grid Configuration for Print - Using Fractional Units (fr) instead of pixels/percent */
+            /* Force Grid Layout */
             .week-grid { 
-                flex: 1;
                 display: grid !important;
-                /* עמודה ראשונה צרה, השאר שוות */
-                grid-template-columns: 0.8fr repeat(6, 1fr) !important; 
-                grid-template-rows: 30px repeat(5, 1fr) !important;
+                /* Percentage based columns to ensure full width */
+                grid-template-columns: 8% 15.3% 15.3% 15.3% 15.3% 15.3% 15.3% !important; 
                 gap: 0 !important;
                 border: 2px solid #000 !important;
-                padding: 0 !important;
+                width: 100% !important;
             }
 
             .header-cell { 
-                font-size: 11pt !important; 
+                font-size: 16pt !important; 
                 background-color: #eee !important; 
                 border: 1px solid #000 !important;
                 color: #000 !important;
-                padding: 2px !important;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                overflow: hidden;
+                padding: 10px !important;
+                height: 50px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
             }
 
             .day-cell { 
                 border: 1px solid #000 !important;
-                min-height: 0 !important;
+                height: 120px !important; /* Fixed height for consistency */
                 display: flex !important;
                 flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                padding: 2px !important;
+                align-items: center !important;
+                justify-content: center !important;
+                padding: 5px !important;
                 border-radius: 0 !important;
+                background-color: transparent !important;
             }
 
             .day-cell:not(.filled)::after { content: ''; }
 
+            /* Make items large and clear */
             .day-cell .food-item {
                 border: none !important;
                 width: auto !important;
@@ -303,17 +306,17 @@
             }
 
             .day-cell .food-item img, .day-cell .food-item span.emoji {
-                width: 1.2cm !important; 
-                height: 1.2cm !important;
-                font-size: 24pt !important;
+                width: 70px !important; 
+                height: 70px !important;
+                font-size: 50pt !important;
+                margin-bottom: 5px !important;
             }
             
             .day-cell .food-item span:not(.emoji) {
-                font-size: 9pt !important;
+                font-size: 14pt !important;
                 color: #000 !important;
                 font-weight: bold;
                 white-space: normal !important;
-                line-height: 1.1;
             }
         }
     </style>
@@ -425,7 +428,7 @@
             'בולגרית': { type: 'img', src: 'https://gad-dairy.co.il/wp-content/uploads/2016/05/30056-13-a_pic_site_9-1024x1024.png' },
             'גבינת שמנת': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtiZ7V4aeVC52RnVhqm5FHQpxuQ8wk182azK07MmJ9Rg&s=10' },
             'תותים': '🍓', 'תפוח': '🍎', 'אוכמניות': '🫐', 'שזיף': '🟣', 'מנגו': '🥭', 'קיווי': '🥝', 'בננה': '🍌', 'ענבים': '🍇',
-            'תפו': '🍊', 'זיתים ירוקים': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDEp9HNy_nTQQl-Pe7cD2fw3XEIUHvFCJCqH_2v2Y4uw&s=10' }, 'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅', 'גזר': '🥕',
+            'תפו': '🍊', 'זיתים ירוקים': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDEp9HNy_nTQQl-Pe7cD2fw3XEIUHvFCJCqH_2v2Y4uw&s=10' }, 'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅', 'גזר': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6-tqV3-Q-Xq_yX-Q_yX-Q_yX-Q_yX-Q&s' },
             'קרקרים': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/Yz1gR9k5ej75oC8J.jpg' },
             'יוגורט': '🥛', 'פתי בר': '🍪', 'מיץ תפוזים': '🧃', 'קאפקייק': '🧁', 'בייגלה (חטיף)': '🥨', 'חטיף': '🍬',
             'אקטימל': { type: 'img', src: 'https://www.emess.co.il/resize/?width=800&height=450&url=/uploads/2024/08/%D7%90%D7%A7%D7%98%D7%99%D7%9E%D7%9C.jpg' },
