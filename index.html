@@ -196,7 +196,7 @@
 
 
         /* ==========================================================================
-           PRINT OPTIMIZATION - A4 LANDSCAPE (V30) - Max Utilization & Alignment
+           PRINT OPTIMIZATION - A4 LANDSCAPE (V31) - Fixed Width & Text Flow
            ========================================================================== */
         @media print and (orientation: landscape) {
             @page {
@@ -204,11 +204,11 @@
                 margin: 0;
             }
             
-            body {
-                margin: 0;
-                padding: 0;
+            html, body {
+                width: 100%;
+                margin: 0 !important;
+                padding: 0 !important;
                 background: white;
-                /* Removed fixed min-width to allow 100% width to be effective */
                 zoom: 1.0; 
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
@@ -230,13 +230,12 @@
                 display: block !important;
                 width: 100% !important;
                 overflow: visible !important;
-                padding: 5mm !important; 
+                padding: 0 !important; /* V31: Removed 5mm padding to ensure max utilization */
             }
 
             /* Ensure table takes full width and breaks pages correctly */
             .single-child-table {
                 width: 100% !important;
-                /* Removed fixed min-width for better fluid use of page width */
                 height: auto !important; 
                 box-shadow: none !important;
                 background: white !important;
@@ -275,13 +274,15 @@
                 border: 1px solid #000 !important;
                 color: #000 !important;
                 padding: 10px !important;
-                height: 120px !important; /* SIGNIFICANTLY INCREASED HEIGHT (V30) */
+                height: 120px !important; 
                 display: flex !important;
                 flex-direction: column !important; 
                 align-items: center !important;
                 justify-content: center !important;
                 text-align: center !important; 
-                line-height: 1.2; /* Better line spacing for text wrap */
+                line-height: 1.2; 
+                /* Ensures text wraps if needed, necessary for the space added in "חלבון/ ממרח" */
+                white-space: normal !important; 
             }
 
             .day-cell { 
@@ -321,7 +322,7 @@
         }
         
         /* ==========================================================================
-           PRINT OPTIMIZATION - A4 PORTRAIT (V30) - Improved Alignment
+           PRINT OPTIMIZATION - A4 PORTRAIT (V31) - Fixed Text Flow
            ========================================================================== */
         @media print and (orientation: portrait) {
              @page {
@@ -329,11 +330,12 @@
                 margin: 0;
             }
 
-            body {
-                margin: 0;
-                padding: 0;
+            html, body {
+                width: 100%;
+                margin: 0 !important;
+                padding: 0 !important;
                 background: white;
-                min-width: 1000px; 
+                /* Retained zoom for portrait since it fills the page better */
                 zoom: 0.55; 
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
@@ -355,7 +357,7 @@
                 display: block !important;
                 width: 100% !important;
                 overflow: visible !important;
-                padding: 5mm !important;
+                padding: 0 !important; /* V31: Removed 5mm padding to ensure max utilization */
             }
 
             .single-child-table {
@@ -394,7 +396,7 @@
             /* Corrected Category Cell Alignment/Height for multi-line text (Issue 2) */
             .header-cell { 
                 font-size: 16pt !important; 
-                height: 100px !important; /* SIGNIFICANTLY INCREASED HEIGHT (V30) */
+                height: 100px !important; 
                 padding: 6px !important;
                 border: 1px solid #000 !important;
                 background-color: #eee !important;
@@ -404,7 +406,8 @@
                 align-items: center !important;
                 justify-content: center !important;
                 text-align: center !important; 
-                line-height: 1.2; /* Better line spacing for text wrap */
+                line-height: 1.2; 
+                white-space: normal !important; /* Allows "חלבון/ ממרח" to wrap */
             } 
             .day-cell { 
                 border: 1px solid #000 !important;
@@ -504,7 +507,8 @@
         // --- Data ---
         const categories = [
             { id: 'bread', name: 'פחמימה', icon: '🍞' },
-            { id: 'filling', name: 'חלבון/ממרח', icon: '🧀' },
+            // V31: Added space to allow line break
+            { id: 'filling', name: 'חלבון/ ממרח', icon: '🧀' }, 
             { id: 'veggie', name: 'ירק', icon: '🥒' },
             { id: 'fruit', name: 'פרי', icon: '🍎' },
             { id: 'treat', name: 'פינוק', icon: '🍪' }
@@ -612,8 +616,10 @@
                 if (typeof val === 'object') return `<img src="${val.src}">`;
                 return `<span class="emoji">${val}</span>`;
             }
-            const fallback = iconDictionary[cat] || '🍱';
-            return `<span class="emoji">${fallback}</span>`;
+            // V31: Use the updated category name from the categories array
+            const fallbackCat = categories.find(c => c.id === cat);
+            const fallbackIcon = iconDictionary[cat] || '🍱';
+            return `<span class="emoji">${fallbackIcon}</span>`;
         }
 
         function initInventoryTabs() {
@@ -695,7 +701,7 @@
             allInventoryItems.unshift({name, cat});
             closeModal('new-item-modal');
             
-            const tabBtn = Array.from(document.querySelectorAll('.tab-button')).find(b => b.innerText.includes(categories.find(c=>c.id===cat).name));
+            const tabBtn = Array.from(document.querySelectorAll('.tab-button')).find(b => b.innerText.includes(categories.find(c=>c.id===cat).name.replace('/ ','/'))); // Fix for finding button with space
             if(tabBtn) tabBtn.click();
             else initInventory(cat);
         }
