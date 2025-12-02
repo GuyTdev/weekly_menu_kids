@@ -196,7 +196,7 @@
 
 
         /* ==========================================================================
-           PRINT OPTIMIZATION - A4 LANDSCAPE (V32) - Max Utilization
+           PRINT OPTIMIZATION - A4 LANDSCAPE (V33) - Max Utilization Fix
            ========================================================================== */
         @media print and (orientation: landscape) {
             @page {
@@ -205,11 +205,12 @@
             }
             
             html, body {
-                width: 100%;
+                width: 100% !important;
+                /* V33: Force browser to use max available width */
+                min-width: 100vw !important; 
                 margin: 0 !important;
                 padding: 0 !important;
                 background: white;
-                /* V32: Removed zoom: 1.0 to ensure full width utilization without scale interference */
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -236,7 +237,6 @@
             /* Ensure table takes full width and breaks pages correctly */
             .single-child-table {
                 width: 100% !important;
-                /* V32: No min-width */
                 height: auto !important; 
                 box-shadow: none !important;
                 background: white !important;
@@ -322,7 +322,7 @@
         }
         
         /* ==========================================================================
-           PRINT OPTIMIZATION - A4 PORTRAIT (V32) - Max Utilization
+           PRINT OPTIMIZATION - A4 PORTRAIT (V33) - Font Size Fix
            ========================================================================== */
         @media print and (orientation: portrait) {
              @page {
@@ -335,7 +335,6 @@
                 margin: 0 !important;
                 padding: 0 !important;
                 background: white;
-                /* V32: Removed min-width and zoom to allow 100% flow */
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -361,7 +360,6 @@
 
             .single-child-table {
                 width: 100% !important;
-                /* V32: Removed min-width: 1000px !important; */
                 box-shadow: none !important;
                 background: white !important;
                 border: none !important;
@@ -394,7 +392,7 @@
             
             /* Category Cell Alignment/Height */
             .header-cell { 
-                font-size: 16pt !important; 
+                font-size: 14pt !important; /* V33: Reduced from 16pt to fit 'פחמימה' and 'קטגוריה' */
                 height: 100px !important; 
                 padding: 6px !important;
                 border: 1px solid #000 !important;
@@ -534,13 +532,14 @@
             'בולגרית': { type: 'img', src: 'https://gad-dairy.co.il/wp-content/uploads/2016/05/30056-13-a_pic_site_9-1024x1024.png' },
             'גבינת שמנת': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtiZ7V4aeVC52RnVhqm5FHQpxuQ8wk182azK07MmJ9Rg&s=10' },
             'תותים': '🍓', 'תפוח': '🍎', 'אוכמניות': '🫐', 'שזיף': '🟣', 'מנגו': '🥭', 'קיווי': '🥝', 'בננה': '🍌', 'ענבים': '🍇',
-            'תפוז': '🍊', 
+            'תפו': '🍊', 
             'זיתים ירוקים': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDEp9HNy_nTQQl-Pe7cD2fw3XEIUHvFCJCqH_2v2Y4uw&s=10' }, 
             'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅', 
             'גזר': '🥕', 
             'קרקרים': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/Yz1gR9k5ej75oC8J.jpg' },
             'יוגורט': '🥛', 'פתי בר': '🍪', 'מיץ תפוזים': '🧃', 'קאפקייק': '🧁', 'בייגלה (חטיף)': '🥨', 'חטיף': '🍬',
-            'אקטימל': { type: 'img', src: 'https://www.emess.co.il/uploads/2024/08/%D7%90%D7%A7%D7%98%D7%99%D7%9E%D7%9C.jpg' },
+            // V33: Updated Actimel link to use a more stable resize service
+            'אקטימל': { type: 'img', src: 'https://www.emess.co.il/resize/?width=800&height=450&url=/uploads/2024/08/%D7%90%D7%A7%D7%98%D7%99%D7%9E%D7%9C.jpg' },
             'כדור שוקולד': { type: 'img', src: 'https://cakenet.co.il/wp-content/uploads/2019/02/0_02891.jpg' },
             'bread': '🍞', 'filling': '🧀', 'veggie': '🥒', 'fruit': '🍎', 'treat': '🍪' 
         };
