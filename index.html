@@ -207,16 +207,17 @@
 
 
         /* ==========================================================================
-           PRINT OPTIMIZATION - RESTORED V33 LOGIC (Zoom Based)
+           PRINT OPTIMIZATION - A4 LANDSCAPE (V37) - Final Mobile Fix
            ========================================================================== */
         @media print {
-            /* Default Orientation handling */
             @page {
+                size: A4 landscape;
                 margin: 0;
             }
             
             html, body {
                 width: 100%;
+                height: 100%;
                 margin: 0 !important;
                 padding: 0 !important;
                 background: white;
@@ -224,8 +225,13 @@
                 print-color-adjust: exact;
             }
 
+            /* Force A4 Width logic specifically for mobile browsers that shrink content */
+            body {
+                min-width: 297mm; /* Exact A4 width */
+            }
+
             /* Hide UI */
-            .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .cell-delete-btn, #context-menu { 
+            .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .cell-delete-btn, #context-menu, .new-item-control { 
                 display: none !important; 
             }
             
@@ -245,10 +251,11 @@
 
             .single-child-table {
                 width: 100% !important;
+                height: auto !important; 
                 box-shadow: none !important;
                 background: white !important;
                 border: none !important;
-                padding: 0 !important;
+                padding: 5mm !important; /* Slight padding for safety */
                 margin: 0 0 50px 0 !important; 
                 page-break-after: always;
                 page-break-inside: avoid;
@@ -292,29 +299,32 @@
             
             .day-cell { 
                 border: 1px solid #000 !important;
-                height: 100px !important; 
+                height: 110px !important; 
                 padding: 3px !important;
                 border-radius: 0 !important;
                 background-color: transparent !important;
+                display: flex !important;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
             } 
 
             .day-cell:not(.filled)::after { content: ''; }
 
             .day-cell .food-item { border: none !important; width: auto !important; height: auto !important; }
-            .day-cell .food-item img, .day-cell .food-item span.emoji { width: 60px !important; height: 60px !important; font-size: 45pt !important; margin-bottom: 5px !important; }
-            .day-cell .food-item span:not(.emoji) { font-size: 12pt !important; font-weight: bold; } 
+            .day-cell .food-item img, .day-cell .food-item span.emoji { width: 65px !important; height: 65px !important; font-size: 45pt !important; margin-bottom: 2px !important; }
+            .day-cell .food-item span:not(.emoji) { font-size: 12pt !important; font-weight: bold; color: #000 !important; } 
         }
 
-        /* Portrait Specific Zoom */
+        /* Portrait Adjustments */
         @media print and (orientation: portrait) {
-            body { zoom: 0.55; min-width: 1000px; }
+            body { zoom: 0.55; }
             .header-cell { font-size: 14pt !important; }
         }
 
-        /* Landscape Specific Zoom */
+        /* Landscape Adjustments */
         @media print and (orientation: landscape) {
-            body { zoom: 0.90; min-width: 1400px; }
-             .header-cell { font-size: 16pt !important; }
+            body { zoom: 1.0; }
         }
     </style>
 </head>
@@ -385,9 +395,6 @@
     <div id="item-selector-modal" class="modal">
         <div class="modal-content">
             <h3 id="selector-title">בחר פריט</h3>
-            <div style="margin-bottom:15px;">
-                <button class="btn btn-add" onclick="openAddModalFromSelector()">➕ צור מאכל חדש</button>
-            </div>
             <div id="item-selector-list"></div>
             <div style="margin-top: 15px; display:flex; gap:10px;">
                 <button class="btn btn-small-delete" style="flex:1" onclick="deleteItemFromCell()">🗑️ נקה תא</button>
@@ -422,6 +429,7 @@
         ];
         const days = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'];
         
+        // Common food emojis for the picker
         const commonEmojis = [
             '🥪','🍞','🥯','🥐','🥖','🥨','🥞','🧇','🧀','🥚','🍳','🍗','🍖','🥩','🌭','🍔','🍟','🍕','🌮','🌯','🥗','🥣',
             '🥒','🍅','🥑','🥦','🥕','🌽','🫑','🥔','🍠','🧅','🧄',
@@ -457,7 +465,8 @@
             'גזר': '🥕', 
             'קרקרים': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/Yz1gR9k5ej75oC8J.jpg' },
             'יוגורט': '🥛', 'פתי בר': '🍪', 'מיץ תפוזים': '🧃', 'קאפקייק': '🧁', 'בייגלה (חטיף)': '🥨', 'חטיף': '🍬',
-            'אקטימל': { type: 'img', src: 'https://www.emess.co.il/uploads/2024/08/%D7%90%D7%A7%D7%98%D7%99%D7%9E%D7%9C.jpg' },
+            // V37: Fixed Actimel Link
+            'אקטימל': { type: 'img', src: 'https://res.cloudinary.com/shufersal/image/upload/f_auto,q_auto/v1551800922/prod/product_images/products_large/WWB42_L_P_7290008671627_1.png' },
             'כדור שוקולד': { type: 'img', src: 'https://cakenet.co.il/wp-content/uploads/2019/02/0_02891.jpg' },
             'bread': '🍞', 'filling': '🧀', 'veggie': '🥒', 'fruit': '🍎', 'treat': '🍪' 
         };
@@ -613,6 +622,8 @@
                 list.appendChild(el);
             });
         }
+
+        // --- New Item Logic ---
 
         window.openAddModal = function(catId) {
             document.getElementById('modal-food-name').value = '';
@@ -770,6 +781,13 @@
                 };
                 list.appendChild(el);
             });
+
+            // V37: ADD BUTTON LAST
+            const addBtn = document.createElement('div');
+            addBtn.className = 'food-item add-item-btn';
+            addBtn.innerHTML = '+';
+            addBtn.onclick = openAddModalFromSelector;
+            list.appendChild(addBtn);
             
             document.getElementById('item-selector-modal').style.display = 'flex';
         }
