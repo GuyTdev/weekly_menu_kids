@@ -193,7 +193,7 @@
         }
         .day-cell.filled:hover .cell-delete-btn { display: block; }
 
-        /* Modals */
+        /* Modals (CSS omitted for brevity, logic remains the same) */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 350px; max-height: 80vh; overflow-y: auto; text-align: center; position: relative;}
         
@@ -202,9 +202,6 @@
         .form-group input, .form-group select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
 
         #item-selector-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 15px; }
-        .shopping-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; text-align: right; }
-        .shopping-item .icon-and-name { display: flex; align-items: center; gap: 8px; }
-        .shopping-item img { width: 24px; height: 24px; }
 
         /* Emoji Picker */
         .emoji-picker { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-top: 10px; padding: 10px; background: #f9f9f9; border-radius: 8px; max-height: 150px; overflow-y: auto; }
@@ -218,7 +215,7 @@
 
 
         /* ==========================================================================
-           PRINT OPTIMIZATION - V40.0 (Fully Relative & Consistent)
+           PRINT OPTIMIZATION - V42.0 (v40.0 settings with page break fix)
            ========================================================================== */
         @media print {
             @page {
@@ -275,9 +272,14 @@
                 border: none !important;
                 padding: 5mm !important; /* Internal padding for table on page */
                 margin: 0 auto 50px auto !important; 
-                page-break-after: always;
+                page-break-after: always; /* Force break after each table */
                 page-break-inside: avoid;
                 display: block !important;
+            }
+
+            /* FIX: Prevent the last table from forcing a blank page */
+            .single-child-table:last-child {
+                page-break-after: auto !important;
             }
             
             .child-title { 
@@ -293,7 +295,7 @@
 
             .week-grid { 
                 display: grid !important;
-                /* Column widths are fully relative (approx 8% + 6 * 15.333% = 100%) */
+                /* Column widths are fully relative (approx 8% + 6 * 15.333% = 100%) - v40.0 settings */
                 grid-template-columns: 8% repeat(6, 15.333%) !important; 
                 gap: 0 !important;
                 border: 1px solid #000 !important;
@@ -346,22 +348,22 @@
                 text-align: left;
                 width: 50%;
             }
-        }
 
-        /* Portrait mode printing (will automatically use the relative settings above) */
-        @media print and (orientation: portrait) {
-            @page {
-                size: A4 portrait; /* Explicitly set size for better mobile control */
+            /* Portrait mode printing (will automatically use the relative settings above) - v40.0 settings */
+            @media print and (orientation: portrait) {
+                @page {
+                    size: A4 portrait; /* Explicitly set size for better mobile control */
+                }
+                /* The relative grid columns ensure everything fits in the reduced width */
+                .header-cell { height: 70px !important; font-size: 12pt !important; }
+                .day-cell { height: 90px !important; }
+                .day-cell .food-item img, .day-cell .food-item span.emoji { width: 50px !important; height: 50px !important; font-size: 35pt !important; }
             }
-            /* The relative grid columns ensure everything fits in the reduced width */
-            .header-cell { height: 70px !important; font-size: 12pt !important; }
-            .day-cell { height: 90px !important; }
-            .day-cell .food-item img, .day-cell .food-item span.emoji { width: 50px !important; height: 50px !important; font-size: 35pt !important; }
         }
     </style>
 </head>
 <body>
-    <div class="version-tag">v40.0</div>
+    <div class="version-tag">v42.0</div>
 
     <h1 class="main-title">תפריט קופסאות שבועי 🍱</h1>
 
@@ -395,7 +397,7 @@
 
         <div id="tables-container"></div>
         
-        <div class="print-footer" style="display:none;">v40.0 | פותח על ידי guytdev &copy;</div>
+        <div class="print-footer" style="display:none;">v42.0 | פותח על ידי guytdev &copy;</div>
 
     </div>
 
@@ -497,7 +499,7 @@
             'תותים': '🍓', 'תפוח': '🍎', 'אוכמניות': '🫐', 'שזיף': '🟣', 'מנגו': '🥭', 'קיווי': '🥝', 'בננה': '🍌', 'ענבים': '🍇',
             'תפו': '🍊', 
             'זיתים ירוקים': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDEp9HNy_nTQQl-Pe7cD2fw3XEIUHvFCJCqH_2v2Y4uw&s=10' }, 
-            'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅', 
+            'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניית שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅', 
             'גזר': '🥕', 
             'קרקרים': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/Yz1gR9k5ej75oC8J.jpg' },
             'יוגורט': '🥛', 'פתי בר': '🍪', 'מיץ תפוזים': '🧃', 'קאפקייק': '🧁', 'בייגלה (חטיף)': '🥨', 'חטיף': '🍬',
