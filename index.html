@@ -29,7 +29,7 @@
             align-items: center;
             min-height: 100vh;
             -webkit-tap-highlight-color: transparent;
-            position: relative; /* For version tag positioning */
+            position: relative; 
         }
 
         /* Version Tag */
@@ -218,35 +218,25 @@
 
 
         /* ==========================================================================
-           PRINT OPTIMIZATION - V38.0 (Centered, Full Width Fix)
+           PRINT OPTIMIZATION - V39.0 (v14 Desktop + v32 Mobile Zoom)
            ========================================================================== */
         @media print {
             @page {
                 size: A4 landscape;
-                margin: 0; /* We handle margins in the body */
+                margin: 0;
             }
             
             html, body {
-                width: 297mm; /* Explicit A4 Landscape Width */
-                height: 210mm;
+                /* General print settings: Use 100% width and rely on page size */
+                width: 100%;
+                height: 100%;
                 margin: 0 !important;
                 padding: 0 !important;
                 background: white;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
-                
-                /* Flex to center the table on the page */
-                display: flex;
-                flex-direction: column;
-                justify-content: flex-start;
-                align-items: center;
-            }
-
-            .version-tag {
-                color: #000;
-                font-weight: bold;
-                top: 5mm;
-                left: 5mm;
+                /* Remove v38 centering flex, revert to block */
+                display: block; 
             }
 
             /* Hide UI */
@@ -254,59 +244,65 @@
                 display: none !important; 
             }
             
+            .version-tag { /* Ensure version tag is visible on print */
+                color: #000;
+                font-weight: bold;
+                position: absolute;
+                top: 5mm;
+                left: 5mm;
+                display: block !important;
+            }
+
             #app-screen { 
                 display: block !important; 
                 margin: 0 !important; 
-                padding: 0 !important; 
+                padding: 10px !important; /* Small general padding */
                 width: 100% !important;
             }
 
             #tables-container { 
-                display: block !important;
                 width: 100% !important;
                 overflow: visible !important;
-                padding: 5mm !important; /* Safe margin from edges */
+                padding: 0 !important; 
             }
 
             .single-child-table {
-                width: 98% !important; /* Use almost full width */
-                max-width: 287mm !important;
-                height: auto !important; 
+                /* V14.0 Style: Simple width, rely on print engine scaling */
+                width: 99% !important; 
+                max-width: none !important;
                 box-shadow: none !important;
                 background: white !important;
                 border: none !important;
-                padding: 0 !important;
-                margin: 0 auto 50px auto !important; /* Centered */
+                padding: 5mm !important; 
+                margin: 0 0 50px 0 !important; 
                 page-break-after: always;
                 page-break-inside: avoid;
                 display: block !important;
             }
-
-            .child-title {
-                font-size: 32pt !important; 
-                padding: 10px !important;
-                margin-bottom: 10px !important;
+            
+            .child-title { 
+                font-size: 24pt !important; 
+                padding: 8px !important;
+                margin-bottom: 8px !important;
                 background-color: rgba(200,200,200,0.3) !important;
-                border: 2px solid #000;
+                border: 1px solid #000;
                 color: #000 !important;
                 border-radius: 0 !important;
                 text-align: center !important;
             }
 
-            /* Grid Layout */
             .week-grid { 
                 display: grid !important;
-                /* Category 8%, Days ~15.3% each */
                 grid-template-columns: 8% 15.3% 15.3% 15.3% 15.3% 15.3% 15.3% !important; 
                 gap: 0 !important;
-                border: 2px solid #000 !important;
+                border: 1px solid #000 !important;
                 width: 100% !important;
             }
             
             .header-cell { 
-                font-size: 16pt !important;
-                height: 100px !important; /* Tall header for multi-line */
-                padding: 10px !important;
+                font-size: 14pt !important;
+                height: 80px !important;
+                padding: 6px !important;
                 border: 1px solid #000 !important;
                 background-color: #eee !important;
                 color: #000 !important;
@@ -321,7 +317,7 @@
             
             .day-cell { 
                 border: 1px solid #000 !important;
-                height: 120px !important; 
+                height: 110px !important; 
                 padding: 3px !important;
                 border-radius: 0 !important;
                 background-color: transparent !important;
@@ -334,25 +330,22 @@
             .day-cell:not(.filled)::after { content: ''; }
 
             .day-cell .food-item { border: none !important; width: auto !important; height: auto !important; }
-            .day-cell .food-item img, .day-cell .food-item span.emoji { width: 70px !important; height: 70px !important; font-size: 50pt !important; margin-bottom: 5px !important; }
-            .day-cell .food-item span:not(.emoji) { font-size: 14pt !important; font-weight: bold; color: #000 !important; } 
-        }
+            .day-cell .food-item img, .day-cell .food-item span.emoji { width: 65px !important; height: 65px !important; font-size: 45pt !important; margin-bottom: 2px !important; }
+            .day-cell .food-item span:not(.emoji) { font-size: 12pt !important; font-weight: bold; color: #000 !important; } 
 
-        /* Adjustments specifically for Portrait mode printing */
-        @media print and (orientation: portrait) {
-            html, body { width: 210mm; } /* A4 width */
-            body { 
-                zoom: 0.55; /* Scale down to fit portrait width */
-                align-items: flex-start; /* Align top for portrait flow */
+
+            /* --- Mobile/Portrait (v32.0 style - zoom based) --- */
+            @media (orientation: portrait) {
+                body { 
+                    zoom: 0.55; /* Reverted to the user's preferred zoom for portrait/mobile */
+                    min-width: 297mm; /* Ensure it treats it like a landscape A4 */
+                }
             }
-            .header-cell { font-size: 14pt !important; height: 90px !important; }
-            .day-cell { height: 110px !important; }
-            .day-cell .food-item img, .day-cell .food-item span.emoji { width: 60px !important; height: 60px !important; font-size: 40pt !important; }
         }
     </style>
 </head>
 <body>
-    <div class="version-tag">v38.0</div>
+    <div class="version-tag">v39.0</div>
 
     <h1 class="main-title">תפריט קופסאות שבועי 🍱</h1>
 
@@ -489,7 +482,6 @@
             'גזר': '🥕', 
             'קרקרים': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/Yz1gR9k5ej75oC8J.jpg' },
             'יוגורט': '🥛', 'פתי בר': '🍪', 'מיץ תפוזים': '🧃', 'קאפקייק': '🧁', 'בייגלה (חטיף)': '🥨', 'חטיף': '🍬',
-            // V38: Update Actimel Image
             'אקטימל': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQrtmfSxyJW6btKLE8w-C4vftyZTWmgobgvE9qAMPmtg&s=10' },
             'כדור שוקולד': { type: 'img', src: 'https://cakenet.co.il/wp-content/uploads/2019/02/0_02891.jpg' },
             'bread': '🍞', 'filling': '🧀', 'veggie': '🥒', 'fruit': '🍎', 'treat': '🍪' 
@@ -610,14 +602,6 @@
             const list = document.getElementById('inventory-list');
             list.innerHTML = '';
             selectedInventoryItem = null;
-
-            // ADD BUTTON FIRST (as a card)
-            const addBtn = document.createElement('div');
-            addBtn.className = 'food-item add-item-btn';
-            addBtn.innerHTML = '+';
-            addBtn.title = 'הוסף מאכל חדש';
-            addBtn.onclick = () => openAddModal(catId);
-            list.appendChild(addBtn);
             
             const filtered = allInventoryItems.filter(i => i.cat === catId);
             filtered.forEach(item => {
@@ -645,6 +629,14 @@
 
                 list.appendChild(el);
             });
+
+            // ADD BUTTON LAST (as a card) <-- MOVED TO END
+            const addBtn = document.createElement('div');
+            addBtn.className = 'food-item add-item-btn';
+            addBtn.innerHTML = '+';
+            addBtn.title = 'הוסף מאכל חדש';
+            addBtn.onclick = () => openAddModal(catId);
+            list.appendChild(addBtn);
         }
 
         // --- New Item Logic ---
@@ -806,7 +798,7 @@
                 list.appendChild(el);
             });
 
-            // ADD BUTTON LAST
+            // ADD BUTTON LAST (This is for the modal, which was already correct)
             const addBtn = document.createElement('div');
             addBtn.className = 'food-item add-item-btn';
             addBtn.innerHTML = '+';
