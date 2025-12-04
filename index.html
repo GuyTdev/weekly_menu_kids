@@ -42,21 +42,6 @@
             opacity: 0.7;
         }
 
-        /* Footer (Screen View) - Bottom Center */
-        .app-footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            padding: 5px 0;
-            font-size: 10px;
-            color: var(--footer-text, #7f8c8d);
-            background: #fff;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
-            z-index: 1000;
-        }
-
         h1.main-title {
             color: var(--primary);
             margin-bottom: 15px;
@@ -104,53 +89,9 @@
             margin-top: 10px;
         }
 
-        .child-input-row { 
-            display: flex; 
-            gap: 10px; 
-            margin-bottom: 10px; 
-            align-items: center; 
-        }
-        .child-input-row input[type="text"] { 
-            flex: 1; 
-            padding: 10px; 
-            border: 2px solid #dfe6e9; 
-            border-radius: 10px; 
-            outline: none; 
-            font-family: 'Rubik', sans-serif; 
-            font-size: 16px; 
-        }
-        
-        /* Lunchbox Color Picker Container */
-        .color-picker-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            width: 60px; /* fixed width */
-            text-align: center;
-        }
-        .color-picker-container label {
-            font-size: 10px;
-            color: #666;
-            margin-bottom: 2px;
-        }
-        .color-picker-container input[type="color"] { 
-            width: 40px; 
-            height: 40px; 
-            border: none; 
-            background: none;
-            padding: 0;
-            border-radius: 50%;
-            cursor: pointer;
-        }
-        /* Lunchbox SVG for Setup Screen */
-        .setup-lunchbox-icon {
-            width: 30px;
-            height: 30px;
-            color: #999;
-            stroke-width: 1.5;
-        }
-
+        .child-input-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+        .child-input-row input[type="text"] { flex: 1; padding: 10px; border: 2px solid #dfe6e9; border-radius: 10px; outline: none; font-family: 'Rubik', sans-serif; font-size: 16px; }
+        .child-input-row input[type="color"] { width: 40px; height: 40px; border: none; background: none; }
         .remove-row-btn { background: #ff7675; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-weight: bold; }
 
         /* --- Main App --- */
@@ -222,18 +163,8 @@
         /* Tables */
         #tables-container { width: 100%; overflow-x: auto; padding-bottom: 10px; -webkit-overflow-scrolling: touch; }
         .single-child-table { background: white; padding: 15px; border-radius: 20px; box-shadow: var(--shadow); min-width: 800px; margin-bottom: 20px; }
+        .child-title { text-align: center; font-size: 22px; font-weight: bold; margin-bottom: 10px; padding: 8px; border-radius: 10px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
         
-        .child-title { 
-            text-align: center; font-size: 22px; font-weight: bold; margin-bottom: 10px; 
-            padding: 8px; border-radius: 10px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            gap: 10px;
-        }
-        
-        .child-title > span { color: #fff; } /* The text itself */
-
         .week-grid { display: grid; grid-template-columns: 80px repeat(6, 1fr); gap: 4px; border: 1px solid rgba(0,0,0,0.1); padding: 5px; border-radius: 12px; }
         .header-cell { padding: 5px; text-align: center; font-weight: bold; border-radius: 6px; font-size: 12px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.6); }
         .day-header { background: #ffeaa7 !important; }
@@ -261,29 +192,39 @@
             text-align: center; display: none; z-index: 5; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         .day-cell.filled:hover .cell-delete-btn { display: block; }
+
+        /* Modals (CSS omitted for brevity, logic remains the same) */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 350px; max-height: 80vh; overflow-y: auto; text-align: center; position: relative;}
         
-        /* Lunchbox Icon Styling (Screen) */
-        .print-lunchbox-icon {
-            width: 30px;
-            height: 30px;
-            fill: none;
-            stroke: #fff; /* White stroke for visibility on color background */
-            stroke-width: 2;
-            margin-right: 5px;
-            display: none; /* Hide in screen mode by default */
-        }
+        .form-group { margin-bottom: 15px; text-align: right; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+
+        #item-selector-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 15px; }
+
+        /* Emoji Picker */
+        .emoji-picker { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-top: 10px; padding: 10px; background: #f9f9f9; border-radius: 8px; max-height: 150px; overflow-y: auto; }
+        .emoji-option { font-size: 24px; cursor: pointer; padding: 5px; border-radius: 5px; }
+        .emoji-option:hover, .emoji-option.selected { background: #e3f2fd; }
+
+        /* Context Menu */
+        #context-menu { display: none; position: absolute; background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 3000; overflow: hidden; }
+        .ctx-item { padding: 10px 20px; cursor: pointer; font-size: 14px; }
+        .ctx-item:hover { background: #f0f0f0; }
 
 
         /* ==========================================================================
-           PRINT OPTIMIZATION - V44.0 (Base V42.0 + Icon + Footer)
+           PRINT OPTIMIZATION - V42.0 (v40.0 settings with page break fix)
            ========================================================================== */
         @media print {
             @page {
-                size: A4 landscape; 
+                size: A4 landscape; /* Default landscape, browser handles portrait based on content fit */
                 margin: 0;
             }
             
             html, body {
+                /* Use relative units only */
                 width: 100%;
                 height: 100%;
                 margin: 0 !important;
@@ -295,7 +236,7 @@
             }
 
             /* Hide UI */
-            .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .cell-delete-btn, #context-menu, .new-item-control, .app-footer { 
+            .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .cell-delete-btn, #context-menu, .new-item-control { 
                 display: none !important; 
             }
             
@@ -320,18 +261,18 @@
                 width: 100% !important;
                 overflow: visible !important;
                 padding: 0 !important; 
-                margin-bottom: 20mm !important; 
+                margin-bottom: 20mm !important; /* Space for the footer */
             }
 
             .single-child-table {
-                width: 98% !important; 
+                width: 98% !important; /* Full relative width */
                 max-width: none !important;
                 box-shadow: none !important;
                 background: white !important;
                 border: none !important;
-                padding: 5mm !important; 
+                padding: 5mm !important; /* Internal padding for table on page */
                 margin: 0 auto 50px auto !important; 
-                page-break-after: always; 
+                page-break-after: always; /* Force break after each table */
                 page-break-inside: avoid;
                 display: block !important;
             }
@@ -345,39 +286,20 @@
                 font-size: 24pt !important; 
                 padding: 8px !important;
                 margin-bottom: 8px !important;
-                background-color: transparent !important; /* Important: ensures the inline color is used */
-                border: 1px solid #000 !important;
-                color: #fff !important; /* Force text to white for contrast on solid background */
+                background-color: rgba(200,200,200,0.3) !important;
+                border: 1px solid #000;
+                color: #000 !important;
                 border-radius: 0 !important;
                 text-align: center !important;
-                display: flex !important; 
-                align-items: center !important;
-                justify-content: center !important;
-                text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
-                white-space: nowrap !important;
-            }
-            
-            .child-title > span { 
-                color: #fff !important; /* Ensure the text inside the span is white */
-            }
-
-            /* Show and style the print icon */
-            .print-lunchbox-icon {
-                display: inline-block !important; /* Show icon */
-                fill: none !important;
-                stroke: #fff !important; /* White stroke for max contrast on the colored background */
-                stroke-width: 1.5 !important;
-                width: 40px !important; 
-                height: 40px !important; 
-                margin-right: 10px !important;
             }
 
             .week-grid { 
                 display: grid !important;
+                /* Column widths are fully relative (approx 8% + 6 * 15.333% = 100%) - v40.0 settings */
                 grid-template-columns: 8% repeat(6, 15.333%) !important; 
                 gap: 0 !important;
                 border: 1px solid #000 !important;
-                width: 100% !important; 
+                width: 100% !important; /* Ensures it takes up the full width of the parent (98%) */
             }
             
             .header-cell { 
@@ -387,6 +309,7 @@
                 border: 1px solid #000 !important;
                 background-color: #eee !important;
                 color: #000 !important;
+                /* Flex properties ensure multi-line text is centered */
                 display: flex !important; 
                 flex-direction: column !important; 
                 align-items: center !important;
@@ -417,20 +340,21 @@
             /* Print Footer */
             .print-footer {
                 display: block !important;
-                position: fixed; 
+                position: fixed; /* Position at the bottom of the printed page */
                 bottom: 5mm;
-                left: 5mm; 
+                left: 5mm; /* Align left */
                 font-size: 10pt;
                 color: #555;
                 text-align: left;
                 width: 50%;
             }
 
-            /* Portrait mode printing (restored v42.0 settings) */
+            /* Portrait mode printing (will automatically use the relative settings above) - v40.0 settings */
             @media print and (orientation: portrait) {
                 @page {
-                    size: A4 portrait; 
+                    size: A4 portrait; /* Explicitly set size for better mobile control */
                 }
+                /* The relative grid columns ensure everything fits in the reduced width */
                 .header-cell { height: 70px !important; font-size: 12pt !important; }
                 .day-cell { height: 90px !important; }
                 .day-cell .food-item img, .day-cell .food-item span.emoji { width: 50px !important; height: 50px !important; font-size: 35pt !important; }
@@ -439,7 +363,7 @@
     </style>
 </head>
 <body>
-    <div class="version-tag">v44.0</div>
+    <div class="version-tag">v42.0</div>
 
     <h1 class="main-title">תפריט קופסאות שבועי 🍱</h1>
 
@@ -473,11 +397,9 @@
 
         <div id="tables-container"></div>
         
-        <div class="print-footer" style="display:none;">v44.0 | פותח על ידי guytdev &copy; 2025</div>
-    </div>
-    
-    <div class="app-footer">v44.0 | פותח על ידי guytdev &copy; 2025</div>
+        <div class="print-footer" style="display:none;">v42.0 | פותח על ידי guytdev &copy;</div>
 
+    </div>
 
     <div id="new-item-modal" class="modal">
         <div class="modal-content">
@@ -533,12 +455,6 @@
         <div class="ctx-item" onclick="changeItemImage()">🖼️ שנה תמונה (URL)</div>
         <div class="ctx-item" onclick="deleteItemFromInventory()" style="color:red">🗑️ מחק מהמחסן</div>
     </div>
-    
-    <svg id="lunchbox-svg-template" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-        <line x1="3" y1="6" x2="21" y2="6"></line>
-        <path d="M16 10a4 4 0 0 1-8 0"></path>
-    </svg>
 
     <script>
         // --- Data ---
@@ -551,7 +467,7 @@
         ];
         const days = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'];
         
-        // Common food emojis for the picker (Omitted for brevity)
+        // Common food emojis for the picker
         const commonEmojis = [
             '🥪','🍞','🥯','🥐','🥖','🥨','🥞','🧇','🧀','🥚','🍳','🍗','🍖','🥩','🌭','🍔','🍟','🍕','🌮','🌯','🥗','🥣',
             '🥒','🍅','🥑','🥦','🥕','🌽','🫑','🥔','🍠','🧅','🧄',
@@ -593,13 +509,7 @@
         };
 
         let allInventoryItems = [
-            { name: 'ג\'חנון', cat: 'bread' }, 
-            { name: 'בייגלה שומשום', cat: 'bread' }, 
-            { name: 'לחמניה', cat: 'bread' }, 
-            { name: 'לחם', cat: 'bread' }, /* <-- NEW ITEM: לחם */
-            { name: 'פיתה', cat: 'bread' }, 
-            { name: 'בלינצס', cat: 'bread' }, 
-            { name: 'טוסט', cat: 'bread' },
+            { name: 'ג\'חנון', cat: 'bread' }, { name: 'בייגלה שומשום', cat: 'bread' }, { name: 'לחמניה', cat: 'bread' }, { name: 'פיתה', cat: 'bread' }, { name: 'בלינצס', cat: 'bread' }, { name: 'טוסט', cat: 'bread' },
             { name: 'גבינה לבנה', cat: 'filling' }, { name: 'אבוקדו', cat: 'filling' }, { name: 'חביתה', cat: 'filling' }, { name: 'שוקולד השחר', cat: 'filling' }, { name: 'גבינה צהובה', cat: 'filling' }, { name: 'בולגרית', cat: 'filling' }, { name: 'גבינת שמנת', cat: 'filling' }, { name: 'ביצה קשה', cat: 'filling' },
             { name: 'גזר', cat: 'veggie' }, { name: 'עגבניית שרי', cat: 'veggie' }, { name: 'גמבה', cat: 'veggie' }, { name: 'מלפפון', cat: 'veggie' }, { name: 'זיתים ירוקים', cat: 'veggie' },
             { name: 'תמר', cat: 'fruit' }, { name: 'תפוח', cat: 'fruit' }, { name: 'בננה', cat: 'fruit' }, { name: 'ענבים', cat: 'fruit' },
@@ -652,16 +562,9 @@
             const div = document.createElement('div');
             div.className = 'child-input-row';
             const canRemove = container.children.length > 0 || name === ''; 
-            
-            // Lunchbox SVG for setup screen
-            const lunchboxIconHtml = `<svg class="setup-lunchbox-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>`;
-
             div.innerHTML = `
                 <input type="text" placeholder="שם הילד/ה" value="${name}">
-                <div class="color-picker-container">
-                    ${lunchboxIconHtml}
-                    <input type="color" value="${color}">
-                </div>
+                <input type="color" value="${color}">
                 ${canRemove ? '<button class="remove-row-btn" onclick="this.parentElement.remove()">x</button>' : ''}
             `;
             container.appendChild(div);
@@ -757,6 +660,8 @@
             list.appendChild(addBtn);
         }
 
+        // --- New Item Logic ---
+
         window.openAddModal = function(catId) {
             document.getElementById('modal-food-name').value = '';
             document.getElementById('modal-food-cat').value = catId;
@@ -804,16 +709,6 @@
             return `rgba(${+r},${+g},${+b},${alpha})`;
         }
 
-        function getLunchboxSvg(color) {
-            const template = document.getElementById('lunchbox-svg-template');
-            if(!template) return '';
-            const svg = template.cloneNode(true);
-            svg.removeAttribute('id');
-            svg.classList.add('print-lunchbox-icon');
-            svg.style.color = color; 
-            return svg.outerHTML;
-        }
-
         function buildTables() {
             const container = document.getElementById('tables-container');
             container.innerHTML = ''; 
@@ -821,13 +716,7 @@
             childrenData.forEach(child => {
                 const card = document.createElement('div');
                 card.className = 'single-child-table';
-                
-                // Add colored lunchbox to title
-                card.innerHTML = `
-                    <div class="child-title" style="background:${child.color}">
-                        ${getLunchboxSvg(child.color)}
-                        <span>התפריט של ${child.name}</span>
-                    </div>`;
+                card.innerHTML = `<div class="child-title" style="background:${child.color}">התפריט של ${child.name}</div>`;
                 
                 const grid = document.createElement('div');
                 grid.className = 'week-grid';
@@ -913,7 +802,7 @@
             cell.appendChild(del);
         }
 
-        window.openItemSelector = function(cell, catId) {
+        function openItemSelector(cell, catId) {
             currentCellTarget = cell;
             const list = document.getElementById('item-selector-list');
             list.innerHTML = '';
