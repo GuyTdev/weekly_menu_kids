@@ -29,6 +29,17 @@
             align-items: center;
             min-height: 100vh;
             -webkit-tap-highlight-color: transparent;
+            position: relative; /* For version tag positioning */
+        }
+
+        /* Version Tag */
+        .version-tag {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 10px;
+            color: #999;
+            opacity: 0.7;
         }
 
         h1.main-title {
@@ -207,27 +218,35 @@
 
 
         /* ==========================================================================
-           PRINT OPTIMIZATION - A4 LANDSCAPE (V37) - Final Mobile Fix
+           PRINT OPTIMIZATION - V38.0 (Centered, Full Width Fix)
            ========================================================================== */
         @media print {
             @page {
                 size: A4 landscape;
-                margin: 0;
+                margin: 0; /* We handle margins in the body */
             }
             
             html, body {
-                width: 100%;
-                height: 100%;
+                width: 297mm; /* Explicit A4 Landscape Width */
+                height: 210mm;
                 margin: 0 !important;
                 padding: 0 !important;
                 background: white;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
+                
+                /* Flex to center the table on the page */
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
             }
 
-            /* Force A4 Width logic specifically for mobile browsers that shrink content */
-            body {
-                min-width: 297mm; /* Exact A4 width */
+            .version-tag {
+                color: #000;
+                font-weight: bold;
+                top: 5mm;
+                left: 5mm;
             }
 
             /* Hide UI */
@@ -246,45 +265,48 @@
                 display: block !important;
                 width: 100% !important;
                 overflow: visible !important;
-                padding: 0 !important; 
+                padding: 5mm !important; /* Safe margin from edges */
             }
 
             .single-child-table {
-                width: 100% !important;
+                width: 98% !important; /* Use almost full width */
+                max-width: 287mm !important;
                 height: auto !important; 
                 box-shadow: none !important;
                 background: white !important;
                 border: none !important;
-                padding: 5mm !important; /* Slight padding for safety */
-                margin: 0 0 50px 0 !important; 
+                padding: 0 !important;
+                margin: 0 auto 50px auto !important; /* Centered */
                 page-break-after: always;
                 page-break-inside: avoid;
                 display: block !important;
             }
-            
-            .child-title { 
-                font-size: 24pt !important; 
-                padding: 8px !important;
-                margin-bottom: 8px !important;
+
+            .child-title {
+                font-size: 32pt !important; 
+                padding: 10px !important;
+                margin-bottom: 10px !important;
                 background-color: rgba(200,200,200,0.3) !important;
-                border: 1px solid #000;
+                border: 2px solid #000;
                 color: #000 !important;
                 border-radius: 0 !important;
                 text-align: center !important;
             }
 
+            /* Grid Layout */
             .week-grid { 
                 display: grid !important;
+                /* Category 8%, Days ~15.3% each */
                 grid-template-columns: 8% 15.3% 15.3% 15.3% 15.3% 15.3% 15.3% !important; 
                 gap: 0 !important;
-                border: 1px solid #000 !important;
+                border: 2px solid #000 !important;
                 width: 100% !important;
             }
             
             .header-cell { 
-                font-size: 14pt !important;
-                height: 80px !important;
-                padding: 6px !important;
+                font-size: 16pt !important;
+                height: 100px !important; /* Tall header for multi-line */
+                padding: 10px !important;
                 border: 1px solid #000 !important;
                 background-color: #eee !important;
                 color: #000 !important;
@@ -299,7 +321,7 @@
             
             .day-cell { 
                 border: 1px solid #000 !important;
-                height: 110px !important; 
+                height: 120px !important; 
                 padding: 3px !important;
                 border-radius: 0 !important;
                 background-color: transparent !important;
@@ -312,23 +334,25 @@
             .day-cell:not(.filled)::after { content: ''; }
 
             .day-cell .food-item { border: none !important; width: auto !important; height: auto !important; }
-            .day-cell .food-item img, .day-cell .food-item span.emoji { width: 65px !important; height: 65px !important; font-size: 45pt !important; margin-bottom: 2px !important; }
-            .day-cell .food-item span:not(.emoji) { font-size: 12pt !important; font-weight: bold; color: #000 !important; } 
+            .day-cell .food-item img, .day-cell .food-item span.emoji { width: 70px !important; height: 70px !important; font-size: 50pt !important; margin-bottom: 5px !important; }
+            .day-cell .food-item span:not(.emoji) { font-size: 14pt !important; font-weight: bold; color: #000 !important; } 
         }
 
-        /* Portrait Adjustments */
+        /* Adjustments specifically for Portrait mode printing */
         @media print and (orientation: portrait) {
-            body { zoom: 0.55; }
-            .header-cell { font-size: 14pt !important; }
-        }
-
-        /* Landscape Adjustments */
-        @media print and (orientation: landscape) {
-            body { zoom: 1.0; }
+            html, body { width: 210mm; } /* A4 width */
+            body { 
+                zoom: 0.55; /* Scale down to fit portrait width */
+                align-items: flex-start; /* Align top for portrait flow */
+            }
+            .header-cell { font-size: 14pt !important; height: 90px !important; }
+            .day-cell { height: 110px !important; }
+            .day-cell .food-item img, .day-cell .food-item span.emoji { width: 60px !important; height: 60px !important; font-size: 40pt !important; }
         }
     </style>
 </head>
 <body>
+    <div class="version-tag">v38.0</div>
 
     <h1 class="main-title">תפריט קופסאות שבועי 🍱</h1>
 
@@ -465,8 +489,8 @@
             'גזר': '🥕', 
             'קרקרים': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/Yz1gR9k5ej75oC8J.jpg' },
             'יוגורט': '🥛', 'פתי בר': '🍪', 'מיץ תפוזים': '🧃', 'קאפקייק': '🧁', 'בייגלה (חטיף)': '🥨', 'חטיף': '🍬',
-            // V37: Fixed Actimel Link
-            'אקטימל': { type: 'img', src: 'https://res.cloudinary.com/shufersal/image/upload/f_auto,q_auto/v1551800922/prod/product_images/products_large/WWB42_L_P_7290008671627_1.png' },
+            // V38: Update Actimel Image
+            'אקטימל': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQrtmfSxyJW6btKLE8w-C4vftyZTWmgobgvE9qAMPmtg&s=10' },
             'כדור שוקולד': { type: 'img', src: 'https://cakenet.co.il/wp-content/uploads/2019/02/0_02891.jpg' },
             'bread': '🍞', 'filling': '🧀', 'veggie': '🥒', 'fruit': '🍎', 'treat': '🍪' 
         };
@@ -782,7 +806,7 @@
                 list.appendChild(el);
             });
 
-            // V37: ADD BUTTON LAST
+            // ADD BUTTON LAST
             const addBtn = document.createElement('div');
             addBtn.className = 'food-item add-item-btn';
             addBtn.innerHTML = '+';
