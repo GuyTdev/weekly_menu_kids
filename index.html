@@ -32,7 +32,7 @@
             position: relative; 
         }
 
-        /* Version Tag */
+        /* Version Tag (Screen View) */
         .version-tag {
             position: absolute;
             top: 5px;
@@ -158,7 +158,7 @@
         .food-item[data-cat="filling"] { border-top: 3px solid #ff7675; }
         .food-item[data-cat="veggie"] { border-top: 3px solid #00b894; }
         .food-item[data-cat="fruit"] { border-top: 3px solid #e17055; }
-        .food-item[data-cat="treat"] { border-top: 3px solid #a29bfe; }
+        .food-item[data-cat="treat"] { border-top: 3:px solid #a29bfe; }
 
         /* Tables */
         #tables-container { width: 100%; overflow-x: auto; padding-bottom: 10px; -webkit-overflow-scrolling: touch; }
@@ -218,16 +218,16 @@
 
 
         /* ==========================================================================
-           PRINT OPTIMIZATION - V39.0 (v14 Desktop + v32 Mobile Zoom)
+           PRINT OPTIMIZATION - V40.0 (Fully Relative & Consistent)
            ========================================================================== */
         @media print {
             @page {
-                size: A4 landscape;
+                size: A4 landscape; /* Default landscape, browser handles portrait based on content fit */
                 margin: 0;
             }
             
             html, body {
-                /* General print settings: Use 100% width and rely on page size */
+                /* Use relative units only */
                 width: 100%;
                 height: 100%;
                 margin: 0 !important;
@@ -235,7 +235,6 @@
                 background: white;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
-                /* Remove v38 centering flex, revert to block */
                 display: block; 
             }
 
@@ -244,7 +243,8 @@
                 display: none !important; 
             }
             
-            .version-tag { /* Ensure version tag is visible on print */
+            /* Version Tag (Top Left) */
+            .version-tag { 
                 color: #000;
                 font-weight: bold;
                 position: absolute;
@@ -256,7 +256,7 @@
             #app-screen { 
                 display: block !important; 
                 margin: 0 !important; 
-                padding: 10px !important; /* Small general padding */
+                padding: 10px !important; 
                 width: 100% !important;
             }
 
@@ -264,17 +264,17 @@
                 width: 100% !important;
                 overflow: visible !important;
                 padding: 0 !important; 
+                margin-bottom: 20mm !important; /* Space for the footer */
             }
 
             .single-child-table {
-                /* V14.0 Style: Simple width, rely on print engine scaling */
-                width: 99% !important; 
+                width: 98% !important; /* Full relative width */
                 max-width: none !important;
                 box-shadow: none !important;
                 background: white !important;
                 border: none !important;
-                padding: 5mm !important; 
-                margin: 0 0 50px 0 !important; 
+                padding: 5mm !important; /* Internal padding for table on page */
+                margin: 0 auto 50px auto !important; 
                 page-break-after: always;
                 page-break-inside: avoid;
                 display: block !important;
@@ -293,10 +293,11 @@
 
             .week-grid { 
                 display: grid !important;
-                grid-template-columns: 8% 15.3% 15.3% 15.3% 15.3% 15.3% 15.3% !important; 
+                /* Column widths are fully relative (approx 8% + 6 * 15.333% = 100%) */
+                grid-template-columns: 8% repeat(6, 15.333%) !important; 
                 gap: 0 !important;
                 border: 1px solid #000 !important;
-                width: 100% !important;
+                width: 100% !important; /* Ensures it takes up the full width of the parent (98%) */
             }
             
             .header-cell { 
@@ -306,7 +307,8 @@
                 border: 1px solid #000 !important;
                 background-color: #eee !important;
                 color: #000 !important;
-                display: flex !important;
+                /* Flex properties ensure multi-line text is centered */
+                display: flex !important; 
                 flex-direction: column !important; 
                 align-items: center !important;
                 justify-content: center !important;
@@ -333,19 +335,33 @@
             .day-cell .food-item img, .day-cell .food-item span.emoji { width: 65px !important; height: 65px !important; font-size: 45pt !important; margin-bottom: 2px !important; }
             .day-cell .food-item span:not(.emoji) { font-size: 12pt !important; font-weight: bold; color: #000 !important; } 
 
-
-            /* --- Mobile/Portrait (v32.0 style - zoom based) --- */
-            @media (orientation: portrait) {
-                body { 
-                    zoom: 0.55; /* Reverted to the user's preferred zoom for portrait/mobile */
-                    min-width: 297mm; /* Ensure it treats it like a landscape A4 */
-                }
+            /* Print Footer */
+            .print-footer {
+                display: block !important;
+                position: fixed; /* Position at the bottom of the printed page */
+                bottom: 5mm;
+                left: 5mm; /* Align left */
+                font-size: 10pt;
+                color: #555;
+                text-align: left;
+                width: 50%;
             }
+        }
+
+        /* Portrait mode printing (will automatically use the relative settings above) */
+        @media print and (orientation: portrait) {
+            @page {
+                size: A4 portrait; /* Explicitly set size for better mobile control */
+            }
+            /* The relative grid columns ensure everything fits in the reduced width */
+            .header-cell { height: 70px !important; font-size: 12pt !important; }
+            .day-cell { height: 90px !important; }
+            .day-cell .food-item img, .day-cell .food-item span.emoji { width: 50px !important; height: 50px !important; font-size: 35pt !important; }
         }
     </style>
 </head>
 <body>
-    <div class="version-tag">v39.0</div>
+    <div class="version-tag">v40.0</div>
 
     <h1 class="main-title">תפריט קופסאות שבועי 🍱</h1>
 
@@ -378,6 +394,9 @@
         </div>
 
         <div id="tables-container"></div>
+        
+        <div class="print-footer" style="display:none;">v40.0 | פותח על ידי guytdev &copy;</div>
+
     </div>
 
     <div id="new-item-modal" class="modal">
@@ -630,7 +649,7 @@
                 list.appendChild(el);
             });
 
-            // ADD BUTTON LAST (as a card) <-- MOVED TO END
+            // ADD BUTTON LAST (as a card)
             const addBtn = document.createElement('div');
             addBtn.className = 'food-item add-item-btn';
             addBtn.innerHTML = '+';
