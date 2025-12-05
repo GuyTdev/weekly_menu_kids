@@ -73,7 +73,7 @@
         .btn-shopping { background: #e17055; }
         .btn-magic { background: linear-gradient(135deg, #a29bfe, #74b9ff); }
         .btn-whatsapp { background: #25d366; }
-        .btn-google { background: #4285F4; }
+        .btn-google { background: #4285F4; font-size: 12px; padding: 8px; }
         .btn-add { background: #fab1a0; color: #333; margin-top: 10px; width: 100%; }
         .btn-small-delete { background: #ff7675; color: white; padding: 8px; font-size: 14px; border-radius: 8px; }
 
@@ -84,100 +84,40 @@
             border-radius: 20px;
             box-shadow: var(--shadow);
             text-align: center;
-            max-width: 500px;
+            max-width: 450px;
             width: 100%;
             margin-top: 10px;
         }
 
-        .child-input-row { 
-            display: flex; 
+        .child-input-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+        .child-input-row input[type="text"] { flex: 1; padding: 10px; border: 2px solid #dfe6e9; border-radius: 10px; outline: none; font-family: 'Rubik', sans-serif; font-size: 16px; }
+        .child-input-row input[type="color"] { width: 40px; height: 40px; border: none; background: none; }
+        
+        .color-picker-container {
+            display: flex;
             flex-direction: column;
-            gap: 10px; 
-            margin-bottom: 20px; 
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .child-name-input {
-            display: flex;
-            gap: 10px;
-            width: 100%;
             align-items: center;
+            gap: 2px;
+            width: 60px;
+            text-align: center;
         }
-
-        .child-name-input input[type="text"] { 
-            flex: 1; 
-            padding: 10px; 
-            border: 2px solid #dfe6e9; 
-            border-radius: 10px; 
-            outline: none; 
-            font-family: 'Rubik', sans-serif; 
-            font-size: 16px; 
-            transition: border 0.3s;
-        }
-        
-        .child-name-input input[type="text"].error {
-            border-color: #ff7675;
-            background-color: #fff0f0;
-        }
-
-        /* Color Selection Area */
-        .color-selection-area {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            background: #f9f9f9;
-            padding: 8px;
-            border-radius: 10px;
-        }
-        
-        .swatches {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .color-swatch {
-            width: 24px;
-            height: 24px;
+        .color-picker-container input[type="color"] { 
+            width: 40px; 
+            height: 40px; 
+            border: none; 
+            background: none;
+            padding: 0;
             border-radius: 50%;
             cursor: pointer;
-            border: 2px solid white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
         }
-        .color-swatch:hover { transform: scale(1.2); }
-
-        /* Custom Color Picker Wrapper */
-        .color-picker-wrapper {
-            position: relative;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s;
-            margin-left: 10px;
-        }
-        .color-picker-wrapper:hover { transform: scale(1.1); }
-        
-        .color-picker-wrapper input[type="color"] {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0; cursor: pointer; z-index: 2;
-        }
-        
         .setup-lunchbox-icon {
-            width: 100%; height: 100%;
-            stroke: currentColor; 
+            width: 30px;
+            height: 30px;
+            color: #999;
             stroke-width: 1.5;
-            fill: none;
-            z-index: 1;
-            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
         }
 
-        .remove-row-btn { background: #ff7675; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-weight: bold; cursor: pointer; margin-right: auto;}
+        .remove-row-btn { background: #ff7675; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-weight: bold; }
 
         /* --- Main App --- */
         #app-screen { display: none; width: 100%; max-width: 1200px; flex-direction: column; gap: 15px; margin-bottom: 80px; }
@@ -287,7 +227,7 @@
 
         /* Modals */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 350px; max-height: 80vh; overflow-y: auto; text-align: center; position: relative;}
+        .modal-content { background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 350px; max-height: 85vh; overflow-y: auto; text-align: center; position: relative;}
         
         .form-group { margin-bottom: 15px; text-align: right; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
@@ -299,9 +239,22 @@
         .shopping-item img { width: 24px; height: 24px; }
 
         /* Emoji Picker */
-        .emoji-picker { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-top: 10px; padding: 10px; background: #f9f9f9; border-radius: 8px; max-height: 150px; overflow-y: auto; }
+        .emoji-picker { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-top: 5px; padding: 10px; background: #f9f9f9; border-radius: 8px; max-height: 120px; overflow-y: auto; }
         .emoji-option { font-size: 24px; cursor: pointer; padding: 5px; border-radius: 5px; }
         .emoji-option:hover, .emoji-option.selected { background: #e3f2fd; }
+
+        /* Advanced/Image section */
+        .advanced-image-section {
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px dashed #ccc;
+        }
+        .advanced-toggle {
+            color: #666;
+            font-size: 12px;
+            cursor: pointer;
+            text-decoration: underline;
+        }
 
         /* Context Menu */
         #context-menu { display: none; position: absolute; background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 3000; overflow: hidden; }
@@ -310,7 +263,7 @@
 
 
         /* ==========================================================================
-           PRINT OPTIMIZATION - V49.0 (Stable Base)
+           PRINT OPTIMIZATION - V50.0
            ========================================================================== */
         @media print {
             @page {
@@ -329,12 +282,10 @@
                 display: block; 
             }
 
-            /* Hide UI */
             .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .cell-delete-btn, #context-menu, .new-item-control, .app-footer { 
                 display: none !important; 
             }
             
-            /* Version Tag */
             .version-tag { 
                 color: #000;
                 font-weight: bold;
@@ -375,14 +326,13 @@
                 page-break-after: auto !important;
             }
             
-            /* HEADER STYLING FOR PRINT */
             .child-title { 
                 font-size: 24pt !important; 
                 padding: 8px !important;
                 margin-bottom: 8px !important;
-                /* Background color comes from inline style */
+                background-color: rgba(200,200,200,0.3) !important;
                 border: 1px solid #000;
-                color: #fff !important; 
+                color: #000 !important;
                 border-radius: 0 !important;
                 text-align: center !important;
                 display: flex !important;
@@ -448,7 +398,6 @@
             .day-cell .food-item img, .day-cell .food-item span.emoji { width: 65px !important; height: 65px !important; font-size: 45pt !important; margin-bottom: 2px !important; }
             .day-cell .food-item span:not(.emoji) { font-size: 12pt !important; font-weight: bold; color: #000 !important; } 
 
-            /* Print Footer */
             .print-footer {
                 display: block !important;
                 position: fixed; 
@@ -460,7 +409,6 @@
                 width: 50%;
             }
 
-            /* Portrait mode printing */
             @media print and (orientation: portrait) {
                 @page {
                     size: A4 portrait; 
@@ -473,7 +421,7 @@
     </style>
 </head>
 <body>
-    <div class="version-tag">v49.0</div>
+    <div class="version-tag">v50.0</div>
 
     <h1 class="main-title">תפריט קופסאות שבועי 🍱</h1>
 
@@ -507,8 +455,10 @@
 
         <div id="tables-container"></div>
         
-        <div class="print-footer" style="display:none;">v49.0 | פותח על ידי guytdev &copy; 2025</div>
+        <div class="print-footer" style="display:none;">v50.0 | פותח על ידי guytdev &copy; 2025</div>
     </div>
+    
+    <div class="app-footer">v50.0 | פותח על ידי guytdev &copy; 2025</div>
     
     <svg id="lunchbox-svg-template" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
         <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
@@ -520,27 +470,36 @@
         <div class="modal-content">
             <h3 style="color:var(--primary)">הוספת מאכל חדש ➕</h3>
             <div class="form-group">
-                <label>שם המאכל:</label>
+                <label>1. שם המאכל:</label>
                 <input type="text" id="modal-food-name" placeholder="לדוגמה: סושי">
             </div>
             <div class="form-group">
-                <label>קטגוריה:</label>
+                <label>2. קטגוריה:</label>
                 <select id="modal-food-cat"></select>
             </div>
             
             <div class="form-group">
-                <label>בחר תמונה/אימוג'י:</label>
-                <div style="display:flex; gap:5px; margin-bottom:10px;">
-                    <button class="btn btn-google" style="flex:1; font-size:12px;" onclick="searchGoogleImages()">חפש בגוגל 🔍</button>
-                </div>
-                <input type="text" id="modal-food-url" placeholder="הדבק כאן קישור לתמונה" style="margin-bottom:10px;">
-                <div style="text-align:center; margin-bottom:5px; font-size:12px; color:#666;">או בחר אימוג'י:</div>
+                <label>3. בחר אייקון:</label>
                 <div id="emoji-picker-container" class="emoji-picker"></div>
             </div>
+            
+            <div style="margin-top:15px; margin-bottom:20px;">
+                <button class="btn btn-primary" style="width:100%; font-size:18px;" onclick="addNewItemFromModal()">שמור והוסף למחסן</button>
+            </div>
 
-            <div style="display:flex; gap:10px; margin-top:20px;">
-                <button class="btn btn-primary" style="flex:1" onclick="addNewItemFromModal()">שמור והוסף</button>
-                <button class="btn btn-warning" style="flex:1" onclick="closeModal('new-item-modal')">ביטול</button>
+            <div class="advanced-image-section">
+                <div class="advanced-toggle" onclick="document.getElementById('advanced-url-area').style.display='block'; this.style.display='none'">לא מצאת אימוג'י מתאים? לחץ להוספת תמונה</div>
+                <div id="advanced-url-area" style="display:none;">
+                    <div style="display:flex; gap:5px; margin-bottom:10px;">
+                        <button class="btn btn-google" style="flex:1;" onclick="searchGoogleImages()">חפש בגוגל 🔍</button>
+                    </div>
+                    <input type="text" id="modal-food-url" placeholder="הדבק קישור לתמונה כאן" style="margin-bottom:5px;">
+                    <div style="font-size:10px; color:#888;">יש להעתיק קישור לתמונה (Copy Image Link) ולהדביק כאן</div>
+                </div>
+            </div>
+
+            <div style="margin-top:20px;">
+                <button class="btn btn-warning" style="width:100%" onclick="closeModal('new-item-modal')">ביטול</button>
             </div>
         </div>
     </div>
@@ -582,10 +541,6 @@
         ];
         const days = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'];
         
-        // Presets for Lunchbox Colors
-        const presetColors = ['#ff7675', '#74b9ff', '#00b894', '#fdcb6e', '#a29bfe', '#fd79a8', '#00cec9'];
-
-        // Common food emojis for the picker
         const commonEmojis = [
             '🥪','🍞','🥯','🥐','🥖','🥨','🥞','🧇','🧀','🥚','🍳','🍗','🍖','🥩','🌭','🍔','🍟','🍕','🌮','🌯','🥗','🥣',
             '🥒','🍅','🥑','🥦','🥕','🌽','🫑','🥔','🍠','🧅','🧄',
@@ -621,7 +576,7 @@
             'גזר': '🥕', 
             'קרקרים': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/Yz1gR9k5ej75oC8J.jpg' },
             'יוגורט': '🥛', 'פתי בר': '🍪', 'מיץ תפוזים': '🧃', 'קאפקייק': '🧁', 'בייגלה (חטיף)': '🥨', 'חטיף': '🍬',
-            'אקטימל': { type: 'img', src: 'https://res.cloudinary.com/shufersal/image/upload/f_auto,q_auto/v1551800922/prod/product_images/products_large/WWB42_L_P_7290008671627_1.png' },
+            'אקטימל': { type: 'img', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Actimel_classic.jpg/440px-Actimel_classic.jpg' },
             'כדור שוקולד': { type: 'img', src: 'https://cakenet.co.il/wp-content/uploads/2019/02/0_02891.jpg' },
             'bread': '🍞', 'filling': '🧀', 'veggie': '🥒', 'fruit': '🍎', 'treat': '🍪' 
         };
@@ -646,7 +601,6 @@
         let activeCategory = 'bread';
         let selectedEmoji = null;
 
-        // --- Init ---
         document.addEventListener('DOMContentLoaded', () => {
             const catSelect = document.getElementById('modal-food-cat');
             catSelect.innerHTML = '';
@@ -657,7 +611,6 @@
                 catSelect.appendChild(option);
             });
             populateEmojiPicker();
-            
             if (document.getElementById('children-list-container').children.length === 0) {
                 addChildRow('אורי', '#539fec');
             }
@@ -680,7 +633,6 @@
             });
         }
 
-        // --- Functions ---
         window.addChildRow = function(name = '', color = '#a29bfe') {
             const container = document.getElementById('children-list-container');
             const div = document.createElement('div');
@@ -689,61 +641,25 @@
             
             const lunchboxIconHtml = `<svg class="setup-lunchbox-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>`;
 
-            let swatchesHtml = `<div class="swatches">`;
-            presetColors.forEach(c => {
-                swatchesHtml += `<div class="color-swatch" style="background-color:${c}" onclick="updateColor(this, '${c}')"></div>`;
-            });
-            swatchesHtml += `</div>`;
-
             div.innerHTML = `
-                <div class="child-name-input">
-                     <input type="text" placeholder="שם הילד/ה" value="${name}">
-                     <div class="color-picker-wrapper" style="color: ${color}">
-                        ${lunchboxIconHtml}
-                        <input type="color" value="${color}" onchange="this.parentElement.style.color = this.value">
-                    </div>
-                     ${canRemove ? '<button class="remove-row-btn" onclick="this.closest(\'.child-input-row\').remove()">x</button>' : ''}
+                <input type="text" placeholder="שם הילד/ה" value="${name}">
+                <div class="color-picker-container">
+                    ${lunchboxIconHtml}
+                    <input type="color" value="${color}" onchange="this.parentElement.style.color = this.value">
                 </div>
-                <div class="color-selection-area">
-                     <span style="font-size:0.9em; font-weight:500;">בחר צבע:</span>
-                     ${swatchesHtml}
-                </div>
+                ${canRemove ? '<button class="remove-row-btn" onclick="this.parentElement.remove()">x</button>' : ''}
             `;
             container.appendChild(div);
-        }
-
-        window.updateColor = function(el, color) {
-            const row = el.closest('.child-input-row');
-            const wrapper = row.querySelector('.color-picker-wrapper');
-            const input = row.querySelector('input[type="color"]');
-            wrapper.style.color = color;
-            input.value = color;
         }
 
         window.startApp = function() {
             const rows = document.querySelectorAll('.child-input-row');
             childrenData = [];
-            let allNamesValid = true;
-            
             rows.forEach(row => {
-                const nameInput = row.querySelector('input[type="text"]');
-                const name = nameInput.value.trim();
-                const colorInput = row.querySelector('input[type="color"]');
-                const color = colorInput ? colorInput.value : '#a29bfe';
-                
-                if (!name) {
-                    allNamesValid = false;
-                    nameInput.classList.add('error');
-                } else {
-                    nameInput.classList.remove('error');
-                    childrenData.push({ name, color });
-                }
+                const name = row.querySelector('input[type="text"]').value.trim();
+                const color = row.querySelector('input[type="color"]').value;
+                if(name) childrenData.push({ name, color });
             });
-            
-            if (!allNamesValid) {
-                return alert('נא למלא את שמות כל הילדים או למחוק שורות ריקות.');
-            }
-            
             if (childrenData.length === 0) return alert('נא להוסיף לפחות ילד אחד');
 
             document.getElementById('setup-screen').style.display = 'none';
@@ -789,7 +705,7 @@
             const list = document.getElementById('inventory-list');
             list.innerHTML = '';
             selectedInventoryItem = null;
-            
+
             const filtered = allInventoryItems.filter(i => i.cat === catId);
             filtered.forEach(item => {
                 const el = document.createElement('div');
@@ -821,17 +737,16 @@
             const addBtn = document.createElement('div');
             addBtn.className = 'food-item add-item-btn';
             addBtn.innerHTML = '+';
-            addBtn.title = 'הוסף מאכל חדש';
             addBtn.onclick = () => openAddModal(catId);
             list.appendChild(addBtn);
         }
-
-        // --- New Item Logic ---
 
         window.openAddModal = function(catId) {
             document.getElementById('modal-food-name').value = '';
             document.getElementById('modal-food-cat').value = catId;
             document.getElementById('modal-food-url').value = '';
+            document.getElementById('advanced-url-area').style.display = 'none';
+            document.querySelector('.advanced-toggle').style.display = 'block';
             selectedEmoji = null;
             document.querySelectorAll('.emoji-option').forEach(e => e.classList.remove('selected'));
             
@@ -856,7 +771,6 @@
             let url = document.getElementById('modal-food-url').value.trim();
             
             if(!name) return alert('נא להזין שם למאכל');
-            
             if (!url && selectedEmoji) url = selectedEmoji;
 
             const item = { name, cat, customUrl: url || null };
@@ -874,7 +788,7 @@
             else if(hex.length==7){r="0x"+hex[1]+hex[2];g="0x"+hex[3]+hex[4];b="0x"+hex[5]+hex[6];}
             return `rgba(${+r},${+g},${+b},${alpha})`;
         }
-        
+
         function getLunchboxSvg(color) {
             const template = document.getElementById('lunchbox-svg-template');
             if(!template) return '';
@@ -943,7 +857,6 @@
                             if(selectedInventoryItem) {
                                 if(selectedInventoryItem.cat !== cat.id && !confirm('המאכל אינו תואם לקטגוריה. להוסיף בכל זאת?')) return;
                                 populateCell(cell, selectedInventoryItem);
-                                
                                 selectedInventoryItem = null;
                                 document.querySelectorAll('.selected-for-move').forEach(el => el.classList.remove('selected-for-move'));
                             } else {
