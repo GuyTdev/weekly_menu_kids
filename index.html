@@ -84,19 +84,28 @@
             border-radius: 20px;
             box-shadow: var(--shadow);
             text-align: center;
-            max-width: 450px;
+            max-width: 500px;
             width: 100%;
             margin-top: 10px;
         }
 
         .child-input-row { 
             display: flex; 
+            flex-direction: column;
             gap: 10px; 
-            margin-bottom: 15px; 
-            align-items: center; 
+            margin-bottom: 20px; 
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
         }
         
-        .child-input-row input[type="text"] { 
+        .child-name-input {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .child-name-input input[type="text"] { 
             flex: 1; 
             padding: 10px; 
             border: 2px solid #dfe6e9; 
@@ -104,47 +113,71 @@
             outline: none; 
             font-family: 'Rubik', sans-serif; 
             font-size: 16px; 
+            transition: border 0.3s;
         }
         
+        .child-name-input input[type="text"].error {
+            border-color: #ff7675;
+            background-color: #fff0f0;
+        }
+
+        /* Color Selection Area */
+        .color-selection-area {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            background: #f9f9f9;
+            padding: 8px;
+            border-radius: 10px;
+        }
+        
+        .swatches {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .color-swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        .color-swatch:hover { transform: scale(1.2); }
+
         /* Custom Color Picker Wrapper */
         .color-picker-wrapper {
             position: relative;
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: transform 0.2s;
+            margin-left: 10px;
         }
-        .color-picker-wrapper:hover {
-            transform: scale(1.1);
-        }
+        .color-picker-wrapper:hover { transform: scale(1.1); }
         
-        /* The actual input is hidden but clickable over the icon */
         .color-picker-wrapper input[type="color"] {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            cursor: pointer;
-            z-index: 2;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0; cursor: pointer; z-index: 2;
         }
         
-        /* The visible icon taking the color */
         .setup-lunchbox-icon {
-            width: 100%;
-            height: 100%;
-            stroke: currentColor; /* Takes color from parent div */
+            width: 100%; height: 100%;
+            stroke: currentColor; 
             stroke-width: 1.5;
             fill: none;
             z-index: 1;
-            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
         }
 
-        .remove-row-btn { background: #ff7675; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-weight: bold; cursor: pointer;}
+        .remove-row-btn { background: #ff7675; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-weight: bold; cursor: pointer; margin-right: auto;}
 
         /* --- Main App --- */
         #app-screen { display: none; width: 100%; max-width: 1200px; flex-direction: column; gap: 15px; margin-bottom: 80px; }
@@ -277,7 +310,7 @@
 
 
         /* ==========================================================================
-           PRINT OPTIMIZATION - V47.0
+           PRINT OPTIMIZATION - V49.0 (Stable Base)
            ========================================================================== */
         @media print {
             @page {
@@ -301,7 +334,7 @@
                 display: none !important; 
             }
             
-            /* Version Tag (Top Left) */
+            /* Version Tag */
             .version-tag { 
                 color: #000;
                 font-weight: bold;
@@ -342,11 +375,12 @@
                 page-break-after: auto !important;
             }
             
+            /* HEADER STYLING FOR PRINT */
             .child-title { 
                 font-size: 24pt !important; 
                 padding: 8px !important;
                 margin-bottom: 8px !important;
-                /* Background comes from inline style */
+                /* Background color comes from inline style */
                 border: 1px solid #000;
                 color: #fff !important; 
                 border-radius: 0 !important;
@@ -439,7 +473,7 @@
     </style>
 </head>
 <body>
-    <div class="version-tag">v47.0</div>
+    <div class="version-tag">v49.0</div>
 
     <h1 class="main-title">תפריט קופסאות שבועי 🍱</h1>
 
@@ -473,7 +507,7 @@
 
         <div id="tables-container"></div>
         
-        <div class="print-footer" style="display:none;">v47.0 | פותח על ידי guytdev &copy; 2025</div>
+        <div class="print-footer" style="display:none;">v49.0 | פותח על ידי guytdev &copy; 2025</div>
     </div>
     
     <svg id="lunchbox-svg-template" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
@@ -548,6 +582,10 @@
         ];
         const days = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'];
         
+        // Presets for Lunchbox Colors
+        const presetColors = ['#ff7675', '#74b9ff', '#00b894', '#fdcb6e', '#a29bfe', '#fd79a8', '#00cec9'];
+
+        // Common food emojis for the picker
         const commonEmojis = [
             '🥪','🍞','🥯','🥐','🥖','🥨','🥞','🧇','🧀','🥚','🍳','🍗','🍖','🥩','🌭','🍔','🍟','🍕','🌮','🌯','🥗','🥣',
             '🥒','🍅','🥑','🥦','🥕','🌽','🫑','🥔','🍠','🧅','🧄',
@@ -583,7 +621,7 @@
             'גזר': '🥕', 
             'קרקרים': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/Yz1gR9k5ej75oC8J.jpg' },
             'יוגורט': '🥛', 'פתי בר': '🍪', 'מיץ תפוזים': '🧃', 'קאפקייק': '🧁', 'בייגלה (חטיף)': '🥨', 'חטיף': '🍬',
-            'אקטימל': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQrtmfSxyJW6btKLE8w-C4vftyZTWmgobgvE9qAMPmtg&s=10' },
+            'אקטימל': { type: 'img', src: 'https://res.cloudinary.com/shufersal/image/upload/f_auto,q_auto/v1551800922/prod/product_images/products_large/WWB42_L_P_7290008671627_1.png' },
             'כדור שוקולד': { type: 'img', src: 'https://cakenet.co.il/wp-content/uploads/2019/02/0_02891.jpg' },
             'bread': '🍞', 'filling': '🧀', 'veggie': '🥒', 'fruit': '🍎', 'treat': '🍪' 
         };
@@ -649,32 +687,63 @@
             div.className = 'child-input-row';
             const canRemove = container.children.length > 0 || name === ''; 
             
-            // Lunchbox SVG for setup screen (color handled by css color property on wrapper)
             const lunchboxIconHtml = `<svg class="setup-lunchbox-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>`;
 
+            let swatchesHtml = `<div class="swatches">`;
+            presetColors.forEach(c => {
+                swatchesHtml += `<div class="color-swatch" style="background-color:${c}" onclick="updateColor(this, '${c}')"></div>`;
+            });
+            swatchesHtml += `</div>`;
+
             div.innerHTML = `
-                <input type="text" placeholder="שם הילד/ה" value="${name}">
-                
-                <div class="color-picker-wrapper" style="color: ${color}">
-                    ${lunchboxIconHtml}
-                    <input type="color" value="${color}" onchange="this.parentElement.style.color = this.value">
+                <div class="child-name-input">
+                     <input type="text" placeholder="שם הילד/ה" value="${name}">
+                     <div class="color-picker-wrapper" style="color: ${color}">
+                        ${lunchboxIconHtml}
+                        <input type="color" value="${color}" onchange="this.parentElement.style.color = this.value">
+                    </div>
+                     ${canRemove ? '<button class="remove-row-btn" onclick="this.closest(\'.child-input-row\').remove()">x</button>' : ''}
                 </div>
-                
-                ${canRemove ? '<button class="remove-row-btn" onclick="this.parentElement.remove()">x</button>' : ''}
+                <div class="color-selection-area">
+                     <span style="font-size:0.9em; font-weight:500;">בחר צבע:</span>
+                     ${swatchesHtml}
+                </div>
             `;
             container.appendChild(div);
+        }
+
+        window.updateColor = function(el, color) {
+            const row = el.closest('.child-input-row');
+            const wrapper = row.querySelector('.color-picker-wrapper');
+            const input = row.querySelector('input[type="color"]');
+            wrapper.style.color = color;
+            input.value = color;
         }
 
         window.startApp = function() {
             const rows = document.querySelectorAll('.child-input-row');
             childrenData = [];
+            let allNamesValid = true;
+            
             rows.forEach(row => {
-                const name = row.querySelector('input[type="text"]').value.trim();
-                // Get the color from the input, or fallback
+                const nameInput = row.querySelector('input[type="text"]');
+                const name = nameInput.value.trim();
                 const colorInput = row.querySelector('input[type="color"]');
                 const color = colorInput ? colorInput.value : '#a29bfe';
-                if(name) childrenData.push({ name, color });
+                
+                if (!name) {
+                    allNamesValid = false;
+                    nameInput.classList.add('error');
+                } else {
+                    nameInput.classList.remove('error');
+                    childrenData.push({ name, color });
+                }
             });
+            
+            if (!allNamesValid) {
+                return alert('נא למלא את שמות כל הילדים או למחוק שורות ריקות.');
+            }
+            
             if (childrenData.length === 0) return alert('נא להוסיף לפחות ילד אחד');
 
             document.getElementById('setup-screen').style.display = 'none';
@@ -720,13 +789,6 @@
             const list = document.getElementById('inventory-list');
             list.innerHTML = '';
             selectedInventoryItem = null;
-
-            // ADD BUTTON LAST
-            const addBtn = document.createElement('div');
-            addBtn.className = 'food-item add-item-btn';
-            addBtn.innerHTML = '+';
-            addBtn.title = 'הוסף מאכל חדש';
-            addBtn.onclick = () => openAddModal(catId);
             
             const filtered = allInventoryItems.filter(i => i.cat === catId);
             filtered.forEach(item => {
@@ -755,7 +817,13 @@
                 list.appendChild(el);
             });
 
-            list.appendChild(addBtn); // Add + at the end
+            // ADD BUTTON LAST
+            const addBtn = document.createElement('div');
+            addBtn.className = 'food-item add-item-btn';
+            addBtn.innerHTML = '+';
+            addBtn.title = 'הוסף מאכל חדש';
+            addBtn.onclick = () => openAddModal(catId);
+            list.appendChild(addBtn);
         }
 
         // --- New Item Logic ---
@@ -806,13 +874,13 @@
             else if(hex.length==7){r="0x"+hex[1]+hex[2];g="0x"+hex[3]+hex[4];b="0x"+hex[5]+hex[6];}
             return `rgba(${+r},${+g},${+b},${alpha})`;
         }
-
+        
         function getLunchboxSvg(color) {
             const template = document.getElementById('lunchbox-svg-template');
             if(!template) return '';
             const svg = template.cloneNode(true);
             svg.removeAttribute('id');
-            svg.removeAttribute('style'); // Make it visible
+            svg.removeAttribute('style'); 
             svg.classList.add('print-lunchbox-icon');
             svg.style.color = color; 
             return svg.outerHTML;
@@ -876,7 +944,6 @@
                                 if(selectedInventoryItem.cat !== cat.id && !confirm('המאכל אינו תואם לקטגוריה. להוסיף בכל זאת?')) return;
                                 populateCell(cell, selectedInventoryItem);
                                 
-                                // Deselect after placement
                                 selectedInventoryItem = null;
                                 document.querySelectorAll('.selected-for-move').forEach(el => el.classList.remove('selected-for-move'));
                             } else {
@@ -933,7 +1000,6 @@
                 list.appendChild(el);
             });
 
-            // ADD BUTTON LAST
             const addBtn = document.createElement('div');
             addBtn.className = 'food-item add-item-btn';
             addBtn.innerHTML = '+';
