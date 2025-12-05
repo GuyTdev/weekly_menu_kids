@@ -32,7 +32,7 @@
             position: relative; 
         }
 
-        /* Version Tag (Screen View) */
+        /* Version Tag */
         .version-tag {
             position: absolute;
             top: 5px;
@@ -89,9 +89,46 @@
             margin-top: 10px;
         }
 
-        .child-input-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
-        .child-input-row input[type="text"] { flex: 1; padding: 10px; border: 2px solid #dfe6e9; border-radius: 10px; outline: none; font-family: 'Rubik', sans-serif; font-size: 16px; }
-        .child-input-row input[type="color"] { width: 40px; height: 40px; border: none; background: none; }
+        .child-input-row { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 10px; 
+            align-items: center; 
+        }
+        .child-input-row input[type="text"] { 
+            flex: 1; 
+            padding: 10px; 
+            border: 2px solid #dfe6e9; 
+            border-radius: 10px; 
+            outline: none; 
+            font-family: 'Rubik', sans-serif; 
+            font-size: 16px; 
+        }
+        
+        .color-picker-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            width: 60px;
+            text-align: center;
+        }
+        .color-picker-container input[type="color"] { 
+            width: 40px; 
+            height: 40px; 
+            border: none; 
+            background: none;
+            padding: 0;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .setup-lunchbox-icon {
+            width: 30px;
+            height: 30px;
+            color: #999;
+            stroke-width: 1.5;
+        }
+
         .remove-row-btn { background: #ff7675; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-weight: bold; }
 
         /* --- Main App --- */
@@ -112,7 +149,6 @@
 
         .inventory-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-height: 200px; overflow-y: auto; padding: 5px; }
 
-        /* Instruction Text toggling */
         .mobile-text { display: none; }
         .desktop-text { display: inline; }
         @media (max-width: 768px) {
@@ -138,7 +174,6 @@
             z-index: 10;
         }
 
-        /* Add Item Button (The Plus Card) */
         .add-item-btn {
             border: 2px dashed #aaa;
             background: #f9f9f9;
@@ -158,13 +193,22 @@
         .food-item[data-cat="filling"] { border-top: 3px solid #ff7675; }
         .food-item[data-cat="veggie"] { border-top: 3px solid #00b894; }
         .food-item[data-cat="fruit"] { border-top: 3px solid #e17055; }
-        .food-item[data-cat="treat"] { border-top: 3:px solid #a29bfe; }
+        .food-item[data-cat="treat"] { border-top: 3px solid #a29bfe; }
 
         /* Tables */
         #tables-container { width: 100%; overflow-x: auto; padding-bottom: 10px; -webkit-overflow-scrolling: touch; }
         .single-child-table { background: white; padding: 15px; border-radius: 20px; box-shadow: var(--shadow); min-width: 800px; margin-bottom: 20px; }
-        .child-title { text-align: center; font-size: 22px; font-weight: bold; margin-bottom: 10px; padding: 8px; border-radius: 10px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
         
+        .child-title { 
+            text-align: center; font-size: 22px; font-weight: bold; margin-bottom: 10px; 
+            padding: 8px; border-radius: 10px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); 
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        
+        .print-lunchbox-icon {
+            width: 30px; height: 30px; fill: none; stroke: #fff; stroke-width: 2; margin-right: 5px; display: none;
+        }
+
         .week-grid { display: grid; grid-template-columns: 80px repeat(6, 1fr); gap: 4px; border: 1px solid rgba(0,0,0,0.1); padding: 5px; border-radius: 12px; }
         .header-cell { padding: 5px; text-align: center; font-weight: bold; border-radius: 6px; font-size: 12px; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.6); }
         .day-header { background: #ffeaa7 !important; }
@@ -193,7 +237,7 @@
         }
         .day-cell.filled:hover .cell-delete-btn { display: block; }
 
-        /* Modals (CSS omitted for brevity, logic remains the same) */
+        /* Modals */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 350px; max-height: 80vh; overflow-y: auto; text-align: center; position: relative;}
         
@@ -202,6 +246,9 @@
         .form-group input, .form-group select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
 
         #item-selector-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 15px; }
+        .shopping-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; text-align: right; }
+        .shopping-item .icon-and-name { display: flex; align-items: center; gap: 8px; }
+        .shopping-item img { width: 24px; height: 24px; }
 
         /* Emoji Picker */
         .emoji-picker { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-top: 10px; padding: 10px; background: #f9f9f9; border-radius: 8px; max-height: 150px; overflow-y: auto; }
@@ -215,16 +262,15 @@
 
 
         /* ==========================================================================
-           PRINT OPTIMIZATION - V42.0 (v40.0 settings with page break fix)
+           PRINT OPTIMIZATION - V46.0
            ========================================================================== */
         @media print {
             @page {
-                size: A4 landscape; /* Default landscape, browser handles portrait based on content fit */
+                size: A4 landscape; 
                 margin: 0;
             }
             
             html, body {
-                /* Use relative units only */
                 width: 100%;
                 height: 100%;
                 margin: 0 !important;
@@ -236,7 +282,7 @@
             }
 
             /* Hide UI */
-            .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .cell-delete-btn, #context-menu, .new-item-control { 
+            .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .cell-delete-btn, #context-menu, .new-item-control, .app-footer { 
                 display: none !important; 
             }
             
@@ -261,45 +307,64 @@
                 width: 100% !important;
                 overflow: visible !important;
                 padding: 0 !important; 
-                margin-bottom: 20mm !important; /* Space for the footer */
+                margin-bottom: 20mm !important; 
             }
 
             .single-child-table {
-                width: 98% !important; /* Full relative width */
+                width: 98% !important; 
                 max-width: none !important;
                 box-shadow: none !important;
                 background: white !important;
                 border: none !important;
-                padding: 5mm !important; /* Internal padding for table on page */
+                padding: 5mm !important; 
                 margin: 0 auto 50px auto !important; 
                 page-break-after: always; /* Force break after each table */
                 page-break-inside: avoid;
                 display: block !important;
             }
 
-            /* FIX: Prevent the last table from forcing a blank page */
             .single-child-table:last-child {
                 page-break-after: auto !important;
             }
             
+            /* HEADER STYLING FOR PRINT */
             .child-title { 
                 font-size: 24pt !important; 
                 padding: 8px !important;
                 margin-bottom: 8px !important;
-                background-color: rgba(200,200,200,0.3) !important;
+                /* Background color comes from inline style, so we don't set it here */
                 border: 1px solid #000;
-                color: #000 !important;
+                color: #fff !important; /* Ensure text is white */
                 border-radius: 0 !important;
                 text-align: center !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
+                white-space: nowrap !important;
+            }
+            
+            .child-title > span { 
+                color: #fff !important; 
+            }
+
+            .print-lunchbox-icon {
+                display: inline-block !important; 
+                fill: none !important;
+                stroke: #fff !important; /* White stroke */
+                stroke-width: 1.5 !important;
+                width: 40px !important; 
+                height: 40px !important; 
+                margin-right: 10px !important;
             }
 
             .week-grid { 
                 display: grid !important;
-                /* Column widths are fully relative (approx 8% + 6 * 15.333% = 100%) - v40.0 settings */
                 grid-template-columns: 8% repeat(6, 15.333%) !important; 
                 gap: 0 !important;
                 border: 1px solid #000 !important;
-                width: 100% !important; /* Ensures it takes up the full width of the parent (98%) */
+                width: 100% !important; 
+                /* IMPORTANT: Background transparency logic comes from inline style (hexToRgba) */
             }
             
             .header-cell { 
@@ -309,7 +374,6 @@
                 border: 1px solid #000 !important;
                 background-color: #eee !important;
                 color: #000 !important;
-                /* Flex properties ensure multi-line text is centered */
                 display: flex !important; 
                 flex-direction: column !important; 
                 align-items: center !important;
@@ -340,21 +404,20 @@
             /* Print Footer */
             .print-footer {
                 display: block !important;
-                position: fixed; /* Position at the bottom of the printed page */
+                position: fixed; 
                 bottom: 5mm;
-                left: 5mm; /* Align left */
+                left: 5mm; 
                 font-size: 10pt;
                 color: #555;
                 text-align: left;
                 width: 50%;
             }
 
-            /* Portrait mode printing (will automatically use the relative settings above) - v40.0 settings */
+            /* Portrait mode printing */
             @media print and (orientation: portrait) {
                 @page {
-                    size: A4 portrait; /* Explicitly set size for better mobile control */
+                    size: A4 portrait; 
                 }
-                /* The relative grid columns ensure everything fits in the reduced width */
                 .header-cell { height: 70px !important; font-size: 12pt !important; }
                 .day-cell { height: 90px !important; }
                 .day-cell .food-item img, .day-cell .food-item span.emoji { width: 50px !important; height: 50px !important; font-size: 35pt !important; }
@@ -363,7 +426,7 @@
     </style>
 </head>
 <body>
-    <div class="version-tag">v42.0</div>
+    <div class="version-tag">v46.0</div>
 
     <h1 class="main-title">תפריט קופסאות שבועי 🍱</h1>
 
@@ -397,9 +460,14 @@
 
         <div id="tables-container"></div>
         
-        <div class="print-footer" style="display:none;">v42.0 | פותח על ידי guytdev &copy;</div>
-
+        <div class="print-footer" style="display:none;">v46.0 | פותח על ידי guytdev &copy; 2025</div>
     </div>
+    
+    <svg id="lunchbox-svg-template" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <path d="M16 10a4 4 0 0 1-8 0"></path>
+    </svg>
 
     <div id="new-item-modal" class="modal">
         <div class="modal-content">
@@ -499,7 +567,7 @@
             'תותים': '🍓', 'תפוח': '🍎', 'אוכמניות': '🫐', 'שזיף': '🟣', 'מנגו': '🥭', 'קיווי': '🥝', 'בננה': '🍌', 'ענבים': '🍇',
             'תפו': '🍊', 
             'זיתים ירוקים': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDEp9HNy_nTQQl-Pe7cD2fw3XEIUHvFCJCqH_2v2Y4uw&s=10' }, 
-            'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניית שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅', 
+            'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅', 
             'גזר': '🥕', 
             'קרקרים': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/Yz1gR9k5ej75oC8J.jpg' },
             'יוגורט': '🥛', 'פתי בר': '🍪', 'מיץ תפוזים': '🧃', 'קאפקייק': '🧁', 'בייגלה (חטיף)': '🥨', 'חטיף': '🍬',
@@ -509,7 +577,13 @@
         };
 
         let allInventoryItems = [
-            { name: 'ג\'חנון', cat: 'bread' }, { name: 'בייגלה שומשום', cat: 'bread' }, { name: 'לחמניה', cat: 'bread' }, { name: 'פיתה', cat: 'bread' }, { name: 'בלינצס', cat: 'bread' }, { name: 'טוסט', cat: 'bread' },
+            { name: 'ג\'חנון', cat: 'bread' }, 
+            { name: 'בייגלה שומשום', cat: 'bread' }, 
+            { name: 'לחמניה', cat: 'bread' }, 
+            { name: 'לחם', cat: 'bread' }, 
+            { name: 'פיתה', cat: 'bread' }, 
+            { name: 'בלינצס', cat: 'bread' }, 
+            { name: 'טוסט', cat: 'bread' },
             { name: 'גבינה לבנה', cat: 'filling' }, { name: 'אבוקדו', cat: 'filling' }, { name: 'חביתה', cat: 'filling' }, { name: 'שוקולד השחר', cat: 'filling' }, { name: 'גבינה צהובה', cat: 'filling' }, { name: 'בולגרית', cat: 'filling' }, { name: 'גבינת שמנת', cat: 'filling' }, { name: 'ביצה קשה', cat: 'filling' },
             { name: 'גזר', cat: 'veggie' }, { name: 'עגבניית שרי', cat: 'veggie' }, { name: 'גמבה', cat: 'veggie' }, { name: 'מלפפון', cat: 'veggie' }, { name: 'זיתים ירוקים', cat: 'veggie' },
             { name: 'תמר', cat: 'fruit' }, { name: 'תפוח', cat: 'fruit' }, { name: 'בננה', cat: 'fruit' }, { name: 'ענבים', cat: 'fruit' },
@@ -562,9 +636,16 @@
             const div = document.createElement('div');
             div.className = 'child-input-row';
             const canRemove = container.children.length > 0 || name === ''; 
+            
+            // Lunchbox SVG for setup screen
+            const lunchboxIconHtml = `<svg class="setup-lunchbox-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>`;
+
             div.innerHTML = `
                 <input type="text" placeholder="שם הילד/ה" value="${name}">
-                <input type="color" value="${color}">
+                <div class="color-picker-container">
+                    ${lunchboxIconHtml}
+                    <input type="color" value="${color}">
+                </div>
                 ${canRemove ? '<button class="remove-row-btn" onclick="this.parentElement.remove()">x</button>' : ''}
             `;
             container.appendChild(div);
@@ -651,7 +732,7 @@
                 list.appendChild(el);
             });
 
-            // ADD BUTTON LAST (as a card)
+            // ADD BUTTON LAST
             const addBtn = document.createElement('div');
             addBtn.className = 'food-item add-item-btn';
             addBtn.innerHTML = '+';
@@ -708,6 +789,16 @@
             else if(hex.length==7){r="0x"+hex[1]+hex[2];g="0x"+hex[3]+hex[4];b="0x"+hex[5]+hex[6];}
             return `rgba(${+r},${+g},${+b},${alpha})`;
         }
+        
+        function getLunchboxSvg(color) {
+            const template = document.getElementById('lunchbox-svg-template');
+            if(!template) return '';
+            const svg = template.cloneNode(true);
+            svg.removeAttribute('id');
+            svg.classList.add('print-lunchbox-icon');
+            svg.style.color = color; 
+            return svg.outerHTML;
+        }
 
         function buildTables() {
             const container = document.getElementById('tables-container');
@@ -716,7 +807,13 @@
             childrenData.forEach(child => {
                 const card = document.createElement('div');
                 card.className = 'single-child-table';
-                card.innerHTML = `<div class="child-title" style="background:${child.color}">התפריט של ${child.name}</div>`;
+                
+                // Add colored lunchbox to title
+                card.innerHTML = `
+                    <div class="child-title" style="background:${child.color}">
+                        ${getLunchboxSvg(child.color)}
+                        <span>התפריט של ${child.name}</span>
+                    </div>`;
                 
                 const grid = document.createElement('div');
                 grid.className = 'week-grid';
@@ -819,7 +916,7 @@
                 list.appendChild(el);
             });
 
-            // ADD BUTTON LAST (This is for the modal, which was already correct)
+            // ADD BUTTON LAST
             const addBtn = document.createElement('div');
             addBtn.className = 'food-item add-item-btn';
             addBtn.innerHTML = '+';
