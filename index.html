@@ -92,9 +92,10 @@
         .child-input-row { 
             display: flex; 
             gap: 10px; 
-            margin-bottom: 10px; 
+            margin-bottom: 15px; 
             align-items: center; 
         }
+        
         .child-input-row input[type="text"] { 
             flex: 1; 
             padding: 10px; 
@@ -105,31 +106,45 @@
             font-size: 16px; 
         }
         
-        .color-picker-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            width: 60px;
-            text-align: center;
-        }
-        .color-picker-container input[type="color"] { 
-            width: 40px; 
-            height: 40px; 
-            border: none; 
-            background: none;
-            padding: 0;
-            border-radius: 50%;
+        /* Custom Color Picker Wrapper */
+        .color-picker-wrapper {
+            position: relative;
+            width: 45px;
+            height: 45px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
         }
+        .color-picker-wrapper:hover {
+            transform: scale(1.1);
+        }
+        
+        /* The actual input is hidden but clickable over the icon */
+        .color-picker-wrapper input[type="color"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 2;
+        }
+        
+        /* The visible icon taking the color */
         .setup-lunchbox-icon {
-            width: 30px;
-            height: 30px;
-            color: #999;
+            width: 100%;
+            height: 100%;
+            stroke: currentColor; /* Takes color from parent div */
             stroke-width: 1.5;
+            fill: none;
+            z-index: 1;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.2));
         }
 
-        .remove-row-btn { background: #ff7675; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-weight: bold; }
+        .remove-row-btn { background: #ff7675; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-weight: bold; cursor: pointer;}
 
         /* --- Main App --- */
         #app-screen { display: none; width: 100%; max-width: 1200px; flex-direction: column; gap: 15px; margin-bottom: 80px; }
@@ -262,7 +277,7 @@
 
 
         /* ==========================================================================
-           PRINT OPTIMIZATION - V46.0
+           PRINT OPTIMIZATION - V47.0
            ========================================================================== */
         @media print {
             @page {
@@ -318,7 +333,7 @@
                 border: none !important;
                 padding: 5mm !important; 
                 margin: 0 auto 50px auto !important; 
-                page-break-after: always; /* Force break after each table */
+                page-break-after: always; 
                 page-break-inside: avoid;
                 display: block !important;
             }
@@ -327,14 +342,13 @@
                 page-break-after: auto !important;
             }
             
-            /* HEADER STYLING FOR PRINT */
             .child-title { 
                 font-size: 24pt !important; 
                 padding: 8px !important;
                 margin-bottom: 8px !important;
-                /* Background color comes from inline style, so we don't set it here */
+                /* Background comes from inline style */
                 border: 1px solid #000;
-                color: #fff !important; /* Ensure text is white */
+                color: #fff !important; 
                 border-radius: 0 !important;
                 text-align: center !important;
                 display: flex !important;
@@ -351,7 +365,7 @@
             .print-lunchbox-icon {
                 display: inline-block !important; 
                 fill: none !important;
-                stroke: #fff !important; /* White stroke */
+                stroke: #fff !important; 
                 stroke-width: 1.5 !important;
                 width: 40px !important; 
                 height: 40px !important; 
@@ -364,7 +378,6 @@
                 gap: 0 !important;
                 border: 1px solid #000 !important;
                 width: 100% !important; 
-                /* IMPORTANT: Background transparency logic comes from inline style (hexToRgba) */
             }
             
             .header-cell { 
@@ -426,7 +439,7 @@
     </style>
 </head>
 <body>
-    <div class="version-tag">v46.0</div>
+    <div class="version-tag">v47.0</div>
 
     <h1 class="main-title">תפריט קופסאות שבועי 🍱</h1>
 
@@ -460,7 +473,7 @@
 
         <div id="tables-container"></div>
         
-        <div class="print-footer" style="display:none;">v46.0 | פותח על ידי guytdev &copy; 2025</div>
+        <div class="print-footer" style="display:none;">v47.0 | פותח על ידי guytdev &copy; 2025</div>
     </div>
     
     <svg id="lunchbox-svg-template" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
@@ -535,7 +548,6 @@
         ];
         const days = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'];
         
-        // Common food emojis for the picker
         const commonEmojis = [
             '🥪','🍞','🥯','🥐','🥖','🥨','🥞','🧇','🧀','🥚','🍳','🍗','🍖','🥩','🌭','🍔','🍟','🍕','🌮','🌯','🥗','🥣',
             '🥒','🍅','🥑','🥦','🥕','🌽','🫑','🥔','🍠','🧅','🧄',
@@ -637,15 +649,17 @@
             div.className = 'child-input-row';
             const canRemove = container.children.length > 0 || name === ''; 
             
-            // Lunchbox SVG for setup screen
+            // Lunchbox SVG for setup screen (color handled by css color property on wrapper)
             const lunchboxIconHtml = `<svg class="setup-lunchbox-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>`;
 
             div.innerHTML = `
                 <input type="text" placeholder="שם הילד/ה" value="${name}">
-                <div class="color-picker-container">
+                
+                <div class="color-picker-wrapper" style="color: ${color}">
                     ${lunchboxIconHtml}
-                    <input type="color" value="${color}">
+                    <input type="color" value="${color}" onchange="this.parentElement.style.color = this.value">
                 </div>
+                
                 ${canRemove ? '<button class="remove-row-btn" onclick="this.parentElement.remove()">x</button>' : ''}
             `;
             container.appendChild(div);
@@ -656,7 +670,9 @@
             childrenData = [];
             rows.forEach(row => {
                 const name = row.querySelector('input[type="text"]').value.trim();
-                const color = row.querySelector('input[type="color"]').value;
+                // Get the color from the input, or fallback
+                const colorInput = row.querySelector('input[type="color"]');
+                const color = colorInput ? colorInput.value : '#a29bfe';
                 if(name) childrenData.push({ name, color });
             });
             if (childrenData.length === 0) return alert('נא להוסיף לפחות ילד אחד');
@@ -704,6 +720,13 @@
             const list = document.getElementById('inventory-list');
             list.innerHTML = '';
             selectedInventoryItem = null;
+
+            // ADD BUTTON LAST
+            const addBtn = document.createElement('div');
+            addBtn.className = 'food-item add-item-btn';
+            addBtn.innerHTML = '+';
+            addBtn.title = 'הוסף מאכל חדש';
+            addBtn.onclick = () => openAddModal(catId);
             
             const filtered = allInventoryItems.filter(i => i.cat === catId);
             filtered.forEach(item => {
@@ -732,13 +755,7 @@
                 list.appendChild(el);
             });
 
-            // ADD BUTTON LAST
-            const addBtn = document.createElement('div');
-            addBtn.className = 'food-item add-item-btn';
-            addBtn.innerHTML = '+';
-            addBtn.title = 'הוסף מאכל חדש';
-            addBtn.onclick = () => openAddModal(catId);
-            list.appendChild(addBtn);
+            list.appendChild(addBtn); // Add + at the end
         }
 
         // --- New Item Logic ---
@@ -789,12 +806,13 @@
             else if(hex.length==7){r="0x"+hex[1]+hex[2];g="0x"+hex[3]+hex[4];b="0x"+hex[5]+hex[6];}
             return `rgba(${+r},${+g},${+b},${alpha})`;
         }
-        
+
         function getLunchboxSvg(color) {
             const template = document.getElementById('lunchbox-svg-template');
             if(!template) return '';
             const svg = template.cloneNode(true);
             svg.removeAttribute('id');
+            svg.removeAttribute('style'); // Make it visible
             svg.classList.add('print-lunchbox-icon');
             svg.style.color = color; 
             return svg.outerHTML;
@@ -808,7 +826,6 @@
                 const card = document.createElement('div');
                 card.className = 'single-child-table';
                 
-                // Add colored lunchbox to title
                 card.innerHTML = `
                     <div class="child-title" style="background:${child.color}">
                         ${getLunchboxSvg(child.color)}
