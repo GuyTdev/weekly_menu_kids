@@ -10,7 +10,6 @@
 
         :root {
             --bg-color: #f0f3f7;
-            --accent: #ff7675;
             --primary: #6c5ce7;
             --text: #2d3436;
             --shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -29,17 +28,6 @@
             align-items: center;
             min-height: 100vh;
             -webkit-tap-highlight-color: transparent;
-            position: relative; 
-        }
-
-        /* Version Tag */
-        .version-tag {
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            font-size: 10px;
-            color: #999;
-            opacity: 0.7;
         }
 
         h1.main-title {
@@ -64,7 +52,6 @@
             gap: 5px;
             color: white;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            white-space: nowrap;
         }
         .btn:active { transform: scale(0.95); }
         .btn-primary { background: var(--primary); }
@@ -72,10 +59,8 @@
         .btn-warning { background: #fdcb6e; color: #333; }
         .btn-shopping { background: #e17055; }
         .btn-magic { background: linear-gradient(135deg, #a29bfe, #74b9ff); }
-        .btn-whatsapp { background: #25d366; }
-        .btn-google { background: #4285F4; }
+        .btn-google { background: #4285F4; font-size: 13px; padding: 8px; width: 100%; margin-bottom: 5px;}
         .btn-add { background: #fab1a0; color: #333; margin-top: 10px; width: 100%; }
-        .btn-small-delete { background: #ff7675; color: white; padding: 8px; font-size: 14px; border-radius: 8px; }
 
         /* --- Setup Screen --- */
         #setup-screen {
@@ -84,100 +69,17 @@
             border-radius: 20px;
             box-shadow: var(--shadow);
             text-align: center;
-            max-width: 500px;
+            max-width: 450px;
             width: 100%;
             margin-top: 10px;
         }
 
-        .child-input-row { 
-            display: flex; 
-            flex-direction: column;
-            gap: 10px; 
-            margin-bottom: 20px; 
-            padding-bottom: 15px;
-            border-bottom: 1px solid #eee;
-        }
+        .child-input-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+        .child-input-row input[type="text"] { flex: 1; padding: 10px; border: 2px solid #dfe6e9; border-radius: 10px; outline: none; font-size: 16px; font-family: 'Rubik', sans-serif;}
         
-        .child-name-input {
-            display: flex;
-            gap: 10px;
-            width: 100%;
-            align-items: center;
-        }
-
-        .child-name-input input[type="text"] { 
-            flex: 1; 
-            padding: 10px; 
-            border: 2px solid #dfe6e9; 
-            border-radius: 10px; 
-            outline: none; 
-            font-family: 'Rubik', sans-serif; 
-            font-size: 16px; 
-            transition: border 0.3s;
-        }
-        
-        .child-name-input input[type="text"].error {
-            border-color: #ff7675;
-            background-color: #fff0f0;
-        }
-
-        /* Color Selection Area */
-        .color-selection-area {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            background: #f9f9f9;
-            padding: 8px;
-            border-radius: 10px;
-        }
-        
-        .swatches {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .color-swatch {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-            transition: transform 0.2s;
-        }
-        .color-swatch:hover { transform: scale(1.2); }
-
-        /* Custom Color Picker Wrapper */
-        .color-picker-wrapper {
-            position: relative;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s;
-            margin-left: 10px;
-        }
-        .color-picker-wrapper:hover { transform: scale(1.1); }
-        
-        .color-picker-wrapper input[type="color"] {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0; cursor: pointer; z-index: 2;
-        }
-        
-        .setup-lunchbox-icon {
-            width: 100%; height: 100%;
-            stroke: currentColor; 
-            stroke-width: 1.5;
-            fill: none;
-            z-index: 1;
-            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1));
-        }
-
-        .remove-row-btn { background: #ff7675; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-weight: bold; cursor: pointer; margin-right: auto;}
+        .color-picker-wrapper { position: relative; width: 40px; height: 40px; overflow: hidden; border-radius: 50%; cursor: pointer; border: 2px solid #ddd; }
+        .color-picker-wrapper input[type="color"] { position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; cursor: pointer; border: none; padding: 0; margin: 0; }
+        .remove-row-btn { background: #ff7675; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-weight: bold; cursor: pointer; }
 
         /* --- Main App --- */
         #app-screen { display: none; width: 100%; max-width: 1200px; flex-direction: column; gap: 15px; margin-bottom: 80px; }
@@ -197,14 +99,6 @@
 
         .inventory-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; max-height: 200px; overflow-y: auto; padding: 5px; }
 
-        .mobile-text { display: none; }
-        .desktop-text { display: inline; }
-        @media (max-width: 768px) {
-            .mobile-text { display: inline; }
-            .desktop-text { display: none; }
-        }
-
-        /* Items */
         .food-item {
             width: 65px; height: 65px; background: white; border: 1px solid #dfe6e9; border-radius: 12px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -218,24 +112,11 @@
             border: 3px solid var(--primary);
             background-color: #e3f2fd;
             transform: scale(1.1);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             z-index: 10;
         }
 
-        .add-item-btn {
-            border: 2px dashed #aaa;
-            background: #f9f9f9;
-            color: #555;
-            font-size: 30px;
-            font-weight: bold;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .add-item-btn:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: #fff;
-        }
-
+        .add-item-btn { border: 2px dashed #aaa; background: #f9f9f9; color: #555; font-size: 30px; font-weight: bold; }
+        
         /* Categories Colors */
         .food-item[data-cat="bread"] { border-top: 3px solid #fdcb6e; }
         .food-item[data-cat="filling"] { border-top: 3px solid #ff7675; }
@@ -244,17 +125,29 @@
         .food-item[data-cat="treat"] { border-top: 3px solid #a29bfe; }
 
         /* Tables */
-        #tables-container { width: 100%; overflow-x: auto; padding-bottom: 10px; -webkit-overflow-scrolling: touch; }
-        .single-child-table { background: white; padding: 15px; border-radius: 20px; box-shadow: var(--shadow); min-width: 800px; margin-bottom: 20px; }
+        #tables-container { width: 100%; overflow-x: auto; padding-bottom: 10px; }
+        .single-child-table { background: white; padding: 15px; border-radius: 20px; box-shadow: var(--shadow); min-width: 800px; margin-bottom: 20px; transition: all 0.3s; }
         
         .child-title { 
             text-align: center; font-size: 22px; font-weight: bold; margin-bottom: 10px; 
             padding: 8px; border-radius: 10px; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,0.5); 
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+            display: flex; align-items: center; justify-content: center; gap: 10px; position: relative;
         }
-        
-        .print-lunchbox-icon {
-            width: 30px; height: 30px; fill: none; stroke: #fff; stroke-width: 2; margin-right: 5px; display: none;
+
+        /* Color Edit Button on Main Screen */
+        .edit-color-btn {
+            background: rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.6);
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+        .edit-color-btn input[type="color"] {
+            position: absolute; top: -10px; left: -10px; width: 50px; height: 50px; opacity: 0; cursor: pointer;
         }
 
         .week-grid { display: grid; grid-template-columns: 80px repeat(6, 1fr); gap: 4px; border: 1px solid rgba(0,0,0,0.1); padding: 5px; border-radius: 12px; }
@@ -265,217 +158,52 @@
             background: rgba(255,255,255,0.5); border-radius: 6px; min-height: 65px;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             border: 1px dashed rgba(0,0,0,0.2); cursor: pointer; position: relative; padding: 2px;
-            transition: all 0.2s;
         }
-        
-        .day-cell:not(.filled)::after {
-            content: '+'; font-size: 24px; color: rgba(0,0,0,0.15); pointer-events: none; position: absolute;
-        }
-        
-        .day-cell.drag-over {
-            background-color: #dff9fb !important; border: 2px solid var(--primary) !important; transform: scale(1.02);
-        }
-
-        .day-cell .food-item { width: 100%; height: 100%; border: none; box-shadow: none; background: transparent; }
+        .day-cell.filled { border-style: solid; background: rgba(255,255,255,0.8); }
         
         .cell-delete-btn {
             position: absolute; top: -5px; left: -5px; background: #ff7675; color: white;
             border-radius: 50%; width: 20px; height: 20px; font-size: 12px; line-height: 20px;
-            text-align: center; display: none; z-index: 5; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            text-align: center; display: none; z-index: 5;
         }
         .day-cell.filled:hover .cell-delete-btn { display: block; }
 
         /* Modals */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 3000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 350px; max-height: 80vh; overflow-y: auto; text-align: center; position: relative;}
+        .modal-content { background: white; padding: 20px; border-radius: 20px; width: 90%; max-width: 350px; max-height: 90vh; overflow-y: auto; text-align: center; }
         
         .form-group { margin-bottom: 15px; text-align: right; }
         .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .form-group input, .form-group select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
-
-        #item-selector-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 15px; }
-        .shopping-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; text-align: right; }
-        .shopping-item .icon-and-name { display: flex; align-items: center; gap: 8px; }
-        .shopping-item img { width: 24px; height: 24px; }
+        .form-group input, .form-group select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: 'Rubik'; }
 
         /* Emoji Picker */
-        .emoji-picker { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-top: 10px; padding: 10px; background: #f9f9f9; border-radius: 8px; max-height: 150px; overflow-y: auto; }
+        .emoji-picker { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-top: 5px; padding: 10px; background: #f9f9f9; border-radius: 8px; max-height: 120px; overflow-y: auto; }
         .emoji-option { font-size: 24px; cursor: pointer; padding: 5px; border-radius: 5px; }
-        .emoji-option:hover, .emoji-option.selected { background: #e3f2fd; }
+        .emoji-option:hover, .emoji-option.selected { background: #e3f2fd; transform: scale(1.2); }
 
-        /* Context Menu */
-        #context-menu { display: none; position: absolute; background: white; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); z-index: 3000; overflow: hidden; }
-        .ctx-item { padding: 10px 20px; cursor: pointer; font-size: 14px; }
-        .ctx-item:hover { background: #f0f0f0; }
+        /* Advanced Section */
+        .advanced-section { margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ccc; text-align: center; }
+        .advanced-toggle { font-size: 12px; color: #666; text-decoration: underline; cursor: pointer; margin-bottom: 10px; }
+        .advanced-content { display: none; }
 
-
-        /* ==========================================================================
-           PRINT OPTIMIZATION - V49.0 (Stable Base)
-           ========================================================================== */
+        /* Print */
         @media print {
-            @page {
-                size: A4 landscape; 
-                margin: 0;
+            .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .cell-delete-btn, .edit-color-btn, .add-item-btn { display: none !important; }
+            #app-screen { display: block !important; }
+            .single-child-table { 
+                box-shadow: none !important; page-break-inside: avoid; margin-bottom: 20px; 
+                border: 2px solid #ccc; width: 100% !important; min-width: 0 !important;
             }
-            
-            html, body {
-                width: 100%;
-                height: 100%;
-                margin: 0 !important;
-                padding: 0 !important;
-                background: white;
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-                display: block; 
-            }
-
-            /* Hide UI */
-            .inventory-section, .controls-bar, h1.main-title, .modal, #setup-screen, .cell-delete-btn, #context-menu, .new-item-control, .app-footer { 
-                display: none !important; 
-            }
-            
-            /* Version Tag */
-            .version-tag { 
-                color: #000;
-                font-weight: bold;
-                position: absolute;
-                top: 5mm;
-                left: 5mm;
-                display: block !important;
-            }
-
-            #app-screen { 
-                display: block !important; 
-                margin: 0 !important; 
-                padding: 10px !important; 
-                width: 100% !important;
-            }
-
-            #tables-container { 
-                width: 100% !important;
-                overflow: visible !important;
-                padding: 0 !important; 
-                margin-bottom: 20mm !important; 
-            }
-
-            .single-child-table {
-                width: 98% !important; 
-                max-width: none !important;
-                box-shadow: none !important;
-                background: white !important;
-                border: none !important;
-                padding: 5mm !important; 
-                margin: 0 auto 50px auto !important; 
-                page-break-after: always; 
-                page-break-inside: avoid;
-                display: block !important;
-            }
-
-            .single-child-table:last-child {
-                page-break-after: auto !important;
-            }
-            
-            /* HEADER STYLING FOR PRINT */
-            .child-title { 
-                font-size: 24pt !important; 
-                padding: 8px !important;
-                margin-bottom: 8px !important;
-                /* Background color comes from inline style */
-                border: 1px solid #000;
-                color: #fff !important; 
-                border-radius: 0 !important;
-                text-align: center !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                text-shadow: 0 1px 2px rgba(0,0,0,0.5) !important;
-                white-space: nowrap !important;
-            }
-            
-            .child-title > span { 
-                color: #fff !important; 
-            }
-
-            .print-lunchbox-icon {
-                display: inline-block !important; 
-                fill: none !important;
-                stroke: #fff !important; 
-                stroke-width: 1.5 !important;
-                width: 40px !important; 
-                height: 40px !important; 
-                margin-right: 10px !important;
-            }
-
-            .week-grid { 
-                display: grid !important;
-                grid-template-columns: 8% repeat(6, 15.333%) !important; 
-                gap: 0 !important;
-                border: 1px solid #000 !important;
-                width: 100% !important; 
-            }
-            
-            .header-cell { 
-                font-size: 14pt !important;
-                height: 80px !important;
-                padding: 6px !important;
-                border: 1px solid #000 !important;
-                background-color: #eee !important;
-                color: #000 !important;
-                display: flex !important; 
-                flex-direction: column !important; 
-                align-items: center !important;
-                justify-content: center !important;
-                text-align: center !important; 
-                line-height: 1.2; 
-                white-space: normal !important; 
-            } 
-            
-            .day-cell { 
-                border: 1px solid #000 !important;
-                height: 110px !important; 
-                padding: 3px !important;
-                border-radius: 0 !important;
-                background-color: transparent !important;
-                display: flex !important;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-            } 
-
-            .day-cell:not(.filled)::after { content: ''; }
-
-            .day-cell .food-item { border: none !important; width: auto !important; height: auto !important; }
-            .day-cell .food-item img, .day-cell .food-item span.emoji { width: 65px !important; height: 65px !important; font-size: 45pt !important; margin-bottom: 2px !important; }
-            .day-cell .food-item span:not(.emoji) { font-size: 12pt !important; font-weight: bold; color: #000 !important; } 
-
-            /* Print Footer */
-            .print-footer {
-                display: block !important;
-                position: fixed; 
-                bottom: 5mm;
-                left: 5mm; 
-                font-size: 10pt;
-                color: #555;
-                text-align: left;
-                width: 50%;
-            }
-
-            /* Portrait mode printing */
-            @media print and (orientation: portrait) {
-                @page {
-                    size: A4 portrait; 
-                }
-                .header-cell { height: 70px !important; font-size: 12pt !important; }
-                .day-cell { height: 90px !important; }
-                .day-cell .food-item img, .day-cell .food-item span.emoji { width: 50px !important; height: 50px !important; font-size: 35pt !important; }
-            }
+            .week-grid { border: none; }
+            body { background: white; padding: 0; }
+            .day-cell { border: 1px solid #ddd !important; }
         }
     </style>
 </head>
 <body>
-    <div class="version-tag">v49.0</div>
 
     <h1 class="main-title">תפריט קופסאות שבועי 🍱</h1>
+    <div style="position: absolute; top: 5px; left: 5px; font-size: 10px; color: #aaa;">v51.0</div>
 
     <div id="setup-screen">
         <h2>הגדרת ילדים 🎨</h2>
@@ -489,262 +217,160 @@
         <div class="controls-bar">
             <div class="controls-group">
                 <button class="btn btn-shopping" onclick="showShoppingList()">🛒 רשימה</button>
-                <button class="btn btn-success" onclick="window.print()">📸 שמור</button>
-                <button class="btn btn-magic" onclick="autoFillMenu()">🪄 אוטומטי</button>
+                <button class="btn btn-success" onclick="window.print()">📸 שמור/הדפס</button>
+                <button class="btn btn-magic" onclick="autoFillMenu()">🪄 אוטומטי (לריק)</button>
             </div>
-            <button class="btn btn-warning" style="flex:0;" onclick="clearTable()">🧹</button>
+            <button class="btn btn-warning" style="flex:0;" onclick="clearTable()">🧹 נקה הכל</button>
         </div>
 
         <div class="inventory-section">
-            <h4 style="margin:0 0 10px 0; text-align:center;">
-                מחסן המאכלים <br>
-                <span style="font-size:0.8em; color:#666;" class="desktop-text">(גרור לטבלה)</span>
-                <span style="font-size:0.8em; color:#666;" class="mobile-text">(לחץ על תא בטבלה כדי להוסיף)</span>
-            </h4>
             <div class="tab-buttons"></div>
             <div id="inventory-list" class="inventory-list"></div>
         </div>
 
         <div id="tables-container"></div>
-        
-        <div class="print-footer" style="display:none;">v49.0 | פותח על ידי guytdev &copy; 2025</div>
     </div>
-    
-    <svg id="lunchbox-svg-template" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-        <line x1="3" y1="6" x2="21" y2="6"></line>
-        <path d="M16 10a4 4 0 0 1-8 0"></path>
-    </svg>
 
     <div id="new-item-modal" class="modal">
         <div class="modal-content">
-            <h3 style="color:var(--primary)">הוספת מאכל חדש ➕</h3>
+            <h3 style="color:var(--primary); margin-top:0;">הוספת מאכל חדש</h3>
+            
             <div class="form-group">
                 <label>שם המאכל:</label>
-                <input type="text" id="modal-food-name" placeholder="לדוגמה: סושי">
+                <input type="text" id="modal-food-name" placeholder="למשל: סושי">
             </div>
             <div class="form-group">
                 <label>קטגוריה:</label>
                 <select id="modal-food-cat"></select>
             </div>
-            
+
             <div class="form-group">
-                <label>בחר תמונה/אימוג'י:</label>
-                <div style="display:flex; gap:5px; margin-bottom:10px;">
-                    <button class="btn btn-google" style="flex:1; font-size:12px;" onclick="searchGoogleImages()">חפש בגוגל 🔍</button>
-                </div>
-                <input type="text" id="modal-food-url" placeholder="הדבק כאן קישור לתמונה" style="margin-bottom:10px;">
-                <div style="text-align:center; margin-bottom:5px; font-size:12px; color:#666;">או בחר אימוג'י:</div>
+                <label>בחר אייקון:</label>
                 <div id="emoji-picker-container" class="emoji-picker"></div>
             </div>
 
-            <div style="display:flex; gap:10px; margin-top:20px;">
-                <button class="btn btn-primary" style="flex:1" onclick="addNewItemFromModal()">שמור והוסף</button>
-                <button class="btn btn-warning" style="flex:1" onclick="closeModal('new-item-modal')">ביטול</button>
-            </div>
-        </div>
-    </div>
+            <button class="btn btn-primary" style="width:100%; margin: 15px 0; font-size:16px;" onclick="addNewItemFromModal()">➕ הוסף מאכל למחסן</button>
 
-    <div id="item-selector-modal" class="modal">
-        <div class="modal-content">
-            <h3 id="selector-title">בחר פריט</h3>
-            <div id="item-selector-list"></div>
-            <div style="margin-top: 15px; display:flex; gap:10px;">
-                <button class="btn btn-small-delete" style="flex:1" onclick="deleteItemFromCell()">🗑️ נקה תא</button>
-                <button class="btn btn-primary" style="flex:1" onclick="closeModal('item-selector-modal')">סגור</button>
+            <div class="advanced-section">
+                <div class="advanced-toggle" onclick="toggleAdvanced()">לא מצאת אימוג'י? חפש תמונה בגוגל</div>
+                <div id="advanced-content" class="advanced-content">
+                    <button class="btn btn-google" onclick="searchGoogleImages()">🔍 חפש תמונה בגוגל (נפתח בחלון חדש)</button>
+                    <div style="font-size:11px; color:#666; margin-bottom:5px;">יש להעתיק את כתובת התמונה ולהדביק כאן:</div>
+                    <input type="text" id="modal-food-url" placeholder="הדבק קישור לתמונה כאן..." style="width:100%; padding:8px; border:1px solid #ddd; border-radius:6px;">
+                </div>
             </div>
+
+            <button class="btn btn-warning" style="width:100%; margin-top:10px;" onclick="closeModal('new-item-modal')">ביטול</button>
         </div>
     </div>
 
     <div id="shopping-modal" class="modal">
         <div class="modal-content">
             <h3>רשימת קניות 📝</h3>
-            <div id="shopping-list-items"></div>
-            <br>
-            <button class="btn btn-whatsapp" style="width:100%; margin-bottom:10px;" onclick="copyToWhatsapp()">העתק לוואטסאפ 💬</button>
+            <div id="shopping-list-items" style="text-align:right; margin-bottom:15px;"></div>
             <button class="btn btn-primary" style="width:100%" onclick="closeModal('shopping-modal')">סגור</button>
         </div>
-    </div>
-
-    <div id="context-menu">
-        <div class="ctx-item" onclick="changeItemImage()">🖼️ שנה תמונה (URL)</div>
-        <div class="ctx-item" onclick="deleteItemFromInventory()" style="color:red">🗑️ מחק מהמחסן</div>
     </div>
 
     <script>
         // --- Data ---
         const categories = [
             { id: 'bread', name: 'פחמימה', icon: '🍞' },
-            { id: 'filling', name: 'חלבון/ ממרח', icon: '🧀' }, 
+            { id: 'filling', name: 'חלבון/ממרח', icon: '🧀' }, 
             { id: 'veggie', name: 'ירק', icon: '🥒' },
             { id: 'fruit', name: 'פרי', icon: '🍎' },
             { id: 'treat', name: 'פינוק', icon: '🍪' }
         ];
         const days = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי'];
         
-        // Presets for Lunchbox Colors
-        const presetColors = ['#ff7675', '#74b9ff', '#00b894', '#fdcb6e', '#a29bfe', '#fd79a8', '#00cec9'];
-
-        // Common food emojis for the picker
-        const commonEmojis = [
-            '🥪','🍞','🥯','🥐','🥖','🥨','🥞','🧇','🧀','🥚','🍳','🍗','🍖','🥩','🌭','🍔','🍟','🍕','🌮','🌯','🥗','🥣',
-            '🥒','🍅','🥑','🥦','🥕','🌽','🫑','🥔','🍠','🧅','🧄',
-            '🍎','🍐','🍊','🍋','🍌','🍉','🍇','🍓','🫐','🍈','🍒','🍑','🥭','🍍','🥥','🥝',
-            '🍪','🍩','🍫','🍬','🍭','🍮','🧁','🍰','🍦','🍨',
-            '🥛','🧃','🥤','🍵'
-        ];
+        const commonEmojis = ['🥪','🍞','🥯','🥐','🥖','🥨','🥞','🧇','🧀','🥚','🍳','🍗','🍖','🥩','🌭','🍔','🍟','🍕','🌮','🌯','🥗','🥣','🥒','🍅','🥑','🥦','🥕','🌽','🫑','🥔','🍠','🧅','🧄','🍎','🍐','🍊','🍋','🍌','🍉','🍇','🍓','🫐','🍈','🍒','🍑','🥭','🍍','🥥','🥝','🍪','🍩','🍫','🍬','🍭','🍮','🧁','🍰','🍦','🍨','🥛','🧃','🥤','🍵'];
 
         const iconDictionary = {
-            'ג\'חנון': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjCf98VhLbeXmSTL-Qe8RfwUkJpk9a7KDWUY5X_0MRGw&s=10' },
-            'בייגלה שומשום': { type: 'img', src: 'https://www.nika-cakes.co.il/wp-content/uploads/2020/12/Romanian-pretzel.jpg' },
-            'אבוקדו': { type: 'img', src: 'https://i0.wp.com/lyb.co.il/wp-content/uploads/2021/01/half-of-avocado-.jpg?fit=764%2C1024&ssl=1' },
-            'תמר': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/uW5nT0cbTD7gyfDt.jpg' },
-            'עגבניית שרי': { type: 'img', src: 'https://www.ecolution.co.il/wp-content/uploads/2025/02/lobelo-%D7%A2%D7%92%D7%91%D7%A0%D7%99%D7%99%D7%AA-%D7%A9%D7%A8%D7%99-%D7%9C%D7%95%D7%91%D7%9C%D7%95-600x999.jpg' },
-            'גמבה': { type: 'img', src: 'https://hevdel.co.il/wp-content/uploads/2021/02/bell-peppers-421087_640.jpg' },
-            'שוקולד השחר': { type: 'img', src: 'https://res.cloudinary.com/shufersal/image/upload/f_auto,q_auto/v1551800922/prod/product_images/products_large/QJU14_L_P_416021_1.png' },
-            'נוטלה': { type: 'img', src: 'https://res.cloudinary.com/shufersal/image/upload/f_auto,q_auto/v1551800922/prod/product_images/products_large/JEB38_L_P_80135876_1.png' },
-            'מוצרלה מגורדת': { type: 'img', src: 'https://manhaadama.co.il/wp-content/uploads/2022/01/Mock-Up2.jpg' },
-            'מוצרלה בייבי': { type: 'img', src: 'https://noyhasade.b-cdn.net/wp-content/uploads/2021/01/baby_mozarella2.jpg' },
-            'גאודה קוביות': { type: 'img', src: 'https://www.hamoshava.co.il/wp-content/uploads/2025/04/%D7%92%D7%90%D7%95%D7%93%D7%94-%D7%94%D7%95%D7%9C%D7%A0%D7%93%D7%99%D7%AA-%D7%9E%D7%A9%D7%95%D7%9C%D7%A9.jpg' },
-            'פטה עיזים': { type: 'img', src: 'https://www.carmella.co.il/wp-content/uploads/2022/08/7290001499303.jpg' },
-            'חביתה': { type: 'img', src: 'https://www.kipa.co.il/userFiles/2025/11/1200-680/334694_%D7%97%D7%91%D7%99%D7%AA%D7%94_2.jpg' },
-            'לחמניה': '🥖', 'לביבות': '🥞', 'לחם מלא': '🍞', 'פיתה': '🥙', 'בייגלה': '🥨', 'לחם': '🍞', 'טוסט': '🥪',
-            'בלינצס': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmtCm9Bu4wczi_0LUyr29ux-xOfFnzeLq_6bvycZPmBA&s=10' },
-            'ממרח שוקולד': '🍫', 'ביצה קשה': '🥚', 'פסטרמה': '🥩', 'גבינה צהובה': '🧀',
-            'גבינה לבנה': { type: 'img', src: 'https://noyhasade.b-cdn.net/wp-content/uploads/2020/09/7290002824183-2.jpg'},
-            'בולגרית': { type: 'img', src: 'https://gad-dairy.co.il/wp-content/uploads/2016/05/30056-13-a_pic_site_9-1024x1024.png' },
-            'גבינת שמנת': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtiZ7V4aeVC52RnVhqm5FHQpxuQ8wk182azK07MmJ9Rg&s=10' },
-            'תותים': '🍓', 'תפוח': '🍎', 'אוכמניות': '🫐', 'שזיף': '🟣', 'מנגו': '🥭', 'קיווי': '🥝', 'בננה': '🍌', 'ענבים': '🍇',
-            'תפו': '🍊', 
-            'זיתים ירוקים': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDEp9HNy_nTQQl-Pe7cD2fw3XEIUHvFCJCqH_2v2Y4uw&s=10' }, 
-            'מלפפון': '🥒', 'מלפפון חמוץ': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'עגבניה': '🍅', 
-            'גזר': '🥕', 
-            'קרקרים': { type: 'img', src: 'https://st1.foodsd.co.il/Images/Products/large/Yz1gR9k5ej75oC8J.jpg' },
-            'יוגורט': '🥛', 'פתי בר': '🍪', 'מיץ תפוזים': '🧃', 'קאפקייק': '🧁', 'בייגלה (חטיף)': '🥨', 'חטיף': '🍬',
-            'אקטימל': { type: 'img', src: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTgrPCJJpSFJ2yyW8M8qUSQ36OZwX9cxdlELoulf1aAag&s=10' },
-            'כדור שוקולד': { type: 'img', src: 'https://cakenet.co.il/wp-content/uploads/2019/02/0_02891.jpg' },
-            'bread': '🍞', 'filling': '🧀', 'veggie': '🥒', 'fruit': '🍎', 'treat': '🍪' 
+            'לחמניה': '🥖', 'לחם מלא': '🍞', 'פיתה': '🥙', 'בייגלה': '🥨', 'לחם': '🍞', 'טוסט': '🥪',
+            'ממרח שוקולד': '🍫', 'ביצה קשה': '🥚', 'פסטרמה': '🥩', 'גבינה צהובה': '🧀', 'קוטג': '🍚',
+            'תותים': '🍓', 'תפוח': '🍎', 'אוכמניות': '🫐', 'בננה': '🍌', 'ענבים': '🍇', 'אגס': '🍐',
+            'מלפפון': '🥒', 'עגבניות שרי': '🍅', 'פלפל גמבה': '🫑', 'גזר': '🥕', 'זיתים': '🫒',
+            'יוגורט': '🥛', 'פתי בר': '🍪', 'חטיף': '🍬', 'אקטימל': { type: 'img', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Actimel_classic.jpg/440px-Actimel_classic.jpg' }
         };
 
         let allInventoryItems = [
-            { name: 'ג\'חנון', cat: 'bread' }, 
-            { name: 'בייגלה שומשום', cat: 'bread' }, 
-            { name: 'לחמניה', cat: 'bread' }, 
-            { name: 'לחם', cat: 'bread' }, 
-            { name: 'פיתה', cat: 'bread' }, 
-            { name: 'בלינצס', cat: 'bread' }, 
-            { name: 'טוסט', cat: 'bread' },
-            { name: 'גבינה לבנה', cat: 'filling' }, { name: 'אבוקדו', cat: 'filling' }, { name: 'חביתה', cat: 'filling' }, { name: 'שוקולד השחר', cat: 'filling' }, { name: 'גבינה צהובה', cat: 'filling' }, { name: 'בולגרית', cat: 'filling' }, { name: 'גבינת שמנת', cat: 'filling' }, { name: 'ביצה קשה', cat: 'filling' },
-            { name: 'גזר', cat: 'veggie' }, { name: 'עגבניית שרי', cat: 'veggie' }, { name: 'גמבה', cat: 'veggie' }, { name: 'מלפפון', cat: 'veggie' }, { name: 'זיתים ירוקים', cat: 'veggie' },
-            { name: 'תמר', cat: 'fruit' }, { name: 'תפוח', cat: 'fruit' }, { name: 'בננה', cat: 'fruit' }, { name: 'ענבים', cat: 'fruit' },
-            { name: 'מוצרלה בייבי', cat: 'treat' }, { name: 'קרקרים', cat: 'treat' }, { name: 'יוגורט', cat: 'treat' }, { name: 'אקטימל', cat: 'treat' }, { name: 'כדור שוקולד', cat: 'treat' }
+            { name: 'לחמניה', cat: 'bread' }, { name: 'פיתה', cat: 'bread' }, { name: 'טוסט', cat: 'bread' }, { name: 'בייגלה', cat: 'bread' },
+            { name: 'גבינה צהובה', cat: 'filling' }, { name: 'ביצה קשה', cat: 'filling' }, { name: 'ממרח שוקולד', cat: 'filling' }, { name: 'קוטג', cat: 'filling' },
+            { name: 'מלפפון', cat: 'veggie' }, { name: 'עגבניות שרי', cat: 'veggie' }, { name: 'גזר', cat: 'veggie' }, { name: 'פלפל גמבה', cat: 'veggie' },
+            { name: 'תפוח', cat: 'fruit' }, { name: 'בננה', cat: 'fruit' }, { name: 'ענבים', cat: 'fruit' }, { name: 'תותים', cat: 'fruit' },
+            { name: 'יוגורט', cat: 'treat' }, { name: 'פתי בר', cat: 'treat' }, { name: 'אקטימל', cat: 'treat' }, { name: 'חטיף', cat: 'treat' }
         ];
 
         let childrenData = [];
         let selectedInventoryItem = null;
-        let currentCellTarget = null;
-        let activeCategory = 'bread';
         let selectedEmoji = null;
 
-        // --- Init ---
+        // --- Initialization ---
         document.addEventListener('DOMContentLoaded', () => {
-            const catSelect = document.getElementById('modal-food-cat');
-            catSelect.innerHTML = '';
-            categories.forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat.id;
-                option.innerText = `${cat.icon} ${cat.name}`;
-                catSelect.appendChild(option);
-            });
+            populateCatSelect();
             populateEmojiPicker();
-            
-            if (document.getElementById('children-list-container').children.length === 0) {
-                addChildRow('אורי', '#539fec');
-            }
+            if(document.getElementById('children-list-container').children.length === 0) addChildRow('ילד/ה 1', '#6c5ce7');
         });
 
-        function populateEmojiPicker() {
-            const container = document.getElementById('emoji-picker-container');
-            container.innerHTML = '';
-            commonEmojis.forEach(emoji => {
-                const span = document.createElement('span');
-                span.className = 'emoji-option';
-                span.innerText = emoji;
-                span.onclick = () => {
-                    document.querySelectorAll('.emoji-option').forEach(e => e.classList.remove('selected'));
-                    span.classList.add('selected');
-                    selectedEmoji = emoji;
-                    document.getElementById('modal-food-url').value = ''; 
-                };
-                container.appendChild(span);
+        function populateCatSelect() {
+            const s = document.getElementById('modal-food-cat');
+            s.innerHTML = '';
+            categories.forEach(c => {
+                const o = document.createElement('option');
+                o.value = c.id; o.innerText = c.name;
+                s.appendChild(o);
             });
         }
 
-        // --- Functions ---
+        function populateEmojiPicker() {
+            const c = document.getElementById('emoji-picker-container');
+            c.innerHTML = '';
+            commonEmojis.forEach(e => {
+                const sp = document.createElement('span');
+                sp.className = 'emoji-option';
+                sp.innerText = e;
+                sp.onclick = () => {
+                    document.querySelectorAll('.emoji-option').forEach(x => x.classList.remove('selected'));
+                    sp.classList.add('selected');
+                    selectedEmoji = e;
+                    document.getElementById('modal-food-url').value = ''; // Clear URL if emoji selected
+                };
+                c.appendChild(sp);
+            });
+        }
+
+        // --- Setup Logic ---
         window.addChildRow = function(name = '', color = '#a29bfe') {
             const container = document.getElementById('children-list-container');
             const div = document.createElement('div');
             div.className = 'child-input-row';
-            const canRemove = container.children.length > 0 || name === ''; 
-            
-            const lunchboxIconHtml = `<svg class="setup-lunchbox-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>`;
-
-            let swatchesHtml = `<div class="swatches">`;
-            presetColors.forEach(c => {
-                swatchesHtml += `<div class="color-swatch" style="background-color:${c}" onclick="updateColor(this, '${c}')"></div>`;
-            });
-            swatchesHtml += `</div>`;
-
+            const showRemove = container.children.length > 0 || name === '';
             div.innerHTML = `
-                <div class="child-name-input">
-                     <input type="text" placeholder="שם הילד/ה" value="${name}">
-                     <div class="color-picker-wrapper" style="color: ${color}">
-                        ${lunchboxIconHtml}
-                        <input type="color" value="${color}" onchange="this.parentElement.style.color = this.value">
-                    </div>
-                     ${canRemove ? '<button class="remove-row-btn" onclick="this.closest(\'.child-input-row\').remove()">x</button>' : ''}
+                <input type="text" placeholder="שם הילד/ה" value="${name}">
+                <div class="color-picker-wrapper" title="בחר צבע">
+                    <input type="color" value="${color}" onchange="this.parentElement.style.backgroundColor = this.value">
                 </div>
-                <div class="color-selection-area">
-                     <span style="font-size:0.9em; font-weight:500;">בחר צבע:</span>
-                     ${swatchesHtml}
-                </div>
+                ${showRemove ? '<button class="remove-row-btn" onclick="this.parentElement.remove()">x</button>' : ''}
             `;
+            // Set initial BG color for picker wrapper
+            div.querySelector('.color-picker-wrapper').style.backgroundColor = color;
+            
             container.appendChild(div);
-        }
 
-        window.updateColor = function(el, color) {
-            const row = el.closest('.child-input-row');
-            const wrapper = row.querySelector('.color-picker-wrapper');
-            const input = row.querySelector('input[type="color"]');
-            wrapper.style.color = color;
-            input.value = color;
+            // FOCUS LOGIC (Requested)
+            const input = div.querySelector('input[type="text"]');
+            if(input) input.focus();
         }
 
         window.startApp = function() {
-            const rows = document.querySelectorAll('.child-input-row');
             childrenData = [];
-            let allNamesValid = true;
-            
-            rows.forEach(row => {
-                const nameInput = row.querySelector('input[type="text"]');
-                const name = nameInput.value.trim();
-                const colorInput = row.querySelector('input[type="color"]');
-                const color = colorInput ? colorInput.value : '#a29bfe';
-                
-                if (!name) {
-                    allNamesValid = false;
-                    nameInput.classList.add('error');
-                } else {
-                    nameInput.classList.remove('error');
-                    childrenData.push({ name, color });
-                }
+            document.querySelectorAll('.child-input-row').forEach(row => {
+                const name = row.querySelector('input[type="text"]').value.trim();
+                const color = row.querySelector('input[type="color"]').value;
+                if(name) childrenData.push({ name, color });
             });
-            
-            if (!allNamesValid) {
-                return alert('נא למלא את שמות כל הילדים או למחוק שורות ריקות.');
-            }
-            
-            if (childrenData.length === 0) return alert('נא להוסיף לפחות ילד אחד');
+
+            if(childrenData.length === 0) return alert('נא להוסיף לפחות ילד אחד');
 
             document.getElementById('setup-screen').style.display = 'none';
             document.getElementById('app-screen').style.display = 'flex';
@@ -754,338 +380,269 @@
             buildTables();
         }
 
-        function resolveIcon(name, cat, customUrl = null) {
-            if (customUrl) {
-                if (customUrl.startsWith('http')) return `<img src="${customUrl}">`;
-                else return `<span class="emoji">${customUrl}</span>`;
+        // --- Core Logic ---
+        function resolveIcon(item) {
+            if(item.customUrl) {
+                 if(item.customUrl.startsWith('http')) return `<img src="${item.customUrl}">`;
+                 return `<span class="emoji">${item.customUrl}</span>`;
             }
-            if (iconDictionary[name]) {
-                const val = iconDictionary[name];
-                if (typeof val === 'object') return `<img src="${val.src}">`;
+            const val = iconDictionary[item.name];
+            if(val) {
+                if(typeof val === 'object') return `<img src="${val.src}">`;
                 return `<span class="emoji">${val}</span>`;
             }
-            const fallback = iconDictionary[cat] || '🍱';
-            return `<span class="emoji">${fallback}</span>`;
+            return `<span class="emoji">🍱</span>`;
         }
 
         function initInventoryTabs() {
-            const container = document.querySelector('.tab-buttons');
-            container.innerHTML = '';
+            const c = document.querySelector('.tab-buttons');
+            c.innerHTML = '';
             categories.forEach((cat, idx) => {
-                const btn = document.createElement('div');
-                btn.className = `tab-button ${idx===0?'active':''}`;
-                btn.innerText = `${cat.icon} ${cat.name}`;
-                btn.onclick = () => {
-                    document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
+                const b = document.createElement('div');
+                b.className = `tab-button ${idx===0?'active':''}`;
+                b.innerText = `${cat.icon} ${cat.name}`;
+                b.onclick = () => {
+                    document.querySelectorAll('.tab-button').forEach(x=>x.classList.remove('active'));
+                    b.classList.add('active');
                     initInventory(cat.id);
                 };
-                container.appendChild(btn);
+                c.appendChild(b);
             });
         }
 
         function initInventory(catId) {
-            activeCategory = catId;
             const list = document.getElementById('inventory-list');
             list.innerHTML = '';
             selectedInventoryItem = null;
-            
-            const filtered = allInventoryItems.filter(i => i.cat === catId);
-            filtered.forEach(item => {
+
+            // Items
+            allInventoryItems.filter(i => i.cat === catId).forEach(item => {
                 const el = document.createElement('div');
                 el.className = 'food-item';
-                el.draggable = true;
-                el.innerHTML = resolveIcon(item.name, item.cat, item.customUrl) + `<span>${item.name}</span>`;
-                
-                el.addEventListener('dragstart', (ev) => {
-                    ev.dataTransfer.setData("application/json", JSON.stringify(item));
-                });
-
+                el.innerHTML = resolveIcon(item) + `<span>${item.name}</span>`;
                 el.onclick = () => {
-                    if (selectedInventoryItem === item) {
+                    if(selectedInventoryItem === item) {
                         selectedInventoryItem = null;
                         el.classList.remove('selected-for-move');
                     } else {
-                        document.querySelectorAll('.inventory-list .food-item').forEach(x => x.classList.remove('selected-for-move'));
+                        document.querySelectorAll('.inventory-list .food-item').forEach(x=>x.classList.remove('selected-for-move'));
                         selectedInventoryItem = item;
                         el.classList.add('selected-for-move');
                     }
                 };
-                
-                el.addEventListener('contextmenu', (e) => showContextMenu(e, item));
-
                 list.appendChild(el);
             });
 
-            // ADD BUTTON LAST
+            // Add Button
             const addBtn = document.createElement('div');
             addBtn.className = 'food-item add-item-btn';
-            addBtn.innerHTML = '+';
-            addBtn.title = 'הוסף מאכל חדש';
+            addBtn.innerText = '+';
             addBtn.onclick = () => openAddModal(catId);
             list.appendChild(addBtn);
         }
 
-        // --- New Item Logic ---
+        function hexToRgba(hex, alpha) {
+            let r=0,g=0,b=0;
+            if(hex.length===4){r="0x"+hex[1]+hex[1];g="0x"+hex[2]+hex[2];b="0x"+hex[3]+hex[3];}
+            else if(hex.length===7){r="0x"+hex[1]+hex[2];g="0x"+hex[3]+hex[4];b="0x"+hex[5]+hex[6];}
+            return `rgba(${+r},${+g},${+b},${alpha})`;
+        }
+
+        function buildTables() {
+            const container = document.getElementById('tables-container');
+            container.innerHTML = '';
+            
+            childrenData.forEach((child, index) => {
+                const card = document.createElement('div');
+                card.className = 'single-child-table';
+                card.id = `child-card-${index}`;
+                
+                // Header with Color Edit
+                card.innerHTML = `
+                    <div class="child-title" style="background:${child.color}">
+                        <span>${child.name}</span>
+                        <div class="edit-color-btn" title="שנה צבע">
+                            🎨
+                            <input type="color" value="${child.color}" onchange="updateChildColor(${index}, this.value)">
+                        </div>
+                    </div>`;
+
+                const grid = document.createElement('div');
+                grid.className = 'week-grid';
+                grid.style.backgroundColor = hexToRgba(child.color, 0.2);
+                grid.id = `grid-${index}`;
+
+                // Header Row
+                grid.appendChild(createHeader('קטגוריה'));
+                days.forEach(d => {
+                     const h = createHeader(d);
+                     h.classList.add('day-header');
+                     grid.appendChild(h);
+                });
+
+                // Body
+                categories.forEach(cat => {
+                    const rowHeader = createHeader(cat.name + ' ' + cat.icon);
+                    grid.appendChild(rowHeader);
+
+                    days.forEach(day => {
+                        const cell = document.createElement('div');
+                        cell.className = 'day-cell';
+                        cell.dataset.cat = cat.id;
+                        cell.onclick = () => {
+                            if(selectedInventoryItem) {
+                                if(selectedInventoryItem.cat !== cat.id && !confirm('זה לא מתאים לקטגוריה. להוסיף?')) return;
+                                fillCell(cell, selectedInventoryItem);
+                                selectedInventoryItem = null;
+                                document.querySelectorAll('.selected-for-move').forEach(x=>x.classList.remove('selected-for-move'));
+                            }
+                        };
+                        grid.appendChild(cell);
+                    });
+                });
+
+                card.appendChild(grid);
+                container.appendChild(card);
+            });
+        }
+
+        function createHeader(text) {
+            const d = document.createElement('div');
+            d.className = 'header-cell';
+            d.innerText = text;
+            return d;
+        }
+
+        // --- NEW: Update Color Logic ---
+        window.updateChildColor = function(index, newColor) {
+            childrenData[index].color = newColor;
+            
+            // Update DOM directly without rebuilding to keep data
+            const card = document.getElementById(`child-card-${index}`);
+            const title = card.querySelector('.child-title');
+            const grid = document.getElementById(`grid-${index}`);
+            
+            title.style.background = newColor;
+            grid.style.backgroundColor = hexToRgba(newColor, 0.2);
+        }
+
+        function fillCell(cell, item) {
+            cell.innerHTML = '';
+            if(!item) {
+                cell.classList.remove('filled');
+                return;
+            }
+            cell.classList.add('filled');
+            const content = document.createElement('div');
+            content.className = 'food-item';
+            content.style.border = 'none'; 
+            content.style.background = 'transparent';
+            content.style.width = '100%'; 
+            content.style.height = '100%';
+            content.innerHTML = resolveIcon(item) + `<span>${item.name}</span>`;
+            
+            const del = document.createElement('div');
+            del.className = 'cell-delete-btn';
+            del.innerText = 'x';
+            del.onclick = (e) => { e.stopPropagation(); fillCell(cell, null); };
+
+            cell.appendChild(content);
+            cell.appendChild(del);
+        }
+
+        // --- Modal & Features Logic ---
 
         window.openAddModal = function(catId) {
             document.getElementById('modal-food-name').value = '';
             document.getElementById('modal-food-cat').value = catId;
             document.getElementById('modal-food-url').value = '';
             selectedEmoji = null;
-            document.querySelectorAll('.emoji-option').forEach(e => e.classList.remove('selected'));
+            document.querySelectorAll('.emoji-option').forEach(x => x.classList.remove('selected'));
             
+            // Reset Advanced View
+            document.getElementById('advanced-content').style.display = 'none';
+            document.querySelector('.advanced-toggle').style.display = 'block';
+
             document.getElementById('new-item-modal').style.display = 'flex';
         }
 
-        window.openAddModalFromSelector = function() {
-            closeModal('item-selector-modal');
-            const catId = currentCellTarget ? currentCellTarget.getAttribute('data-cat') : 'bread';
-            openAddModal(catId);
+        window.toggleAdvanced = function() {
+            document.getElementById('advanced-content').style.display = 'block';
+            document.querySelector('.advanced-toggle').style.display = 'none';
         }
 
         window.searchGoogleImages = function() {
             const name = document.getElementById('modal-food-name').value;
-            if(!name) return alert('הכנס שם מאכל קודם');
+            if(!name) return alert('הכנס שם מאכל קודם כדי שנחפש אותו');
             window.open(`https://www.google.com/search?tbm=isch&q=${encodeURIComponent(name)}`, '_blank');
         }
 
         window.addNewItemFromModal = function() {
             const name = document.getElementById('modal-food-name').value.trim();
             const cat = document.getElementById('modal-food-cat').value;
-            let url = document.getElementById('modal-food-url').value.trim();
+            const urlInput = document.getElementById('modal-food-url').value.trim();
             
-            if(!name) return alert('נא להזין שם למאכל');
+            if(!name) return alert('נא להזין שם');
             
-            if (!url && selectedEmoji) url = selectedEmoji;
+            // Priority: URL > Emoji > Default
+            let finalUrl = null;
+            if(urlInput) finalUrl = urlInput;
+            else if(selectedEmoji) finalUrl = selectedEmoji;
 
-            const item = { name, cat, customUrl: url || null };
-            allInventoryItems.unshift(item);
+            allInventoryItems.push({ name, cat, customUrl: finalUrl });
             closeModal('new-item-modal');
             
-            const tabBtn = Array.from(document.querySelectorAll('.tab-button')).find(b => b.innerText.includes(categories.find(c=>c.id===cat).name.replace('/ ','/'))); 
-            if(tabBtn) tabBtn.click();
-            else initInventory(cat);
-        }
-
-        function hexToRgba(hex, alpha) {
-            let r=0, g=0, b=0;
-            if(hex.length==4){r="0x"+hex[1]+hex[1];g="0x"+hex[2]+hex[2];b="0x"+hex[3]+hex[3];}
-            else if(hex.length==7){r="0x"+hex[1]+hex[2];g="0x"+hex[3]+hex[4];b="0x"+hex[5]+hex[6];}
-            return `rgba(${+r},${+g},${+b},${alpha})`;
-        }
-        
-        function getLunchboxSvg(color) {
-            const template = document.getElementById('lunchbox-svg-template');
-            if(!template) return '';
-            const svg = template.cloneNode(true);
-            svg.removeAttribute('id');
-            svg.removeAttribute('style'); 
-            svg.classList.add('print-lunchbox-icon');
-            svg.style.color = color; 
-            return svg.outerHTML;
-        }
-
-        function buildTables() {
-            const container = document.getElementById('tables-container');
-            container.innerHTML = ''; 
-            
-            childrenData.forEach(child => {
-                const card = document.createElement('div');
-                card.className = 'single-child-table';
-                
-                card.innerHTML = `
-                    <div class="child-title" style="background:${child.color}">
-                        ${getLunchboxSvg(child.color)}
-                        <span>התפריט של ${child.name}</span>
-                    </div>`;
-                
-                const grid = document.createElement('div');
-                grid.className = 'week-grid';
-                grid.style.backgroundColor = hexToRgba(child.color, 0.3);
-
-                const corner = document.createElement('div');
-                corner.className = 'header-cell';
-                corner.innerHTML = `קטגוריה`; 
-                grid.appendChild(corner);
-
-                days.forEach(d => {
-                    const th = document.createElement('div');
-                    th.className = 'header-cell day-header';
-                    th.innerText = d;
-                    grid.appendChild(th);
-                });
-
-                categories.forEach(cat => {
-                    const ch = document.createElement('div');
-                    ch.className = 'header-cell';
-                    ch.innerHTML = `${cat.icon}<br>${cat.name}`;
-                    grid.appendChild(ch);
-
-                    days.forEach(day => {
-                        const cell = document.createElement('div');
-                        cell.className = 'day-cell';
-                        cell.setAttribute('data-cat', cat.id);
-                        
-                        cell.addEventListener('dragover', (e) => { e.preventDefault(); cell.classList.add('drag-over'); });
-                        cell.addEventListener('dragleave', () => cell.classList.remove('drag-over'));
-                        cell.addEventListener('drop', (e) => {
-                            e.preventDefault(); cell.classList.remove('drag-over');
-                            const data = e.dataTransfer.getData("application/json");
-                            if(data) {
-                                const item = JSON.parse(data);
-                                if(item.cat !== cat.id && !confirm('המאכל אינו תואם לקטגוריה. להוסיף בכל זאת?')) return;
-                                populateCell(cell, item);
-                            }
-                        });
-
-                        cell.onclick = () => {
-                            if(selectedInventoryItem) {
-                                if(selectedInventoryItem.cat !== cat.id && !confirm('המאכל אינו תואם לקטגוריה. להוסיף בכל זאת?')) return;
-                                populateCell(cell, selectedInventoryItem);
-                                
-                                selectedInventoryItem = null;
-                                document.querySelectorAll('.selected-for-move').forEach(el => el.classList.remove('selected-for-move'));
-                            } else {
-                                openItemSelector(cell, cat.id);
-                            }
-                        };
-                        grid.appendChild(cell);
-                    });
-                });
-                card.appendChild(grid);
-                container.appendChild(card);
-            });
-        }
-
-        function populateCell(cell, item) {
-            cell.innerHTML = '';
-            if(!item) { 
-                cell.classList.remove('filled'); 
-                return; 
+            // Refresh current tab if needed
+            const activeTab = document.querySelector('.tab-button.active');
+            if(activeTab && activeTab.innerText.includes(categories.find(c=>c.id===cat).name)) {
+                initInventory(cat);
+            } else {
+                // Switch to that tab
+                const allTabs = document.querySelectorAll('.tab-button');
+                const targetIdx = categories.findIndex(c=>c.id===cat);
+                allTabs[targetIdx].click();
             }
-            
-            cell.classList.add('filled');
-            const div = document.createElement('div');
-            div.className = 'food-item';
-            div.innerHTML = resolveIcon(item.name, item.cat, item.customUrl) + `<span>${item.name}</span>`;
-            div.draggable = true;
-            div.addEventListener('dragstart', (ev) => {
-               ev.dataTransfer.setData("application/json", JSON.stringify(item));
-            });
-            
-            const del = document.createElement('div');
-            del.className = 'cell-delete-btn';
-            del.innerText = 'x';
-            del.onclick = (e) => { e.stopPropagation(); populateCell(cell, null); };
-            
-            cell.appendChild(div);
-            cell.appendChild(del);
-        }
-
-        function openItemSelector(cell, catId) {
-            currentCellTarget = cell;
-            const list = document.getElementById('item-selector-list');
-            list.innerHTML = '';
-            
-            const relevant = allInventoryItems.filter(x => x.cat === catId);
-            relevant.forEach(item => {
-                const el = document.createElement('div');
-                el.className = 'food-item';
-                el.innerHTML = resolveIcon(item.name, item.cat, item.customUrl) + `<span>${item.name}</span>`;
-                el.onclick = () => {
-                    populateCell(cell, item);
-                    closeModal('item-selector-modal');
-                };
-                list.appendChild(el);
-            });
-
-            const addBtn = document.createElement('div');
-            addBtn.className = 'food-item add-item-btn';
-            addBtn.innerHTML = '+';
-            addBtn.onclick = openAddModalFromSelector;
-            list.appendChild(addBtn);
-            
-            document.getElementById('item-selector-modal').style.display = 'flex';
-        }
-
-        window.deleteItemFromCell = function() {
-            if(currentCellTarget) populateCell(currentCellTarget, null);
-            closeModal('item-selector-modal');
-        }
-
-        window.closeModal = function(id) { document.getElementById(id).style.display = 'none'; }
-
-        window.showContextMenu = function(e, itemObj) {
-            e.preventDefault();
-            contextTargetItem = itemObj;
-            const ctxMenu = document.getElementById('context-menu');
-            ctxMenu.style.display = 'block';
-            let pageX = e.pageX || (e.touches ? e.touches[0].pageX : 0);
-            let pageY = e.pageY || (e.touches ? e.touches[0].pageY : 0);
-            ctxMenu.style.left = pageX + 'px';
-            ctxMenu.style.top = pageY + 'px';
-        }
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('#context-menu')) document.getElementById('context-menu').style.display = 'none';
-        });
-
-        window.changeItemImage = function() {
-            if(!contextTargetItem) return;
-            const url = prompt('הכנס קישור לתמונה:', contextTargetItem.customUrl || '');
-            if(url !== null) { 
-                contextTargetItem.customUrl = url || null; 
-                initInventory(activeCategory);
-            }
-            document.getElementById('context-menu').style.display = 'none';
-        }
-
-        window.deleteItemFromInventory = function() {
-             if(!contextTargetItem) return;
-             if(confirm('למחוק את ' + contextTargetItem.name + '?')) {
-                 allInventoryItems = allInventoryItems.filter(i => i !== contextTargetItem);
-                 initInventory(activeCategory);
-             }
-             document.getElementById('context-menu').style.display = 'none';
-        }
-
-        window.showShoppingList = function() {
-            const summary = {};
-            document.querySelectorAll('.day-cell.filled .food-item span:last-child').forEach(sp => {
-                const name = sp.innerText;
-                summary[name] = (summary[name] || 0) + 1;
-            });
-            
-            const list = document.getElementById('shopping-list-items');
-            list.innerHTML = '';
-            let text = "רשימת קניות:\n";
-            
-            if(Object.keys(summary).length === 0) list.innerHTML = "הלוח ריק!";
-            else {
-                for(let [k,v] of Object.entries(summary)) {
-                    list.innerHTML += `<div class="shopping-item"><span>${k}</span><span>${v}</span></div>`;
-                    text += `${k}: ${v}\n`;
-                }
-            }
-            window.shoppingListText = text;
-            document.getElementById('shopping-modal').style.display = 'flex';
-        }
-
-        window.copyToWhatsapp = function() {
-            navigator.clipboard.writeText(window.shoppingListText).then(()=>alert('הועתק!'));
         }
 
         window.autoFillMenu = function() {
+            // Smart Auto Fill: Only empty cells
             document.querySelectorAll('.day-cell').forEach(cell => {
-                const cat = cell.getAttribute('data-cat');
-                const rel = allInventoryItems.filter(x => x.cat === cat);
-                if(rel.length) populateCell(cell, rel[Math.floor(Math.random()*rel.length)]);
+                if(cell.classList.contains('filled')) return; // Skip if full
+
+                const catId = cell.dataset.cat;
+                const available = allInventoryItems.filter(i => i.cat === catId);
+                if(available.length > 0) {
+                    const rand = available[Math.floor(Math.random() * available.length)];
+                    fillCell(cell, rand);
+                }
             });
         }
 
         window.clearTable = function() {
-            if(confirm('לנקות הכל?')) document.querySelectorAll('.day-cell').forEach(c => populateCell(c, null));
+            if(confirm('לנקות את כל הלוחות?')) {
+                document.querySelectorAll('.day-cell').forEach(c => fillCell(c, null));
+            }
         }
+
+        window.showShoppingList = function() {
+            const counts = {};
+            document.querySelectorAll('.day-cell.filled').forEach(cell => {
+                const name = cell.querySelector('span:not(.emoji)').innerText;
+                counts[name] = (counts[name] || 0) + 1;
+            });
+
+            let html = '';
+            if(Object.keys(counts).length === 0) html = 'הלוח ריק...';
+            else {
+                for(let [k,v] of Object.entries(counts)) {
+                    html += `<div><b>${k}:</b> ${v}</div>`;
+                }
+            }
+            document.getElementById('shopping-list-items').innerHTML = html;
+            document.getElementById('shopping-modal').style.display = 'flex';
+        }
+
+        window.closeModal = function(id) { document.getElementById(id).style.display = 'none'; }
     </script>
 </body>
 </html>
